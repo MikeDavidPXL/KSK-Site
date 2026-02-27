@@ -74,7 +74,7 @@ const Dashboard = () => {
         >
           <Link
             to="/"
-            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-display font-bold px-8 py-3 rounded-lg transition hover:scale-105"
+            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-display font-bold px-8 py-3 rounded-sm transition"
           >
             Back to Homepage
           </Link>
@@ -90,13 +90,13 @@ const Dashboard = () => {
         <GateCard
           icon={<ExternalLink className="w-8 h-8 text-primary" />}
           title="Join our Discord first"
-          description="You need to be in the 420 Clan Discord server before you can apply."
+          description="You need to be in the KSK Discord server before you can apply."
         >
           <a
             href={DISCORD_INVITE}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-[#5865F2] hover:bg-[#4752C4] text-white font-display font-bold px-8 py-3 rounded-lg transition hover:scale-105"
+            className="inline-flex items-center gap-2 bg-[#5865F2] hover:bg-[#4752C4] text-white font-display font-bold px-8 py-3 rounded-sm transition"
           >
             <ExternalLink className="w-4 h-4" /> Join Discord
           </a>
@@ -121,7 +121,7 @@ const Dashboard = () => {
         >
           <Link
             to="/verify"
-            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-display font-bold px-8 py-3 rounded-lg transition hover:scale-105"
+            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-display font-bold px-8 py-3 rounded-sm transition"
           >
             <ShieldAlert className="w-4 h-4" /> Go to Verification
           </Link>
@@ -141,12 +141,12 @@ const Dashboard = () => {
       {!app && (
         <GateCard
           icon={<FileText className="w-8 h-8 text-primary" />}
-          title="Apply for the 420 Clan"
+          title="Apply for KSK"
           description="Fill out the application form to join us. Staff will review it soon."
         >
           <Link
             to="/apply"
-            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-display font-bold px-8 py-3 rounded-lg transition hover:scale-105"
+            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-display font-bold px-8 py-3 rounded-sm transition"
           >
             <FileText className="w-4 h-4" /> Start Application
           </Link>
@@ -198,7 +198,7 @@ const Dashboard = () => {
           description="Unfortunately your application was not accepted. You may re-apply."
         >
           {app.reviewer_note && (
-            <div className="mb-6 p-4 bg-destructive/10 border border-destructive/30 rounded-lg">
+            <div className="mb-6 p-4 bg-destructive/10 border border-destructive/30 rounded-sm">
               <p className="text-sm text-muted-foreground font-display font-bold mb-2">
                 Feedback from Staff:
               </p>
@@ -209,7 +209,7 @@ const Dashboard = () => {
           )}
           <Link
             to="/apply"
-            className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-display font-bold px-8 py-3 rounded-lg transition hover:scale-105"
+            className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-display font-bold px-8 py-3 rounded-sm transition"
           >
             <FileText className="w-4 h-4" /> Re-Apply
           </Link>
@@ -223,11 +223,10 @@ const Dashboard = () => {
 function GatePage({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      <div className="absolute inset-0 smoke-overlay pointer-events-none" />
-      <nav className="relative z-10 border-b border-border bg-card/60 backdrop-blur">
+      <nav className="relative z-10 border-b border-border bg-card">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <span className="font-display text-lg font-bold neon-text-blue text-primary">
-            420 Clan
+          <span className="font-display text-lg font-bold text-primary">
+            KSK
           </span>
           <a
             href="/.netlify/functions/logout"
@@ -258,7 +257,7 @@ function GateCard({
 }) {
   return (
     <motion.div
-      className="bg-card border border-border rounded-xl p-10 text-center neon-border-blue"
+      className="bg-card border border-border rounded-sm p-10 text-center"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}

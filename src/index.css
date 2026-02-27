@@ -1,59 +1,63 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@500;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ══════════════════════════════════════════════════════════
+   KSK — TACTICAL MILITARY THEME
+   Deep anthracite / olive / tan / bronze
+   No neon. No glow. No gradients. Clean & disciplined.
+   ══════════════════════════════════════════════════════════ */
+
 @layer base {
   :root {
-    --background: 80 20% 14%;
+    /* Anthracite grey base */
+    --background: 220 7% 11%;
     --foreground: 0 0% 94%;
 
-    --card: 82 17% 18%;
+    /* Dark olive card surface */
+    --card: 80 15% 14%;
     --card-foreground: 0 0% 94%;
 
-    --popover: 82 17% 18%;
+    --popover: 80 15% 14%;
     --popover-foreground: 0 0% 94%;
 
-    --primary: 39 31% 68%;
-    --primary-foreground: 85 18% 12%;
+    /* Tan accent — buttons, headings, highlights */
+    --primary: 37 33% 68%;
+    --primary-foreground: 220 10% 10%;
 
-    --secondary: 37 21% 53%;
-    --secondary-foreground: 85 18% 12%;
+    /* Bronze — secondary UI elements */
+    --secondary: 36 21% 53%;
+    --secondary-foreground: 220 10% 10%;
 
-    --muted: 83 13% 23%;
-    --muted-foreground: 0 0% 73%;
+    /* Muted surfaces */
+    --muted: 220 5% 17%;
+    --muted-foreground: 30 5% 65%;
 
-    --accent: 42 35% 62%;
-    --accent-foreground: 85 18% 12%;
+    /* Gold-tinted accent */
+    --accent: 38 30% 60%;
+    --accent-foreground: 220 10% 10%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 82 16% 30%;
-    --input: 82 16% 30%;
-    --ring: 39 31% 68%;
+    /* Bronze-tinted borders */
+    --border: 36 10% 22%;
+    --input: 36 10% 22%;
+    --ring: 37 33% 68%;
 
-    --radius: 0.75rem;
+    /* Sharp corners — military precision */
+    --radius: 0.125rem;
 
-    /* Custom neon tokens */
-    --neon-blue: 39 31% 68%;
-    --neon-purple: 37 21% 53%;
-    --neon-green: 84 19% 30%;
-    --glow-blue: 0 0 20px hsl(39 31% 68% / 0.45), 0 0 40px hsl(39 31% 68% / 0.25);
-    --glow-purple: 0 0 20px hsl(37 21% 53% / 0.4), 0 0 40px hsl(37 21% 53% / 0.22);
-    --glow-green: 0 0 20px hsl(84 19% 30% / 0.5), 0 0 40px hsl(84 19% 30% / 0.3);
-    --gradient-neon: linear-gradient(135deg, hsl(39 31% 68%), hsl(37 21% 53%));
-    --gradient-neon-green: linear-gradient(135deg, hsl(84 19% 30%), hsl(39 31% 68%));
-
-    --sidebar-background: 82 17% 18%;
+    --sidebar-background: 80 15% 14%;
     --sidebar-foreground: 0 0% 94%;
-    --sidebar-primary: 39 31% 68%;
-    --sidebar-primary-foreground: 85 18% 12%;
-    --sidebar-accent: 83 13% 23%;
+    --sidebar-primary: 37 33% 68%;
+    --sidebar-primary-foreground: 220 10% 10%;
+    --sidebar-accent: 220 5% 17%;
     --sidebar-accent-foreground: 0 0% 94%;
-    --sidebar-border: 82 16% 30%;
-    --sidebar-ring: 39 31% 68%;
+    --sidebar-border: 36 10% 22%;
+    --sidebar-ring: 37 33% 68%;
   }
 }
 
@@ -67,140 +71,144 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display;
+    @apply font-display tracking-wide;
   }
 }
 
 @layer utilities {
-  .neon-text-blue {
-    text-shadow: 0 0 7px hsl(220 90% 55% / 0.8), 0 0 20px hsl(220 90% 55% / 0.4), 0 0 40px hsl(220 90% 55% / 0.2);
+  /* Thin bronze divider line */
+  .divider-bronze {
+    border-color: hsl(36 21% 53% / 0.3);
   }
 
-  .neon-text-purple {
-    text-shadow: 0 0 7px hsl(270 80% 60% / 0.8), 0 0 20px hsl(270 80% 60% / 0.4), 0 0 40px hsl(270 80% 60% / 0.2);
+  /* Subtle tactical surface texture overlay */
+  .surface-texture {
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 1px,
+        hsl(0 0% 100% / 0.01) 1px,
+        hsl(0 0% 100% / 0.01) 2px
+      );
   }
 
-  .neon-text-green {
-    text-shadow: 0 0 7px hsl(140 70% 45% / 0.8), 0 0 20px hsl(140 70% 45% / 0.4);
+  /* Hover underline animation for nav links */
+  .nav-underline {
+    position: relative;
+  }
+  .nav-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: hsl(37 33% 68%);
+    transition: width 0.25s ease;
+  }
+  .nav-underline:hover::after,
+  .nav-underline.active::after {
+    width: 100%;
   }
 
-  .neon-box-blue {
-    box-shadow: 0 0 15px hsl(220 90% 55% / 0.4), 0 0 30px hsl(220 90% 55% / 0.2), inset 0 0 15px hsl(220 90% 55% / 0.1);
+  /* Olive section background */
+  .bg-olive {
+    background-color: #2B3020;
   }
 
-  .neon-box-purple {
-    box-shadow: 0 0 15px hsl(270 80% 60% / 0.4), 0 0 30px hsl(270 80% 60% / 0.2), inset 0 0 15px hsl(270 80% 60% / 0.1);
-  }
-
-  .neon-border-blue {
-    border-color: hsl(220 90% 55% / 0.5);
-    box-shadow: 0 0 10px hsl(220 90% 55% / 0.3);
-  }
-
-  .neon-border-purple {
-    border-color: hsl(270 80% 60% / 0.5);
-    box-shadow: 0 0 10px hsl(270 80% 60% / 0.3);
-  }
-
-  .gradient-neon-text {
-    background: linear-gradient(135deg, hsl(39 31% 68%), hsl(37 21% 53%));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .smoke-overlay {
-    background: radial-gradient(ellipse at 20% 50%, hsl(84 19% 30% / 0.14) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 50%, hsl(37 21% 53% / 0.1) 0%, transparent 60%);
+  /* Row hover for tables */
+  .row-hover:hover {
+    background-color: hsl(37 33% 68% / 0.04);
   }
 }
 
-/* Scrollbar styling */
+/* ── Scrollbar ─────────────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: hsl(80 20% 14%);
+  background: hsl(220 7% 11%);
 }
 ::-webkit-scrollbar-thumb {
-  background: hsl(39 31% 68% / 0.35);
-  border-radius: 4px;
+  background: hsl(36 21% 53% / 0.3);
+  border-radius: 0;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(39 31% 68% / 0.55);
+  background: hsl(36 21% 53% / 0.5);
 }
 
-/* Smooth scroll */
+/* ── Smooth scroll ─────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
 }
 
-/* Native select dropdown styling */
+/* ── Select dropdowns ──────────────────────────────────── */
 select {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3e%3c/path%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239E8C70'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3e%3c/path%3e%3c/svg%3e");
   background-position: right 0.75rem center;
   background-repeat: no-repeat;
   background-size: 1rem;
   padding-right: 2.5rem !important;
   cursor: pointer;
-  border-radius: 0.5rem;
+  border-radius: 2px;
   transition: border-color 0.15s ease;
 }
 
 select:hover {
-  border-color: hsl(82 16% 38%);
+  border-color: hsl(36 21% 53% / 0.5);
 }
 
 select:focus {
   outline: none;
-  border-color: hsl(39 31% 68%);
+  border-color: hsl(37 33% 68%);
 }
 
-/* Remove tap highlight on mobile */
+/* ── Tap highlight removal ─────────────────────────────── */
 select,
 button,
 a {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Clean focus states - remove aggressive glows */
+/* ── Focus states — clean, no glow ─────────────────────── */
 *:focus {
   outline: none;
 }
 
 *:focus-visible {
-  outline: 2px solid hsl(39 31% 68%);
+  outline: 1px solid hsl(37 33% 68%);
   outline-offset: 2px;
 }
 
-/* Style the dropdown options */
+/* ── Select option styling ─────────────────────────────── */
 select option {
-  background-color: hsl(82 17% 18%);
+  background-color: hsl(80 15% 14%);
   color: hsl(0 0% 94%);
   padding: 0.5rem;
 }
 
 select option:checked {
-  background: hsl(83 13% 23%);
+  background: hsl(220 5% 17%);
 }
 
 select option:hover {
-  background-color: hsl(82 16% 28%);
+  background-color: hsl(36 10% 22%);
 }
 
-/* Subtle pulse animation for ban report button */
+/* ── Subtle pulse for urgent buttons ───────────────────── */
 @keyframes pulse-subtle {
   0%, 100% {
     opacity: 1;
     box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
   }
   50% {
-    opacity: 0.9;
-    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.3);
+    opacity: 0.92;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
   }
 }
 
 .animate-pulse-subtle {
-  animation: pulse-subtle 2.5s ease-in-out infinite;
+  animation: pulse-subtle 3s ease-in-out infinite;
 }

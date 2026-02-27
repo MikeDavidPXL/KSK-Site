@@ -1,4 +1,4 @@
-// Clan List — staff-only admin page, neon purple accent
+// Clan List â€” staff-only admin page, tactical theme
 // CSV import, manual member add, inline editing, promotion management
 import { useEffect, useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -29,10 +29,10 @@ import {
   UserPlus,
 } from "lucide-react";
 import * as XLSX from "xlsx";
-import clanLogo from "@/assets/clan-logo.png";
+const clanLogo = "/ksk.png";
 import PromotionQueueSection from "@/components/PromotionQueueSection";
 
-// ── Types ─────────────────────────────────────────────────
+// â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 interface ClanMember {
   id: string;
   discord_name: string;
@@ -119,13 +119,13 @@ type SortKey =
   | "days_until_next_rank";
 type SortDirection = "asc" | "desc";
 
-// ══════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  CLAN LIST PAGE
-// ══════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const ClanListPage = () => {
   const { user, loading: authLoading } = useAuth();
 
-  // ── Members state ───────────────────────────────────────
+  // â”€â”€ Members state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [members, setMembers] = useState<ClanMember[]>([]);
   const [membersLoading, setMembersLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -134,7 +134,7 @@ const ClanListPage = () => {
   const [promoDueCount, setPromoDueCount] = useState(0);
   const [unresolvedCount, setUnresolvedCount] = useState(0);
 
-  // ── Filters ─────────────────────────────────────────────
+  // â”€â”€ Filters â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [tagFilter, setTagFilter] = useState("");
@@ -142,11 +142,11 @@ const ClanListPage = () => {
   const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  // ── Sorting ─────────────────────────────────────────────
+  // â”€â”€ Sorting â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
 
-  // ── Upload state ────────────────────────────────────────
+  // â”€â”€ Upload state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [uploading, setUploading] = useState(false);
   const [uploadResult, setUploadResult] = useState<{
     imported: number;
@@ -157,7 +157,7 @@ const ClanListPage = () => {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // ── Add member form ─────────────────────────────────────
+  // â”€â”€ Add member form â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [showAddForm, setShowAddForm] = useState(false);
   const [addForm, setAddForm] = useState({
     discord_name: "",
@@ -179,7 +179,7 @@ const ClanListPage = () => {
   const [saveUnresolvedAllowed, setSaveUnresolvedAllowed] = useState(false);
   const [uiError, setUiError] = useState<string | null>(null);
 
-  // ── Manual unresolved resolver ──────────────────────────
+  // â”€â”€ Manual unresolved resolver â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [resolveTargetId, setResolveTargetId] = useState<string | null>(null);
   const [resolveQuery, setResolveQuery] = useState("");
   const [resolveTargetToken, setResolveTargetToken] = useState("");
@@ -188,14 +188,14 @@ const ClanListPage = () => {
   const [resolveSaving, setResolveSaving] = useState(false);
   const [resolveError, setResolveError] = useState<string | null>(null);
 
-  // ── Inline discord_name editing ─────────────────────────
+  // â”€â”€ Inline discord_name editing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [editingNameId, setEditingNameId] = useState<string | null>(null);
   const [editingNameValue, setEditingNameValue] = useState("");
 
-  // ── Inline editing ──────────────────────────────────────
+  // â”€â”€ Inline editing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [savingField, setSavingField] = useState<string | null>(null);
 
-  // ── Promotions ──────────────────────────────────────────
+  // â”€â”€ Promotions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [promoPreview, setPromoPreview] = useState<PromotionPreview | null>(
     null
   );
@@ -204,23 +204,23 @@ const ClanListPage = () => {
   const [promoResult, setPromoResult] = useState<string | null>(null);
   const [showForceConfirm, setShowForceConfirm] = useState(false);
 
-  // ── Bulk resolve ────────────────────────────────────────
+  // â”€â”€ Bulk resolve â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [bulkResolving, setBulkResolving] = useState(false);
   const [bulkResult, setBulkResult] = useState<string | null>(null);
 
-  // ── Discord sync ────────────────────────────────────────
+  // â”€â”€ Discord sync â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [syncLoading, setSyncLoading] = useState(false);
   const [syncResult, setSyncResult] = useState<string | null>(null);
   const [showArchived, setShowArchived] = useState(false);
   const [archivedCount, setArchivedCount] = useState(0);
 
-  // ── Manual promotion ────────────────────────────────────
+  // â”€â”€ Manual promotion â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [manualPromoMemberId, setManualPromoMemberId] = useState<string | null>(null);
   const [manualPromoNewRank, setManualPromoNewRank] = useState<string>("");
   const [manualPromoRunning, setManualPromoRunning] = useState(false);
   const [manualPromoResult, setManualPromoResult] = useState<string | null>(null);
 
-  // ── Fetch members ───────────────────────────────────────
+  // â”€â”€ Fetch members â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const fetchMembers = useCallback(
     async (pg: number, q: string) => {
       setMembersLoading(true);
@@ -261,7 +261,7 @@ const ClanListPage = () => {
     if (user?.is_staff) fetchMembers(page, debouncedSearch);
   }, [user, page, debouncedSearch, fetchMembers]);
 
-  // ── Debounced search ────────────────────────────────────
+  // â”€â”€ Debounced search â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const handleSearchChange = (val: string) => {
     setSearch(val);
     if (searchTimeout.current) clearTimeout(searchTimeout.current);
@@ -271,7 +271,7 @@ const ClanListPage = () => {
     }, 400);
   };
 
-  // ── Clear all filters ──────────────────────────────────
+  // â”€â”€ Clear all filters â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const clearFilters = () => {
     setSearch("");
     setDebouncedSearch("");
@@ -290,7 +290,7 @@ const ClanListPage = () => {
     promoFilter !== "" ||
     sortKey !== null;
 
-  // ── Sorting handler ────────────────────────────────────
+  // â”€â”€ Sorting handler â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
       setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
@@ -307,7 +307,7 @@ const ClanListPage = () => {
     }
   };
 
-  // ── Sort members client-side ───────────────────────────
+  // â”€â”€ Sort members client-side â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const sortedMembers = [...members].sort((a, b) => {
     if (!sortKey) return 0;
     const dir = sortDirection === "asc" ? 1 : -1;
@@ -359,7 +359,7 @@ const ClanListPage = () => {
     }
   });
 
-  // ── Bulk resolve handler ────────────────────────────────
+  // â”€â”€ Bulk resolve handler â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const handleBulkResolve = async () => {
     setBulkResolving(true);
     setBulkResult(null);
@@ -387,7 +387,7 @@ const ClanListPage = () => {
     }
   };
 
-  // ── Discord sync handler ────────────────────────────────
+  // â”€â”€ Discord sync handler â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const handleDiscordSync = async () => {
     setSyncLoading(true);
     setSyncResult(null);
@@ -411,7 +411,7 @@ const ClanListPage = () => {
     }
   };
 
-  // ── Re-add archived member as new ───────────────────────
+  // â”€â”€ Re-add archived member as new â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const handleReaddMember = async (archivedMember: ClanMember) => {
     if (!confirm(`Re-add ${archivedMember.discord_name || archivedMember.ign} as a new member? They will start over from Private rank with 0 days.`)) {
       return;
@@ -448,7 +448,7 @@ const ClanListPage = () => {
     }
   };
 
-  // ── CSV upload handler ──────────────────────────────────
+  // â”€â”€ CSV upload handler â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -495,7 +495,7 @@ const ClanListPage = () => {
     }
   };
 
-  // ── Add member ──────────────────────────────────────────
+  // â”€â”€ Add member â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const findDiscordCandidates = async () => {
     if (!addForm.discord_name.trim()) {
       setAddError("Discord name is required to resolve.");
@@ -599,7 +599,7 @@ const ClanListPage = () => {
     }
   };
 
-  // ── Inline update member field ──────────────────────────
+  // â”€â”€ Inline update member field â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const updateMember = async (
     id: string,
     fields: Record<string, unknown>
@@ -627,7 +627,7 @@ const ClanListPage = () => {
     }
   };
 
-  // ── Delete member ──────────────────────────────
+  // â”€â”€ Delete member â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const deleteMember = async (id: string) => {
     if (!confirm("Remove this member from the clan list?")) return;
     setSavingField(id);
@@ -649,7 +649,7 @@ const ClanListPage = () => {
     }
   };
 
-  // ── Inline discord_name editor ────────────────
+  // â”€â”€ Inline discord_name editor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const startEditingName = (id: string, currentName: string) => {
     setEditingNameId(id);
     setEditingNameValue(currentName);
@@ -755,7 +755,7 @@ const ClanListPage = () => {
     }
   };
 
-  // ── Preview promotions ──────────────────────────────────
+  // â”€â”€ Preview promotions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const previewPromotions = async () => {
     setPromoLoading(true);
     setPromoResult(null);
@@ -776,7 +776,7 @@ const ClanListPage = () => {
     }
   };
 
-  // ── Run promotions ──────────────────────────────────────
+  // â”€â”€ Run promotions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const runPromotions = async (force = false) => {
     setPromoRunning(true);
     setPromoResult(null);
@@ -808,7 +808,7 @@ const ClanListPage = () => {
     }
   };
 
-  // ── Manual promotion ────────────────────────────────────
+  // â”€â”€ Manual promotion â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const runManualPromotion = async () => {
     if (!manualPromoMemberId || !manualPromoNewRank) {
       setManualPromoResult("Please select a member and rank.");
@@ -843,7 +843,7 @@ const ClanListPage = () => {
     }
   };
 
-  // ── Guards ──────────────────────────────────────────────
+  // â”€â”€ Guards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (!authLoading && (!user || !user.is_staff)) {
     return <Navigate to="/" replace />;
   }
@@ -858,12 +858,12 @@ const ClanListPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* ── Top bar ─────────────────────────────────────── */}
+      {/* â”€â”€ Top bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
-        className="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-secondary/30 shadow-lg"
+        className="sticky top-0 z-50 bg-background border-b border-border"
       >
         <div className="container mx-auto px-4 flex items-center justify-between h-16">
           <Link
@@ -874,7 +874,7 @@ const ClanListPage = () => {
             <img
               src={clanLogo}
               alt="KSK Logo"
-              className="w-8 h-8 rounded-full"
+              className="w-8 h-8"
             />
             <span className="font-display text-sm font-bold hidden sm:block">
               Back to homepage
@@ -890,7 +890,7 @@ const ClanListPage = () => {
             {/* Navigation to Admin Panel */}
             <Link
               to="/admin"
-              className="px-3 py-1.5 text-sm font-display font-bold bg-secondary/20 hover:bg-secondary/30 text-secondary rounded-lg transition border border-secondary/30 hidden sm:block"
+              className="px-3 py-1.5 text-sm font-display font-bold bg-secondary/20 hover:bg-secondary/30 text-secondary rounded-sm transition border border-secondary/30 hidden sm:block"
               title="Go to Applications"
             >
               Applications
@@ -925,10 +925,10 @@ const ClanListPage = () => {
         </div>
       </motion.nav>
 
-      {/* ── Content ─────────────────────────────────────── */}
+      {/* â”€â”€ Content â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div className="container mx-auto px-4 max-w-7xl py-6 space-y-6">
         {uiError && (
-          <div className="bg-destructive/10 border border-destructive/30 text-destructive text-sm rounded-lg px-4 py-3 flex items-center justify-between gap-3">
+          <div className="bg-destructive/10 border border-destructive/30 text-destructive text-sm rounded-sm px-4 py-3 flex items-center justify-between gap-3">
             <span>{uiError}</span>
             <button
               onClick={() => setUiError(null)}
@@ -939,9 +939,9 @@ const ClanListPage = () => {
           </div>
         )}
 
-        {/* ── Import + Add Member buttons ── */}
+        {/* â”€â”€ Import + Add Member buttons â”€â”€ */}
         <div className="flex flex-wrap gap-3 items-center">
-          <label className="inline-flex items-center gap-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground font-display font-bold px-5 py-2.5 rounded-lg transition cursor-pointer">
+          <label className="inline-flex items-center gap-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground font-display font-bold px-5 py-2.5 rounded-sm transition cursor-pointer">
             {uploading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
@@ -959,7 +959,7 @@ const ClanListPage = () => {
           </label>
           <button
             onClick={() => setShowAddForm((v) => !v)}
-            className="inline-flex items-center gap-2 border border-secondary/40 text-secondary hover:bg-secondary/10 font-display font-bold px-5 py-2.5 rounded-lg transition"
+            className="inline-flex items-center gap-2 border border-secondary/40 text-secondary hover:bg-secondary/10 font-display font-bold px-5 py-2.5 rounded-sm transition"
           >
             <Plus className="w-4 h-4" />
             Add Member
@@ -990,12 +990,12 @@ const ClanListPage = () => {
           </div>
         </div>
 
-        {/* ── Discord Sync + Bulk resolve + Show Archived ── */}
+        {/* â”€â”€ Discord Sync + Bulk resolve + Show Archived â”€â”€ */}
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={handleDiscordSync}
             disabled={syncLoading || showArchived}
-            className="inline-flex items-center gap-2 border border-blue-400/40 text-blue-400 hover:bg-blue-400/10 font-display font-bold px-5 py-2.5 rounded-lg transition disabled:opacity-50"
+            className="inline-flex items-center gap-2 border border-primary/40 text-primary hover:bg-primary/10 font-display font-bold px-5 py-2.5 rounded-sm transition disabled:opacity-50"
             title="Check Discord membership and archive members who left"
           >
             {syncLoading ? (
@@ -1013,7 +1013,7 @@ const ClanListPage = () => {
               setShowArchived((v) => !v);
               setPage(1);
             }}
-            className={`inline-flex items-center gap-2 border font-display font-bold px-5 py-2.5 rounded-lg transition ${
+            className={`inline-flex items-center gap-2 border font-display font-bold px-5 py-2.5 rounded-sm transition ${
               showArchived
                 ? "border-red-400 text-red-400 bg-red-400/10"
                 : "border-muted-foreground/40 text-muted-foreground hover:bg-muted-foreground/10"
@@ -1024,13 +1024,13 @@ const ClanListPage = () => {
           </button>
         </div>
 
-        {/* ── Bulk resolve ── */}
+        {/* â”€â”€ Bulk resolve â”€â”€ */}
         {unresolvedCount > 0 && !showArchived && (
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={handleBulkResolve}
               disabled={bulkResolving}
-              className="inline-flex items-center gap-2 border border-yellow-400/40 text-yellow-400 hover:bg-yellow-400/10 font-display font-bold px-5 py-2.5 rounded-lg transition disabled:opacity-50"
+              className="inline-flex items-center gap-2 border border-yellow-400/40 text-yellow-400 hover:bg-yellow-400/10 font-display font-bold px-5 py-2.5 rounded-sm transition disabled:opacity-50"
             >
               {bulkResolving ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -1046,7 +1046,7 @@ const ClanListPage = () => {
         )}
 
         {resolveTargetId && (
-          <div className="bg-card border border-yellow-400/30 rounded-xl p-4 space-y-3">
+          <div className="bg-card border border-yellow-400/30 rounded-sm p-4 space-y-3">
             <div className="flex items-center justify-between gap-3">
               <h3 className="font-display font-bold text-yellow-400 text-sm">
                 Resolve Unresolved Member
@@ -1068,13 +1068,13 @@ const ClanListPage = () => {
               <input
                 value={resolveQuery}
                 onChange={(e) => setResolveQuery(e.target.value)}
-                className="flex-1 min-w-[220px] bg-muted border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
+                className="flex-1 min-w-[220px] bg-muted border border-border rounded-sm px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
                 placeholder="Search Discord name"
               />
               <button
                 onClick={() => searchResolveCandidates(resolveQuery)}
                 disabled={resolveLoading || !resolveQuery.trim()}
-                className="inline-flex items-center gap-2 border border-secondary/40 text-secondary hover:bg-secondary/10 font-display font-bold px-4 py-2 rounded-lg transition disabled:opacity-50"
+                className="inline-flex items-center gap-2 border border-secondary/40 text-secondary hover:bg-secondary/10 font-display font-bold px-4 py-2 rounded-sm transition disabled:opacity-50"
               >
                 {resolveLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
                 Find
@@ -1085,7 +1085,7 @@ const ClanListPage = () => {
               <select
                 value={resolveTargetToken}
                 onChange={(e) => setResolveTargetToken(e.target.value)}
-                className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
+                className="w-full bg-muted border border-border rounded-sm px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
               >
                 <option value="">Choose a Discord user...</option>
                 {resolveTargetCandidates.map((c, i) => (
@@ -1102,7 +1102,7 @@ const ClanListPage = () => {
               <button
                 onClick={applyResolveForMember}
                 disabled={resolveSaving || !resolveTargetToken}
-                className="inline-flex items-center gap-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground font-display font-bold px-4 py-2 rounded-lg transition disabled:opacity-50"
+                className="inline-flex items-center gap-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground font-display font-bold px-4 py-2 rounded-sm transition disabled:opacity-50"
               >
                 {resolveSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
                 Save Resolve
@@ -1111,14 +1111,14 @@ const ClanListPage = () => {
           </div>
         )}
 
-        {/* ── Upload result ── */}
+        {/* â”€â”€ Upload result â”€â”€ */}
         {uploadError && (
-          <div className="bg-destructive/10 border border-destructive/30 text-destructive text-sm rounded-lg px-4 py-3">
+          <div className="bg-destructive/10 border border-destructive/30 text-destructive text-sm rounded-sm px-4 py-3">
             {uploadError}
           </div>
         )}
         {uploadResult && (
-          <div className="bg-green-500/10 border border-green-500/30 text-green-400 text-sm rounded-lg px-4 py-3">
+          <div className="bg-green-500/10 border border-green-500/30 text-green-400 text-sm rounded-sm px-4 py-3">
             Import complete: {uploadResult.imported} imported,{" "}
             {uploadResult.updated} updated, {uploadResult.unresolved}{" "}
             unresolved.
@@ -1137,7 +1137,7 @@ const ClanListPage = () => {
           </div>
         )}
 
-        {/* ── Add member form ── */}
+        {/* â”€â”€ Add member form â”€â”€ */}
         <AnimatePresence>
           {showAddForm && (
             <motion.div
@@ -1146,7 +1146,7 @@ const ClanListPage = () => {
               exit={{ opacity: 0, height: 0 }}
               className="overflow-hidden"
             >
-              <div className="bg-card border border-secondary/30 rounded-xl p-5 space-y-4">
+              <div className="bg-card border border-secondary/30 rounded-sm p-5 space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="font-display font-bold text-secondary text-sm">
                     Add New Member
@@ -1174,13 +1174,13 @@ const ClanListPage = () => {
                           }))
                         }
                         onBlur={findDiscordCandidates}
-                        className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
+                        className="w-full bg-muted border border-border rounded-sm px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
                       />
                       <button
                         type="button"
                         onClick={findDiscordCandidates}
                         disabled={resolving || !addForm.discord_name.trim()}
-                        className="px-3 py-2 rounded-lg border border-secondary/40 text-secondary hover:bg-secondary/10 text-xs font-display font-bold disabled:opacity-50"
+                        className="px-3 py-2 rounded-sm border border-secondary/40 text-secondary hover:bg-secondary/10 text-xs font-display font-bold disabled:opacity-50"
                       >
                         {resolving ? "..." : "Find"}
                       </button>
@@ -1200,7 +1200,7 @@ const ClanListPage = () => {
                       onChange={(e) =>
                         setAddForm((f) => ({ ...f, ign: e.target.value }))
                       }
-                      className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
+                      className="w-full bg-muted border border-border rounded-sm px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
                     />
                   </div>
                   <div>
@@ -1212,7 +1212,7 @@ const ClanListPage = () => {
                       onChange={(e) =>
                         setAddForm((f) => ({ ...f, uid: e.target.value }))
                       }
-                      className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
+                      className="w-full bg-muted border border-border rounded-sm px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
                     />
                   </div>
                   <div>
@@ -1228,7 +1228,7 @@ const ClanListPage = () => {
                           join_date: e.target.value,
                         }))
                       }
-                      className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
+                      className="w-full bg-muted border border-border rounded-sm px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
                     />
                   </div>
                   <div>
@@ -1243,7 +1243,7 @@ const ClanListPage = () => {
                           status: e.target.value as "active" | "inactive",
                         }))
                       }
-                      className="w-full bg-muted border border-border rounded-lg pl-3 pr-10 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
+                      className="w-full bg-muted border border-border rounded-sm pl-3 pr-10 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
                     >
                       <option value="active">Active</option>
                       <option value="inactive">Inactive</option>
@@ -1261,7 +1261,7 @@ const ClanListPage = () => {
                           rank_current: e.target.value,
                         }))
                       }
-                      className="w-full bg-muted border border-border rounded-lg pl-3 pr-10 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
+                      className="w-full bg-muted border border-border rounded-sm pl-3 pr-10 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
                     >
                       {RANKS.map((r) => (
                         <option key={r} value={r}>
@@ -1304,7 +1304,7 @@ const ClanListPage = () => {
                           discord_name: selected?.label || f.discord_name,
                         }));
                       }}
-                      className="w-full bg-muted border border-border rounded-lg pl-3 pr-10 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
+                      className="w-full bg-muted border border-border rounded-sm pl-3 pr-10 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
                     >
                       <option value="">Choose a Discord user...</option>
                       {resolveCandidates.map((c, i) => (
@@ -1322,7 +1322,7 @@ const ClanListPage = () => {
                   <button
                     onClick={() => handleAddMember(false)}
                     disabled={addSaving}
-                    className="inline-flex items-center gap-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground font-display font-bold px-5 py-2 rounded-lg transition disabled:opacity-50"
+                    className="inline-flex items-center gap-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground font-display font-bold px-5 py-2 rounded-sm transition disabled:opacity-50"
                   >
                     {addSaving ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -1335,7 +1335,7 @@ const ClanListPage = () => {
                     <button
                       onClick={() => handleAddMember(true)}
                       disabled={addSaving}
-                      className="inline-flex items-center gap-2 border border-yellow-400/40 text-yellow-400 hover:bg-yellow-400/10 font-display font-bold px-5 py-2 rounded-lg transition disabled:opacity-50"
+                      className="inline-flex items-center gap-2 border border-yellow-400/40 text-yellow-400 hover:bg-yellow-400/10 font-display font-bold px-5 py-2 rounded-sm transition disabled:opacity-50"
                     >
                       Save as Unresolved
                     </button>
@@ -1346,7 +1346,7 @@ const ClanListPage = () => {
           )}
         </AnimatePresence>
 
-        {/* ── Search + filters ── */}
+        {/* â”€â”€ Search + filters â”€â”€ */}
         <div className="flex flex-wrap gap-3 items-center">
           <div className="relative w-full sm:w-auto sm:min-w-[220px] sm:max-w-[280px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -1355,7 +1355,7 @@ const ClanListPage = () => {
               value={search}
               placeholder="Search by name, IGN, or UID..."
               onChange={(e) => handleSearchChange(e.target.value)}
-              className="w-full bg-muted border border-border rounded-lg pl-9 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-border transition"
+              className="w-full bg-muted border border-border rounded-sm pl-9 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-border transition"
             />
           </div>
           <select
@@ -1364,7 +1364,7 @@ const ClanListPage = () => {
               setStatusFilter(e.target.value);
               setPage(1);
             }}
-            className="flex-1 sm:flex-none sm:w-[130px] bg-muted border border-border rounded-lg pl-3 pr-10 py-2.5 text-sm text-foreground focus:outline-none"
+            className="flex-1 sm:flex-none sm:w-[130px] bg-muted border border-border rounded-sm pl-3 pr-10 py-2.5 text-sm text-foreground focus:outline-none"
           >
             <option value="">All Status</option>
             <option value="active">Active</option>
@@ -1376,7 +1376,7 @@ const ClanListPage = () => {
               setTagFilter(e.target.value);
               setPage(1);
             }}
-            className="flex-1 sm:flex-none sm:w-[130px] bg-muted border border-border rounded-lg pl-3 pr-10 py-2.5 text-sm text-foreground focus:outline-none"
+            className="flex-1 sm:flex-none sm:w-[130px] bg-muted border border-border rounded-sm pl-3 pr-10 py-2.5 text-sm text-foreground focus:outline-none"
           >
             <option value="">All Tags</option>
             <option value="true">Has KSK Tag</option>
@@ -1388,7 +1388,7 @@ const ClanListPage = () => {
               setPromoFilter(e.target.value);
               setPage(1);
             }}
-            className="flex-1 sm:flex-none sm:w-[145px] bg-muted border border-border rounded-lg pl-3 pr-10 py-2.5 text-sm text-foreground focus:outline-none"
+            className="flex-1 sm:flex-none sm:w-[145px] bg-muted border border-border rounded-sm pl-3 pr-10 py-2.5 text-sm text-foreground focus:outline-none"
           >
             <option value="">All Promotion</option>
             <option value="true">Promotion Due</option>
@@ -1405,7 +1405,7 @@ const ClanListPage = () => {
           )}
         </div>
 
-        {/* ── Mobile sort controls ── */}
+        {/* â”€â”€ Mobile sort controls â”€â”€ */}
         <div className="lg:hidden flex flex-wrap gap-3 items-center">
           <select
             value={sortKey ?? ""}
@@ -1417,7 +1417,7 @@ const ClanListPage = () => {
                 handleSort(val);
               }
             }}
-            className="flex-1 bg-muted border border-border rounded-lg pl-3 pr-10 py-2.5 text-sm text-foreground focus:outline-none"
+            className="flex-1 bg-muted border border-border rounded-sm pl-3 pr-10 py-2.5 text-sm text-foreground focus:outline-none"
           >
             <option value="">Sort by...</option>
             <option value="discord_name">Discord Name</option>
@@ -1430,7 +1430,7 @@ const ClanListPage = () => {
           {sortKey && (
             <button
               onClick={() => setSortDirection((d) => (d === "asc" ? "desc" : "asc"))}
-              className="inline-flex items-center gap-1.5 bg-secondary/20 hover:bg-secondary/30 text-secondary px-3 py-2.5 rounded-lg text-sm font-display font-bold transition"
+              className="inline-flex items-center gap-1.5 bg-secondary/20 hover:bg-secondary/30 text-secondary px-3 py-2.5 rounded-sm text-sm font-display font-bold transition"
             >
               {sortDirection === "asc" ? (
                 <ChevronUp className="w-4 h-4" />
@@ -1442,7 +1442,7 @@ const ClanListPage = () => {
           )}
         </div>
 
-        {/* ── Table (desktop) / Card view (mobile) ── */}
+        {/* â”€â”€ Table (desktop) / Card view (mobile) â”€â”€ */}
         {membersLoading && (
           <div className="text-center py-12">
             <Loader2 className="w-6 h-6 text-secondary animate-spin mx-auto" />
@@ -1460,7 +1460,7 @@ const ClanListPage = () => {
         {!membersLoading && members.length > 0 && (
           <>
             {/* Desktop table */}
-            <div className="hidden lg:block overflow-x-auto rounded-lg border border-secondary/20">
+            <div className="hidden lg:block overflow-x-auto rounded-sm border border-secondary/20">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-secondary/10 border-b border-secondary/20">
@@ -1637,7 +1637,7 @@ const ClanListPage = () => {
                           </span>
                         ) : (
                           <span className="text-xs text-muted-foreground/50">
-                            —
+                            â€”
                           </span>
                         )}
                       </td>
@@ -1713,7 +1713,7 @@ const ClanListPage = () => {
               {sortedMembers.map((m) => (
                 <div
                   key={m.id}
-                  className={`bg-card border rounded-lg p-4 space-y-2 ${
+                  className={`bg-card border rounded-sm p-4 space-y-2 ${
                     m.archived_at
                       ? "border-red-500/40 opacity-60"
                       : m.promote_eligible
@@ -1764,7 +1764,7 @@ const ClanListPage = () => {
                         </p>
                       )}
                       <p className="text-xs text-muted-foreground">
-                        {m.ign} · UID: {m.uid}
+                        {m.ign} Â· UID: {m.uid}
                       </p>
                     </div>
                     <span className="font-display text-xs font-bold text-secondary shrink-0 ml-2">
@@ -1780,7 +1780,7 @@ const ClanListPage = () => {
                     </span>
                     {m.promote_eligible && m.rank_next && (
                       <span className="text-green-400 font-bold">
-                        <Zap className="w-3 h-3 inline mr-0.5" />→ {m.rank_next}
+                        <Zap className="w-3 h-3 inline mr-0.5" />â†’ {m.rank_next}
                       </span>
                     )}
                     <span className={`font-mono ${
@@ -1862,7 +1862,7 @@ const ClanListPage = () => {
           </>
         )}
 
-        {/* ── Pagination ── */}
+        {/* â”€â”€ Pagination â”€â”€ */}
         {totalPages > 1 && (
           <div className="flex items-center justify-center gap-4 pt-2">
             <button
@@ -1885,7 +1885,7 @@ const ClanListPage = () => {
           </div>
         )}
 
-        {/* ── Promotions section ── */}
+        {/* â”€â”€ Promotions section â”€â”€ */}
         <div className="border-t border-secondary/20 pt-6 space-y-4">
           <h2 className="font-display text-lg font-bold text-secondary flex items-center gap-2">
             <Zap className="w-5 h-5" /> Promotions
@@ -1895,7 +1895,7 @@ const ClanListPage = () => {
             <button
               onClick={previewPromotions}
               disabled={promoLoading}
-              className="inline-flex items-center gap-2 border border-secondary/40 text-secondary hover:bg-secondary/10 font-display font-bold px-5 py-2.5 rounded-lg transition disabled:opacity-50"
+              className="inline-flex items-center gap-2 border border-secondary/40 text-secondary hover:bg-secondary/10 font-display font-bold px-5 py-2.5 rounded-sm transition disabled:opacity-50"
             >
               {promoLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -1909,7 +1909,7 @@ const ClanListPage = () => {
               <button
                 onClick={() => runPromotions(false)}
                 disabled={promoRunning}
-                className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-display font-bold px-5 py-2.5 rounded-lg transition disabled:opacity-50"
+                className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-display font-bold px-5 py-2.5 rounded-sm transition disabled:opacity-50"
               >
                 {promoRunning ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -1932,7 +1932,7 @@ const ClanListPage = () => {
                   {!showForceConfirm ? (
                     <button
                       onClick={() => setShowForceConfirm(true)}
-                      className="text-xs border border-yellow-400/40 text-yellow-400 hover:bg-yellow-400/10 px-3 py-1.5 rounded-lg font-display font-bold transition"
+                      className="text-xs border border-yellow-400/40 text-yellow-400 hover:bg-yellow-400/10 px-3 py-1.5 rounded-sm font-display font-bold transition"
                     >
                       Force Run
                     </button>
@@ -1944,7 +1944,7 @@ const ClanListPage = () => {
                       <button
                         onClick={() => runPromotions(true)}
                         disabled={promoRunning}
-                        className="text-xs bg-destructive text-destructive-foreground px-3 py-1.5 rounded-lg font-display font-bold transition disabled:opacity-50"
+                        className="text-xs bg-destructive text-destructive-foreground px-3 py-1.5 rounded-sm font-display font-bold transition disabled:opacity-50"
                       >
                         {promoRunning ? "Running..." : "Confirm"}
                       </button>
@@ -1961,7 +1961,7 @@ const ClanListPage = () => {
           </div>
 
           {promoResult && (
-            <div className="bg-secondary/10 border border-secondary/30 text-secondary text-sm rounded-lg px-4 py-3">
+            <div className="bg-secondary/10 border border-secondary/30 text-secondary text-sm rounded-sm px-4 py-3">
               {promoResult}
             </div>
           )}
@@ -1972,7 +1972,7 @@ const ClanListPage = () => {
               <h3 className="font-display text-sm font-bold text-foreground">
                 Eligible Members ({promoPreview.total_due})
               </h3>
-              <div className="overflow-x-auto rounded-lg border border-secondary/20">
+              <div className="overflow-x-auto rounded-sm border border-secondary/20">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-secondary/10 border-b border-secondary/20">
@@ -2013,7 +2013,7 @@ const ClanListPage = () => {
                           {p.needs_resolution ? (
                             <span
                               className="text-yellow-400 text-xs"
-                              title="No Discord ID — will be skipped"
+                              title="No Discord ID â€” will be skipped"
                             >
                               <AlertTriangle className="w-3 h-3 inline" />{" "}
                               Unresolved
@@ -2052,7 +2052,7 @@ const ClanListPage = () => {
                     <span className="text-foreground font-bold">
                       {u.discord_name}
                     </span>{" "}
-                    — {u.ign} (UID: {u.uid}) — {u.from_rank} → {u.to_rank}
+                    â€” {u.ign} (UID: {u.uid}) â€” {u.from_rank} â†’ {u.to_rank}
                   </div>
                 ))}
               </div>
@@ -2066,7 +2066,7 @@ const ClanListPage = () => {
           )}
         </div>
 
-        {/* ── Manual Promotion section ── */}
+        {/* â”€â”€ Manual Promotion section â”€â”€ */}
         <div className="border-t border-secondary/20 pt-6 space-y-4">
           <h2 className="font-display text-lg font-bold text-secondary flex items-center gap-2">
             <Zap className="w-5 h-5" /> Manual Promotion
@@ -2083,7 +2083,7 @@ const ClanListPage = () => {
               <select
                 value={manualPromoMemberId ?? ""}
                 onChange={(e) => setManualPromoMemberId(e.target.value || null)}
-                className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
+                className="w-full bg-muted border border-border rounded-sm px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
               >
                 <option value="">-- Choose member --</option>
                 {members.map((m) => (
@@ -2101,7 +2101,7 @@ const ClanListPage = () => {
               <select
                 value={manualPromoNewRank}
                 onChange={(e) => setManualPromoNewRank(e.target.value)}
-                className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
+                className="w-full bg-muted border border-border rounded-sm px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
               >
                 <option value="">-- Choose rank --</option>
                 {RANKS.map((rank) => (
@@ -2116,7 +2116,7 @@ const ClanListPage = () => {
               <button
                 onClick={runManualPromotion}
                 disabled={manualPromoRunning || !manualPromoMemberId || !manualPromoNewRank}
-                className="w-full inline-flex items-center justify-center gap-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground font-display font-bold px-5 py-2 rounded-lg transition disabled:opacity-50"
+                className="w-full inline-flex items-center justify-center gap-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground font-display font-bold px-5 py-2 rounded-sm transition disabled:opacity-50"
               >
                 {manualPromoRunning ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -2129,7 +2129,7 @@ const ClanListPage = () => {
           </div>
 
           {manualPromoResult && (
-            <div className={`border rounded-lg px-4 py-3 text-sm ${
+            <div className={`border rounded-sm px-4 py-3 text-sm ${
               manualPromoResult.includes("Success") 
                 ? "bg-green-500/10 border-green-500/30 text-green-400"
                 : "bg-red-500/10 border-red-500/30 text-red-400"

@@ -146,12 +146,10 @@ const VerifyPage = () => {
   // Only unverified users should see this page
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      <div className="absolute inset-0 smoke-overlay pointer-events-none" />
-
-      <nav className="relative z-10 border-b border-border bg-card/60 backdrop-blur">
+      <nav className="relative z-10 border-b border-border bg-card">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <span className="font-display text-lg font-bold neon-text-blue text-primary">
-            420 Clan
+          <span className="font-display text-lg font-bold text-primary">
+            KSK
           </span>
           <a
             href="/.netlify/functions/logout"
@@ -164,7 +162,7 @@ const VerifyPage = () => {
 
       <div className="relative z-10 container mx-auto px-4 py-16 max-w-lg">
         <motion.div
-          className="bg-card border border-border rounded-xl p-10 text-center neon-border-blue"
+          className="bg-card border border-border rounded-sm p-10 text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -178,7 +176,7 @@ const VerifyPage = () => {
           </h1>
           <p className="text-muted-foreground mb-8 max-w-sm mx-auto text-sm">
             Complete the captcha below to verify you're human. This will unlock
-            access to apply for the 420 Clan.
+            access to apply for KSK.
           </p>
 
           {/* Turnstile widget */}
@@ -205,7 +203,7 @@ const VerifyPage = () => {
           )}
 
           {error && (
-            <div className="flex items-center gap-2 justify-center bg-destructive/10 border border-destructive/30 rounded-lg p-3 mb-6 text-sm text-destructive">
+            <div className="flex items-center gap-2 justify-center bg-destructive/10 border border-destructive/30 rounded-sm p-3 mb-6 text-sm text-destructive">
               <AlertTriangle className="w-4 h-4 shrink-0" />
               {error}
             </div>
@@ -214,7 +212,7 @@ const VerifyPage = () => {
           <button
             onClick={handleVerify}
             disabled={!captchaToken || verifying}
-            className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 disabled:opacity-50 text-primary-foreground font-display font-bold py-3 rounded-lg transition neon-box-blue"
+            className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 disabled:opacity-50 text-primary-foreground font-display font-bold py-3 rounded-sm transition"
           >
             {verifying ? (
               <Loader2 className="w-5 h-5 animate-spin" />

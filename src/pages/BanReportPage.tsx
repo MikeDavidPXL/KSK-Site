@@ -10,7 +10,7 @@ import {
   CheckCircle,
   Shield,
 } from "lucide-react";
-import clanLogo from "@/assets/clan-logo.png";
+const clanLogo = "/ksk.png";
 
 const BAN_REASONS = [
   { value: "cheating", label: "Cheating" },
@@ -96,14 +96,14 @@ const BanReportPage = () => {
     return (
       <div className="min-h-screen bg-background">
         {/* Nav */}
-        <nav className="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border shadow-lg">
+        <nav className="sticky top-0 z-50 bg-background border-b border-border">
           <div className="container mx-auto px-4 flex items-center justify-between h-16">
             <Link
               to="/"
               className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition"
             >
               <ArrowLeft className="w-4 h-4" />
-              <img src={clanLogo} alt="KSK Logo" className="w-8 h-8 rounded-full" />
+              <img src={clanLogo} alt="KSK Logo" className="w-8 h-8 " />
               <span className="font-display text-sm font-bold hidden sm:block">
                 Back to homepage
               </span>
@@ -129,7 +129,7 @@ const BanReportPage = () => {
           </p>
           <a
             href={loginUrl}
-            className="inline-flex items-center gap-2 bg-[#5865F2] hover:bg-[#4752C4] text-white font-display font-bold px-6 py-3 rounded-lg transition"
+            className="inline-flex items-center gap-2 bg-[#5865F2] hover:bg-[#4752C4] text-white font-display font-bold px-6 py-3 rounded-sm transition"
           >
             Login with Discord
           </a>
@@ -143,14 +143,14 @@ const BanReportPage = () => {
     return (
       <div className="min-h-screen bg-background">
         {/* Nav */}
-        <nav className="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border shadow-lg">
+        <nav className="sticky top-0 z-50 bg-background border-b border-border">
           <div className="container mx-auto px-4 flex items-center justify-between h-16">
             <Link
               to="/"
               className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition"
             >
               <ArrowLeft className="w-4 h-4" />
-              <img src={clanLogo} alt="KSK Logo" className="w-8 h-8 rounded-full" />
+              <img src={clanLogo} alt="KSK Logo" className="w-8 h-8 " />
               <span className="font-display text-sm font-bold hidden sm:block">
                 Back to homepage
               </span>
@@ -185,7 +185,7 @@ const BanReportPage = () => {
           </p>
           <Link
             to="/"
-            className="inline-flex items-center gap-2 bg-muted hover:bg-muted/80 text-foreground font-display font-bold px-6 py-3 rounded-lg transition"
+            className="inline-flex items-center gap-2 bg-muted hover:bg-muted/80 text-foreground font-display font-bold px-6 py-3 rounded-sm transition"
           >
             <ArrowLeft className="w-4 h-4" />
             Return to Homepage
@@ -203,7 +203,7 @@ const BanReportPage = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
-        className="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border shadow-lg"
+        className="sticky top-0 z-50 bg-background border-b border-border"
       >
         <div className="container mx-auto px-4 flex items-center justify-between h-16">
           <Link
@@ -211,7 +211,7 @@ const BanReportPage = () => {
             className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition"
           >
             <ArrowLeft className="w-4 h-4" />
-            <img src={clanLogo} alt="KSK Logo" className="w-8 h-8 rounded-full" />
+            <img src={clanLogo} alt="KSK Logo" className="w-8 h-8 " />
             <span className="font-display text-sm font-bold hidden sm:block">
               Back to homepage
             </span>
@@ -227,7 +227,7 @@ const BanReportPage = () => {
               <img
                 src={user.avatar}
                 alt=""
-                className="w-8 h-8 rounded-full border border-border"
+                className="w-8 h-8  border border-border"
               />
             )}
             <span className="text-sm text-foreground hidden sm:block">
@@ -257,7 +257,7 @@ const BanReportPage = () => {
           </div>
 
           {/* Warning box */}
-          <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mb-6">
+          <div className="bg-red-500/10 border border-red-500/30 rounded-sm p-4 mb-6">
             <p className="text-sm text-red-400">
               <strong>Important:</strong> This is NOT an appeal form. This form is only
               to notify the clan that you have been banned.
@@ -274,7 +274,7 @@ const BanReportPage = () => {
                 {BAN_REASONS.map((r) => (
                   <label
                     key={r.value}
-                    className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition ${
+                    className={`flex items-center gap-3 p-3 rounded-sm border cursor-pointer transition ${
                       reason === r.value
                         ? "bg-red-500/10 border-red-500/50"
                         : "bg-card border-border hover:border-muted-foreground/30"
@@ -310,7 +310,7 @@ const BanReportPage = () => {
                   onChange={(e) => setCustomReason(e.target.value)}
                   placeholder="What was the stated reason for your ban?"
                   maxLength={200}
-                  className="w-full bg-muted border border-border rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-border"
+                  className="w-full bg-muted border border-border rounded-sm px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-border"
                 />
               </motion.div>
             )}
@@ -327,7 +327,7 @@ const BanReportPage = () => {
                 placeholder="Any additional information you want to provide..."
                 rows={4}
                 maxLength={1000}
-                className="w-full bg-muted border border-border rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-border resize-none"
+                className="w-full bg-muted border border-border rounded-sm px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-border resize-none"
               />
               <p className="text-xs text-muted-foreground mt-1 text-right">
                 {additionalContext.length}/1000
@@ -335,7 +335,7 @@ const BanReportPage = () => {
             </div>
 
             {/* Confirmation checkbox */}
-            <div className="bg-card border border-border rounded-lg p-4">
+            <div className="bg-card border border-border rounded-sm p-4">
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -351,7 +351,7 @@ const BanReportPage = () => {
 
             {/* Error */}
             {error && (
-              <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+              <div className="bg-red-500/10 border border-red-500/30 rounded-sm p-3">
                 <p className="text-sm text-red-400">{error}</p>
               </div>
             )}
@@ -360,7 +360,7 @@ const BanReportPage = () => {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-display font-bold py-4 rounded-lg transition disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-display font-bold py-4 rounded-sm transition disabled:opacity-50"
             >
               {submitting ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
