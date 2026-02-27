@@ -4,6 +4,25 @@ import type { Handler } from "@netlify/functions";
 import { createSession, discordFetch, redirect } from "./shared";
 
 const handler: Handler = async (event) => {
+  const clientId = process.env.DISCORD_CLIENT_ID;
+  const clientSecret = process.env.DISCORD_CLIENT_SECRET;
+  const redirectUri = process.env.DISCORD_REDIRECT_URI;
+
+  if (!clientId || !clientSecret || !redirectUri) {
+    return {
+      statusCode: 500,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        error: "Missing OAuth environment variables",
+        missing: [
+          !clientId ? "DISCORD_CLIENT_ID" : null,
+          !clientSecret ? "DISCORD_CLIENT_SECRET" : null,
+          !redirectUri ? "DISCORD_REDIRECT_URI" : null,
+        ].filter(Boolean),
+      }),
+    };
+  }
+
   const code = event.queryStringParameters?.code;
   if (!code) {
     return { statusCode: 400, body: "Missing code parameter" };
@@ -14,11 +33,11 @@ const handler: Handler = async (event) => {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
-      client_id: process.env.DISCORD_CLIENT_ID!,
-      client_secret: process.env.DISCORD_CLIENT_SECRET!,
+      client_id: clientId,
+      client_secret: clientSecret,
       grant_type: "authorization_code",
       code,
-      redirect_uri: process.env.DISCORD_REDIRECT_URI!,
+      redirect_uri: redirectUri,
     }),
   });
 
@@ -46,7 +65,7 @@ const handler: Handler = async (event) => {
   const cookie = `session=${sessionToken}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${7 * 24 * 60 * 60}`;
 
   // Determine base URL from redirect URI
-  const base = new URL(process.env.DISCORD_REDIRECT_URI!).origin;
+  const base = new URL(redirectUri).origin;
   return redirect(`${base}/dashboard`, cookie);
 };
 
