@@ -11,7 +11,7 @@ const HeroSection = () => {
       <div className="absolute inset-0">
         <img
           src={heroBanner}
-          alt="420 Clan Banner"
+          alt="KSK Banner"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-background/60" />
@@ -23,7 +23,7 @@ const HeroSection = () => {
       <div className="relative z-10 text-center px-4">
         <motion.img
           src={clanLogo}
-          alt="420 Clan Logo"
+          alt="KSK Logo"
           className="w-28 h-28 mx-auto mb-6 rounded-full neon-box-blue"
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
@@ -38,7 +38,7 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
         >
-          420 Clan
+          KSK
         </motion.h1>
         <motion.p
           className="text-lg sm:text-xl  max-w-2xl mx-auto mb-8 font-body"

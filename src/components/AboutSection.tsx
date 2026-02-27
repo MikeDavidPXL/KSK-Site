@@ -50,10 +50,10 @@ const AboutSection = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="font-display text-3xl sm:text-4xl font-bold uppercase mb-6 neon-text-blue text-primary">
-            About 420 Clan
+            About KSK
           </h2>
           <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-            We are <span className="text-primary font-semibold">420 Clan</span>, a 
+            We are <span className="text-primary font-semibold">KSK</span>, a 
             community built for lovers of the CosmicV KOTH FiveM server who want to 
             take their experience to the next level. Our texture pack made by{" "}
             <span className="text-primary font-semibold neon-text-blue">M1K3</span>{" "}

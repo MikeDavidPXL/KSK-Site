@@ -1,6 +1,6 @@
-# 420 Clan Texture Pack
+# KSK Texture Pack
 
-Official texture pack for the 420 Clan FiveM server.
+Official texture pack for the KSK FiveM server.
 
 This pack includes custom weapon skins, visual effects, and graphical enhancements.
 

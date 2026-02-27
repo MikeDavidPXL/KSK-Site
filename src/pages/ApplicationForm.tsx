@@ -35,9 +35,9 @@ const ApplicationForm = () => {
   }, [confirmOverride, error]);
 
   // Guard: Discord roles are the truth for access.
-  // staff / private → pack page, no session → login, unverified → verify, no koth → dashboard
+  // no session → login, accepted/private/staff → dashboard/admin flow, unverified → verify, no koth → dashboard
   if (!authLoading && !user) return <Navigate to="/" replace />;
-  if (!authLoading && user && user.effective_status === "accepted") return <Navigate to="/pack" replace />;
+  if (!authLoading && user && user.effective_status === "accepted") return <Navigate to="/dashboard" replace />;
   if (!authLoading && user && user.is_unverified && !user.is_koth) return <Navigate to="/verify" replace />;
   if (!authLoading && user && user.effective_status !== "koth") return <Navigate to="/dashboard" replace />;
 

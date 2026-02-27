@@ -331,7 +331,7 @@ const AdminPanel = () => {
 
   // Guard: staff only
   if (!authLoading && (!user || !user.is_staff)) {
-    return <Navigate to="/pack" replace />;
+    return <Navigate to="/" replace />;
   }
 
   if (authLoading) {
@@ -359,11 +359,11 @@ const AdminPanel = () => {
       >
         <div className="container mx-auto px-4 flex items-center justify-between h-16">
           <Link
-            to="/pack"
+            to="/dashboard"
             className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition"
           >
             <ArrowLeft className="w-4 h-4" />
-            <img src={clanLogo} alt="420 Clan Logo" className="w-8 h-8 rounded-full" />
+            <img src={clanLogo} alt="KSK Logo" className="w-8 h-8 rounded-full" />
             <span className="font-display text-sm font-bold hidden sm:block">
               Back to homepage
             </span>

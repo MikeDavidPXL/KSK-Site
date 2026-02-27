@@ -138,7 +138,8 @@ const VerifyPage = () => {
   }
 
   if (!user) return <Navigate to="/" replace />;
-  if (user.is_staff || user.is_private) return <Navigate to="/pack" replace />;
+  if (user.is_staff) return <Navigate to="/admin" replace />;
+  if (user.is_private) return <Navigate to="/dashboard" replace />;
   if (user.is_koth) return <Navigate to="/dashboard" replace />;
   if (!user.in_guild) return <Navigate to="/dashboard" replace />;
 

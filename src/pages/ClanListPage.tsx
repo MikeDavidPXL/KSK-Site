@@ -845,7 +845,7 @@ const ClanListPage = () => {
 
   // ── Guards ──────────────────────────────────────────────
   if (!authLoading && (!user || !user.is_staff)) {
-    return <Navigate to="/pack" replace />;
+    return <Navigate to="/" replace />;
   }
 
   if (authLoading) {
@@ -867,13 +867,13 @@ const ClanListPage = () => {
       >
         <div className="container mx-auto px-4 flex items-center justify-between h-16">
           <Link
-            to="/pack"
+            to="/admin"
             className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition"
           >
             <ArrowLeft className="w-4 h-4" />
             <img
               src={clanLogo}
-              alt="420 Clan Logo"
+              alt="KSK Logo"
               className="w-8 h-8 rounded-full"
             />
             <span className="font-display text-sm font-bold hidden sm:block">
@@ -1283,7 +1283,7 @@ const ClanListPage = () => {
                         }
                         className="accent-secondary w-4 h-4 rounded"
                       />
-                      Has 420 Tag
+                      Has KSK Tag
                     </label>
                   </div>
                 </div>
@@ -1379,8 +1379,8 @@ const ClanListPage = () => {
             className="flex-1 sm:flex-none sm:w-[130px] bg-muted border border-border rounded-lg pl-3 pr-10 py-2.5 text-sm text-foreground focus:outline-none"
           >
             <option value="">All Tags</option>
-            <option value="true">Has 420 Tag</option>
-            <option value="false">No 420 Tag</option>
+            <option value="true">Has KSK Tag</option>
+            <option value="false">No KSK Tag</option>
           </select>
           <select
             value={promoFilter}
@@ -1470,7 +1470,7 @@ const ClanListPage = () => {
                       { label: "UID", key: "uid" as SortKey },
                       { label: "Join Date", key: "join_date" as SortKey },
                       { label: "Days", key: "time_in_clan_days" as SortKey },
-                      { label: "420 Tag", key: null },
+                      { label: "KSK Tag", key: null },
                       { label: "Status", key: "status" as SortKey },
                       { label: "Rank", key: "rank_current" as SortKey },
                       { label: "Next Rank", key: "rank_next" as SortKey },
@@ -1484,7 +1484,7 @@ const ClanListPage = () => {
                           key={col.label}
                           onClick={() => isSortable && col.key && handleSort(col.key)}
                           className={`font-display font-bold px-3 py-3 text-xs uppercase tracking-wider whitespace-nowrap ${
-                            col.label === "420 Tag" || col.label === "Info"
+                            col.label === "KSK Tag" || col.label === "Info"
                               ? "text-center"
                               : "text-left"
                           } ${
@@ -1825,7 +1825,7 @@ const ClanListPage = () => {
                             disabled={savingField === m.id}
                             className="accent-secondary w-3.5 h-3.5 rounded"
                           />
-                          420 Tag
+                          KSK Tag
                         </label>
                         <select
                           value={m.status}

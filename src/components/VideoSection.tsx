@@ -34,7 +34,7 @@ const VideoSection = () => {
             <iframe
               className="absolute inset-0 w-full h-full"
               src="https://www.youtube.com/embed/9uN9U3PjRVk"
-              title="420 Clan Showcase"
+              title="KSK Showcase"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />

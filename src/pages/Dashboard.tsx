@@ -58,9 +58,29 @@ const Dashboard = () => {
     return <Navigate to="/" replace />;
   }
 
-  // Staff or Private → straight to pack page
-  if (user.is_staff || user.is_private) {
-    return <Navigate to="/pack" replace />;
+  // Staff → admin panel
+  if (user.is_staff) {
+    return <Navigate to="/admin" replace />;
+  }
+
+  // Private members: pack section is disabled
+  if (user.is_private) {
+    return (
+      <GatePage>
+        <GateCard
+          icon={<FileText className="w-8 h-8 text-primary" />}
+          title="Pack tijdelijk niet beschikbaar"
+          description="Het download- en installatiegedeelte is verwijderd. We bouwen dit later opnieuw op."
+        >
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-display font-bold px-8 py-3 rounded-lg transition hover:scale-105"
+          >
+            Back to Homepage
+          </Link>
+        </GateCard>
+      </GatePage>
+    );
   }
 
   // Not in guild at all → join Discord card

@@ -18,7 +18,7 @@ const LandingPage = () => {
         {/* Logo */}
         <motion.img
           src={clanLogo}
-          alt="420 Clan"
+          alt="KSK"
           className="w-32 h-32 mb-8 drop-shadow-2xl"
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -26,13 +26,13 @@ const LandingPage = () => {
         />
 
         <h1 className="font-display text-4xl sm:text-6xl font-bold uppercase mb-4 gradient-neon-text">
-          420 Clan
+          KSK
         </h1>
         <p className="text-muted-foreground text-lg sm:text-xl mb-3 max-w-md">
           CosmicV KOTH Clan
         </p>
         <p className="text-muted-foreground/70 text-sm mb-10 max-w-sm">
-          Log in with Discord to apply for the clan and access our exclusive texture pack.
+          Log in met Discord om te applyen en updates te volgen.
         </p>
 
         {/* Discord login button */}

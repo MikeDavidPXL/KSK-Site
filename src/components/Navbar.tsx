@@ -33,9 +33,9 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 flex items-center justify-between h-16">
         <a href="#hero" className="flex items-center gap-2">
-          <img src={clanLogo} alt="420 Clan Logo" className="w-10 h-10 rounded-full" />
+          <img src={clanLogo} alt="KSK Logo" className="w-10 h-10 rounded-full" />
           <span className="font-display text-lg font-bold gradient-neon-text hidden sm:block">
-            420 CLAN
+            KSK
           </span>
         </a>
         <div className="hidden md:flex items-center gap-6">
