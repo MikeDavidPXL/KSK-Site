@@ -1,5 +1,5 @@
 // /.netlify/functions/auth-callback
-// Exchanges Discord code for token, creates session cookie, redirects to /dashboard
+// Exchanges Discord code for token, creates session cookie, redirects to /
 import type { Handler } from "@netlify/functions";
 import { createSession, discordFetch, redirect } from "./shared";
 
@@ -66,7 +66,7 @@ const handler: Handler = async (event) => {
 
   // Determine base URL from redirect URI
   const base = new URL(redirectUri).origin;
-  return redirect(`${base}/dashboard`, cookie);
+  return redirect(`${base}/`, cookie);
 };
 
 export { handler };

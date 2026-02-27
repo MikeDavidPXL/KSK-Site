@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Source+Sans+Pro:wght@300;400;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@500;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,54 +6,54 @@
 
 @layer base {
   :root {
-    --background: 230 25% 7%;
-    --foreground: 220 20% 90%;
+    --background: 80 20% 14%;
+    --foreground: 0 0% 94%;
 
-    --card: 230 25% 10%;
-    --card-foreground: 220 20% 90%;
+    --card: 82 17% 18%;
+    --card-foreground: 0 0% 94%;
 
-    --popover: 230 25% 10%;
-    --popover-foreground: 220 20% 90%;
+    --popover: 82 17% 18%;
+    --popover-foreground: 0 0% 94%;
 
-    --primary: 220 90% 55%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 39 31% 68%;
+    --primary-foreground: 85 18% 12%;
 
-    --secondary: 270 80% 60%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 37 21% 53%;
+    --secondary-foreground: 85 18% 12%;
 
-    --muted: 230 20% 15%;
-    --muted-foreground: 220 15% 55%;
+    --muted: 83 13% 23%;
+    --muted-foreground: 0 0% 73%;
 
-    --accent: 140 70% 45%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 42 35% 62%;
+    --accent-foreground: 85 18% 12%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 230 20% 18%;
-    --input: 230 20% 18%;
-    --ring: 220 90% 55%;
+    --border: 82 16% 30%;
+    --input: 82 16% 30%;
+    --ring: 39 31% 68%;
 
     --radius: 0.75rem;
 
     /* Custom neon tokens */
-    --neon-blue: 220 90% 55%;
-    --neon-purple: 270 80% 60%;
-    --neon-green: 140 70% 45%;
-    --glow-blue: 0 0 20px hsl(220 90% 55% / 0.5), 0 0 40px hsl(220 90% 55% / 0.3), 0 0 80px hsl(220 90% 55% / 0.1);
-    --glow-purple: 0 0 20px hsl(270 80% 60% / 0.5), 0 0 40px hsl(270 80% 60% / 0.3), 0 0 80px hsl(270 80% 60% / 0.1);
-    --glow-green: 0 0 20px hsl(140 70% 45% / 0.5), 0 0 40px hsl(140 70% 45% / 0.3);
-    --gradient-neon: linear-gradient(135deg, hsl(220 90% 55%), hsl(270 80% 60%));
-    --gradient-neon-green: linear-gradient(135deg, hsl(140 70% 45%), hsl(220 90% 55%));
+    --neon-blue: 39 31% 68%;
+    --neon-purple: 37 21% 53%;
+    --neon-green: 84 19% 30%;
+    --glow-blue: 0 0 20px hsl(39 31% 68% / 0.45), 0 0 40px hsl(39 31% 68% / 0.25);
+    --glow-purple: 0 0 20px hsl(37 21% 53% / 0.4), 0 0 40px hsl(37 21% 53% / 0.22);
+    --glow-green: 0 0 20px hsl(84 19% 30% / 0.5), 0 0 40px hsl(84 19% 30% / 0.3);
+    --gradient-neon: linear-gradient(135deg, hsl(39 31% 68%), hsl(37 21% 53%));
+    --gradient-neon-green: linear-gradient(135deg, hsl(84 19% 30%), hsl(39 31% 68%));
 
-    --sidebar-background: 230 25% 10%;
-    --sidebar-foreground: 220 20% 90%;
-    --sidebar-primary: 220 90% 55%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 230 20% 15%;
-    --sidebar-accent-foreground: 220 20% 90%;
-    --sidebar-border: 230 20% 18%;
-    --sidebar-ring: 220 90% 55%;
+    --sidebar-background: 82 17% 18%;
+    --sidebar-foreground: 0 0% 94%;
+    --sidebar-primary: 39 31% 68%;
+    --sidebar-primary-foreground: 85 18% 12%;
+    --sidebar-accent: 83 13% 23%;
+    --sidebar-accent-foreground: 0 0% 94%;
+    --sidebar-border: 82 16% 30%;
+    --sidebar-ring: 39 31% 68%;
   }
 }
 
@@ -103,15 +103,15 @@
   }
 
   .gradient-neon-text {
-    background: linear-gradient(135deg, hsl(220 90% 55%), hsl(270 80% 60%));
+    background: linear-gradient(135deg, hsl(39 31% 68%), hsl(37 21% 53%));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .smoke-overlay {
-    background: radial-gradient(ellipse at 20% 50%, hsl(220 90% 55% / 0.08) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 50%, hsl(270 80% 60% / 0.08) 0%, transparent 60%);
+    background: radial-gradient(ellipse at 20% 50%, hsl(84 19% 30% / 0.14) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, hsl(37 21% 53% / 0.1) 0%, transparent 60%);
   }
 }
 
@@ -120,14 +120,14 @@
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: hsl(230 25% 7%);
+  background: hsl(80 20% 14%);
 }
 ::-webkit-scrollbar-thumb {
-  background: hsl(220 90% 55% / 0.3);
+  background: hsl(39 31% 68% / 0.35);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(220 90% 55% / 0.5);
+  background: hsl(39 31% 68% / 0.55);
 }
 
 /* Smooth scroll */
@@ -149,12 +149,12 @@ select {
 }
 
 select:hover {
-  border-color: hsl(220 20% 35%);
+  border-color: hsl(82 16% 38%);
 }
 
 select:focus {
   outline: none;
-  border-color: hsl(220 20% 45%);
+  border-color: hsl(39 31% 68%);
 }
 
 /* Remove tap highlight on mobile */
@@ -170,23 +170,23 @@ a {
 }
 
 *:focus-visible {
-  outline: 2px solid hsl(220 20% 40%);
+  outline: 2px solid hsl(39 31% 68%);
   outline-offset: 2px;
 }
 
 /* Style the dropdown options */
 select option {
-  background-color: hsl(230 25% 12%);
-  color: hsl(220 20% 90%);
+  background-color: hsl(82 17% 18%);
+  color: hsl(0 0% 94%);
   padding: 0.5rem;
 }
 
 select option:checked {
-  background: hsl(230 25% 18%);
+  background: hsl(83 13% 23%);
 }
 
 select option:hover {
-  background-color: hsl(230 25% 20%);
+  background-color: hsl(82 16% 28%);
 }
 
 /* Subtle pulse animation for ban report button */

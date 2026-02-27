@@ -7,6 +7,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
 import ApplicationForm from "./pages/ApplicationForm";
+import TexturePackPage from "./pages/TexturePackPage";
 import AdminPanel from "./pages/AdminPanel";
 import VerifyPage from "./pages/VerifyPage";
 import ClanListPage from "./pages/ClanListPage";
@@ -24,11 +25,12 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<TexturePackPage />} />
+            <Route path="/landing" element={<LandingPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/verify" element={<VerifyPage />} />
             <Route path="/apply" element={<ApplicationForm />} />
-            <Route path="/pack" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/pack" element={<TexturePackPage />} />
             <Route path="/admin" element={<AdminPanel />} />
             <Route
               path="/clan-list"
