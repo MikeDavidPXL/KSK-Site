@@ -40,11 +40,11 @@ export const handler: Handler = async (event) => {
 
   const roles: string[] = member.roles ?? [];
   const isStaff = roles.includes(process.env.DISCORD_STAFF_ROLE_ID!);
-  const isCorporalPlus = isCorporalOrHigher(roles);
+  const isMemberPlus = isCorporalOrHigher(roles);
 
-  // Must be Corporal+ rank or Staff to download
-  if (!isCorporalPlus && !isStaff) {
-    return json({ error: "Forbidden — you need Corporal rank or higher to download" }, 403);
+  // Must be Member+ rank or Staff to download
+  if (!isMemberPlus && !isStaff) {
+    return json({ error: "Forbidden — you need Member rank or higher to download" }, 403);
   }
 
   // ── Rate limit: max 5 tokens per user per hour ──────────

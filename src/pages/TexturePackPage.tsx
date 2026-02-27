@@ -26,7 +26,7 @@ import {
   Lock,
 } from "lucide-react";
 import clanLogo from "@/assets/clan-logo.png";
-import heroBanner from "@/assets/420Gif.png";
+import heroBanner from "@/assets/hero-banner.jpg";
 import { buildDiscordAvatarUrl } from "@/lib/discord";
 
 // ── Types ─────────────────────────────────────────────────
@@ -236,7 +236,7 @@ const TexturePackPage = () => {
       <div style={{ opacity: heroOpacity }} className="will-change-[opacity]">
         <section id="hero" className="relative min-h-screen overflow-hidden">
           <div className="absolute inset-0">
-            <img src={heroBanner} alt="420 Clan Banner" className="w-full h-full object-cover" />
+            <img src={heroBanner} alt="KSK Banner" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-background/30" />
             <div className="absolute inset-0 smoke-overlay" />
             <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
@@ -258,14 +258,14 @@ const TexturePackPage = () => {
         <div className="container mx-auto px-4 text-center">
           <img
             src={clanLogo}
-            alt="420 Clan Logo"
+            alt="KSK Logo"
             className="w-28 h-28 mx-auto mb-6 rounded-full neon-box-blue"
           />
           <h1
             className="font-display text-4xl sm:text-5xl md:text-7xl font-black uppercase mb-4 gradient-neon-text"
             style={{ WebkitTextStroke: "2px rgba(0, 0, 0, 0.2)" }}
           >
-            420 Clan
+            KSK
           </h1>
           <p className="text-lg sm:text-xl max-w-2xl mx-auto mb-8 font-body text-muted-foreground">
             Come and hangout in the VC or on Cosmic.
@@ -303,10 +303,10 @@ const TexturePackPage = () => {
               transition={{ duration: 0.6 }}
             >
               <h2 className="font-display text-3xl sm:text-4xl font-bold uppercase mb-6 neon-text-blue text-primary">
-                About 420 Clan
+                About KSK
               </h2>
               <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                We are <span className="text-primary font-semibold">420 Clan</span>, a
+                We are <span className="text-primary font-semibold">KSK</span>, a
                 community built for lovers of the CosmicV KOTH FiveM server who want to
                 take their experience to the next level. Our texture pack made by{" "}
                 <span className="text-primary font-semibold neon-text-blue">M1K3</span>{" "}
@@ -469,7 +469,7 @@ const TexturePackPage = () => {
                 <iframe
                   className="absolute inset-0 w-full h-full"
                   src="https://www.youtube.com/embed/9uN9U3PjRVk"
-                  title="420 Clan Showcase"
+                  title="KSK Showcase"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 />
@@ -668,7 +668,7 @@ const TexturePackPage = () => {
                     <Lock className="w-5 h-5" />
                     <span>
                       Reach{" "}
-                      <span className="text-primary neon-text-blue">Corporal</span>
+                      <span className="text-primary neon-text-blue">Member</span>
                       {" "}to unlock
                     </span>
                   </div>
@@ -689,9 +689,9 @@ const TexturePackPage = () => {
         <div className="container mx-auto px-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-3">
             <div className="flex items-center gap-2">
-              <img src={clanLogo} alt="420 Clan" className="w-6 h-6 rounded-full" />
+              <img src={clanLogo} alt="KSK" className="w-6 h-6 rounded-full" />
               <span className="font-display text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                420 Clan © 2026
+                KSK © 2026
               </span>
             </div>
             <p className="text-muted-foreground text-xs">
@@ -790,9 +790,9 @@ function PackNavbar({
     >
       <div className="container mx-auto px-4 flex items-center justify-between h-16">
         <a href="#hero" className="flex items-center gap-2">
-          <img src={clanLogo} alt="420 Clan Logo" className="w-10 h-10 rounded-full" />
+          <img src={clanLogo} alt="KSK Logo" className="w-10 h-10 rounded-full" />
           <span className="font-display text-lg font-bold gradient-neon-text hidden sm:block">
-            420 CLAN
+            KSK
           </span>
         </a>
         <div className="hidden md:flex items-center gap-6">

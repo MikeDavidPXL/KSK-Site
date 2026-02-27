@@ -25,22 +25,112 @@ export const WEBDEV_ROLE_ID = process.env.DISCORD_WEBDEV_ROLE_ID;
 export const ADMIN_ROLE_ID =
   process.env.DISCORD_ADMIN_ROLE_ID ?? process.env.DISCORD_STAFF_ROLE_ID;
 
-// ── Rank role IDs (Corporal and above can download the pack) ────
-export const CORPORAL_ROLE_ID = "1374050435484094525";
-export const SERGEANT_ROLE_ID = "1378450788069933206";
-export const LIEUTENANT_ROLE_ID = "1378450714845778022";
-export const MAJOR_ROLE_ID = "1378450739885637702";
+// ── KSK rank role IDs (Member and higher can download the pack) ────
+export const MEMBER_ROLE_ID = process.env.DISCORD_MEMBER_ROLE_ID ?? null;
+export const OG_ROLE_ID = process.env.DISCORD_OG_ROLE_ID ?? null;
+export const RECRUITEER_ROLE_ID = process.env.DISCORD_RECRUITEER_ROLE_ID ?? null;
+export const COMMANDER_ROLE_ID = process.env.DISCORD_COMMANDER_ROLE_ID ?? null;
 
 const DOWNLOAD_ELIGIBLE_ROLES = [
-  CORPORAL_ROLE_ID,
-  SERGEANT_ROLE_ID,
-  LIEUTENANT_ROLE_ID,
-  MAJOR_ROLE_ID,
+  MEMBER_ROLE_ID,
+  OG_ROLE_ID,
+  RECRUITEER_ROLE_ID,
+  COMMANDER_ROLE_ID,
+].filter((roleId): roleId is string => !!roleId);
+
+const normalizeRankName = (rank: string) => rank.trim().toLowerCase();
+
+const LEGACY_TO_KSK_RANK: Record<string, string> = {
+  private: "Trial Member",
+  corporal: "Member",
+  sergeant: "OG",
+  lieutenant: "Recruiteer",
+  major: "Commander",
+};
+
+const KSK_TO_LEGACY_RANK: Record<string, string> = {
+  "trial member": "Private",
+  member: "Corporal",
+  og: "Sergeant",
+  recruiteer: "Lieutenant",
+  commander: "Major",
+};
+
+export function toKskRankName(rank: string): string {
+  const normalized = normalizeRankName(rank);
+  return LEGACY_TO_KSK_RANK[normalized] ?? rank;
+}
+
+export function fromKskRankName(rank: string): string {
+  const normalized = normalizeRankName(rank);
+  return KSK_TO_LEGACY_RANK[normalized] ?? rank;
+}
+
+export function normalizeStoredRank(rank: string): string {
+  const normalized = normalizeRankName(rank);
+  if (KSK_TO_LEGACY_RANK[normalized]) return KSK_TO_LEGACY_RANK[normalized];
+  if (LEGACY_TO_KSK_RANK[normalized]) return rank;
+  return rank;
+}
+
+export function toKskRankForDisplay(rank: string): string {
+  return toKskRankName(normalizeStoredRank(rank));
+}
+
+export const KSK_RANK_SEQUENCE = [
+  "Trial Member",
+  "Member",
+  "OG",
+  "Recruiteer",
+  "Commander",
 ];
 
-/** Returns true if the user holds Corporal, Sergeant, Lieutenant, or Major role */
+export function kskRankOrder(rank: string): number {
+  const normalized = normalizeRankName(rank);
+  const mapped = normalizeRankName(toKskRankForDisplay(rank));
+  const idx = KSK_RANK_SEQUENCE.findIndex((item) => normalizeRankName(item) === mapped);
+  if (idx !== -1) return idx;
+  const fallback = KSK_RANK_SEQUENCE.findIndex((item) => normalizeRankName(item) === normalized);
+  return fallback === -1 ? 0 : fallback;
+}
+
+export function kskNextRank(rank: string): string | null {
+  const idx = kskRankOrder(rank);
+  if (idx >= KSK_RANK_SEQUENCE.length - 1) return null;
+  return KSK_RANK_SEQUENCE[idx + 1];
+}
+
+export function toLegacyRankName(rank: string): string {
+  return fromKskRankName(rank);
+}
+
+export function toKskRankArray(ranks: string[]): string[] {
+  return ranks.map((rank) => toKskRankForDisplay(rank));
+}
+
+export function toLegacyRankArray(ranks: string[]): string[] {
+  return ranks.map((rank) => normalizeStoredRank(rank));
+}
+
+export const KSK_RANK_COLORS: Record<string, string> = {
+  "Trial Member": "text-green-300",
+  Member: "text-blue-400",
+  OG: "text-orange-400",
+  Recruiteer: "text-cyan-400",
+  Commander: "text-red-400",
+};
+
+export function kskRankColor(rank: string): string {
+  return KSK_RANK_COLORS[toKskRankForDisplay(rank)] ?? "text-muted-foreground";
+}
+
+export function isDownloadEligibleRank(roles: string[]): boolean {
+  return DOWNLOAD_ELIGIBLE_ROLES.some((roleId) => roles.includes(roleId));
+}
+
+// Backward-compat export name used in current handlers/frontend payload fields
 export function isCorporalOrHigher(roles: string[]): boolean {
-  return DOWNLOAD_ELIGIBLE_ROLES.some((r) => roles.includes(r));
+  return isDownloadEligibleRank(roles);
 }
 
 export function determineStaffTier(roles: string[]): StaffTier | null {
@@ -158,11 +248,11 @@ export interface RankDef {
 }
 
 export const RANK_LADDER: RankDef[] = [
-  { name: "Private",    roleId: null,                    daysRequired: 0  },
-  { name: "Corporal",   roleId: "1374050435484094525",   daysRequired: 14 },
-  { name: "Sergeant",   roleId: "1378450788069933206",   daysRequired: 30 },
-  { name: "Lieutenant", roleId: "1378450714845778022",   daysRequired: 60 },
-  { name: "Major",      roleId: "1378450739885637702",   daysRequired: 90 },
+  { name: "Private",    roleId: process.env.DISCORD_TRIAL_MEMBER_ROLE_ID ?? null, daysRequired: 0  },
+  { name: "Corporal",   roleId: MEMBER_ROLE_ID,                                  daysRequired: 14 },
+  { name: "Sergeant",   roleId: OG_ROLE_ID,                                       daysRequired: 30 },
+  { name: "Lieutenant", roleId: RECRUITEER_ROLE_ID,                               daysRequired: 60 },
+  { name: "Major",      roleId: COMMANDER_ROLE_ID,                                daysRequired: 90 },
 ];
 
 export const RANK_ROLE_IDS = RANK_LADDER
