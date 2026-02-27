@@ -139,10 +139,21 @@ const TexturePackPage = () => {
       <TacticalNavbar user={user!} pendingCount={pendingCount} />
 
       {/* ── Hero Section (image only) ────────────────────── */}
-      <section id="hero" className="relative h-screen">
+      <section id="hero" className="relative h-screen overflow-hidden bg-black">
         <div className="absolute inset-0">
-          <img src="/ksk_img.jpg" alt="KSK" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-black/50" />
+          <img
+            src="/ksk_img.jpg"
+            alt="KSK"
+            className="w-full h-full object-cover scale-105 blur-[2px] opacity-50"
+          />
+          <div className="absolute inset-0 bg-black/30" />
+          <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-8">
+            <img
+              src="/ksk_img.jpg"
+              alt="KSK"
+              className="w-full max-w-6xl max-h-[82vh] object-contain"
+            />
+          </div>
           <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background to-transparent" />
         </div>
       </section>
@@ -524,32 +535,32 @@ function TacticalNavbar({
       }`}
     >
       <div className="container mx-auto px-4 h-14">
-        <div className="flex items-center justify-between h-full max-w-6xl mx-auto">
+        <div className="h-full max-w-6xl mx-auto grid grid-cols-[1fr_auto_1fr] items-center">
           {/* Left: Logo */}
-          <a href="#hero" className="flex items-center gap-2">
-          <img src="/ksk.png" alt="KSK" className="h-8 w-auto object-contain" />
-          <span className="font-display text-xl text-primary tracking-widest hidden sm:block">
-            KSK
-          </span>
-        </a>
+          <a href="#hero" className="flex items-center gap-2 justify-self-start">
+            <img src="/ksk.png" alt="KSK" className="h-8 w-auto object-contain" />
+            <span className="font-display text-xl text-primary tracking-widest hidden sm:block">
+              KSK
+            </span>
+          </a>
 
-        {/* Center/Right: Nav links (desktop) */}
-        <div className="hidden md:flex items-center gap-5">
-          {navItems.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className={`nav-underline font-sub text-xs font-bold uppercase tracking-[0.15em] transition-colors duration-200 ${
-                activeSection === item.href ? "text-primary active" : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {item.label}
-            </a>
-          ))}
-        </div>
+          {/* Center: Nav links (desktop) */}
+          <div className="hidden md:flex items-center gap-5 justify-self-center">
+            {navItems.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className={`nav-underline font-sub text-xs font-bold uppercase tracking-[0.15em] transition-colors duration-200 ${
+                  activeSection === item.href ? "text-primary active" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
 
-        {/* Right: User + actions */}
-        <div className="flex items-center gap-3">
+          {/* Right: User + actions */}
+          <div className="flex items-center gap-3 justify-self-end">
           <div className="flex items-center gap-2">
             {user.avatar && (
               <img src={user.avatar} alt="" className="w-7 h-7 border border-border" />
@@ -623,7 +634,7 @@ function TacticalNavbar({
           >
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
-        </div>
+          </div>
         </div>
       </div>
 
