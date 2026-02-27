@@ -1,0 +1,13 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# SPA fallback – serve index.html for all routes not matched by a static file
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

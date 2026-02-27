@@ -1,0 +1,206 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Source+Sans+Pro:wght@300;400;600;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 230 25% 7%;
+    --foreground: 220 20% 90%;
+
+    --card: 230 25% 10%;
+    --card-foreground: 220 20% 90%;
+
+    --popover: 230 25% 10%;
+    --popover-foreground: 220 20% 90%;
+
+    --primary: 220 90% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 270 80% 60%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 230 20% 15%;
+    --muted-foreground: 220 15% 55%;
+
+    --accent: 140 70% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 230 20% 18%;
+    --input: 230 20% 18%;
+    --ring: 220 90% 55%;
+
+    --radius: 0.75rem;
+
+    /* Custom neon tokens */
+    --neon-blue: 220 90% 55%;
+    --neon-purple: 270 80% 60%;
+    --neon-green: 140 70% 45%;
+    --glow-blue: 0 0 20px hsl(220 90% 55% / 0.5), 0 0 40px hsl(220 90% 55% / 0.3), 0 0 80px hsl(220 90% 55% / 0.1);
+    --glow-purple: 0 0 20px hsl(270 80% 60% / 0.5), 0 0 40px hsl(270 80% 60% / 0.3), 0 0 80px hsl(270 80% 60% / 0.1);
+    --glow-green: 0 0 20px hsl(140 70% 45% / 0.5), 0 0 40px hsl(140 70% 45% / 0.3);
+    --gradient-neon: linear-gradient(135deg, hsl(220 90% 55%), hsl(270 80% 60%));
+    --gradient-neon-green: linear-gradient(135deg, hsl(140 70% 45%), hsl(220 90% 55%));
+
+    --sidebar-background: 230 25% 10%;
+    --sidebar-foreground: 220 20% 90%;
+    --sidebar-primary: 220 90% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 230 20% 15%;
+    --sidebar-accent-foreground: 220 20% 90%;
+    --sidebar-border: 230 20% 18%;
+    --sidebar-ring: 220 90% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+
+@layer utilities {
+  .neon-text-blue {
+    text-shadow: 0 0 7px hsl(220 90% 55% / 0.8), 0 0 20px hsl(220 90% 55% / 0.4), 0 0 40px hsl(220 90% 55% / 0.2);
+  }
+
+  .neon-text-purple {
+    text-shadow: 0 0 7px hsl(270 80% 60% / 0.8), 0 0 20px hsl(270 80% 60% / 0.4), 0 0 40px hsl(270 80% 60% / 0.2);
+  }
+
+  .neon-text-green {
+    text-shadow: 0 0 7px hsl(140 70% 45% / 0.8), 0 0 20px hsl(140 70% 45% / 0.4);
+  }
+
+  .neon-box-blue {
+    box-shadow: 0 0 15px hsl(220 90% 55% / 0.4), 0 0 30px hsl(220 90% 55% / 0.2), inset 0 0 15px hsl(220 90% 55% / 0.1);
+  }
+
+  .neon-box-purple {
+    box-shadow: 0 0 15px hsl(270 80% 60% / 0.4), 0 0 30px hsl(270 80% 60% / 0.2), inset 0 0 15px hsl(270 80% 60% / 0.1);
+  }
+
+  .neon-border-blue {
+    border-color: hsl(220 90% 55% / 0.5);
+    box-shadow: 0 0 10px hsl(220 90% 55% / 0.3);
+  }
+
+  .neon-border-purple {
+    border-color: hsl(270 80% 60% / 0.5);
+    box-shadow: 0 0 10px hsl(270 80% 60% / 0.3);
+  }
+
+  .gradient-neon-text {
+    background: linear-gradient(135deg, hsl(220 90% 55%), hsl(270 80% 60%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .smoke-overlay {
+    background: radial-gradient(ellipse at 20% 50%, hsl(220 90% 55% / 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, hsl(270 80% 60% / 0.08) 0%, transparent 60%);
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(230 25% 7%);
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(220 90% 55% / 0.3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(220 90% 55% / 0.5);
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Native select dropdown styling */
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3e%3c/path%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1rem;
+  padding-right: 2.5rem !important;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  transition: border-color 0.15s ease;
+}
+
+select:hover {
+  border-color: hsl(220 20% 35%);
+}
+
+select:focus {
+  outline: none;
+  border-color: hsl(220 20% 45%);
+}
+
+/* Remove tap highlight on mobile */
+select,
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Clean focus states - remove aggressive glows */
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid hsl(220 20% 40%);
+  outline-offset: 2px;
+}
+
+/* Style the dropdown options */
+select option {
+  background-color: hsl(230 25% 12%);
+  color: hsl(220 20% 90%);
+  padding: 0.5rem;
+}
+
+select option:checked {
+  background: hsl(230 25% 18%);
+}
+
+select option:hover {
+  background-color: hsl(230 25% 20%);
+}
+
+/* Subtle pulse animation for ban report button */
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+  }
+  50% {
+    opacity: 0.9;
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.3);
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2.5s ease-in-out infinite;
+}
