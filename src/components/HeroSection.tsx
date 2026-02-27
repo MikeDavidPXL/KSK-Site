@@ -24,7 +24,7 @@ const HeroSection = () => {
         <motion.img
           src={clanLogo}
           alt="KSK Logo"
-          className="w-28 h-28 mx-auto mb-6 rounded-full neon-box-blue"
+          className="h-28 w-auto mx-auto mb-6 object-contain"
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ duration: 0.8, type: "spring" }}

@@ -1,7 +1,7 @@
 // /.netlify/functions/clan-list
 // GET: fetch clan list rows with search, pagination, list selection
 import type { Handler } from "@netlify/functions";
-import { getSessionFromCookie, discordFetch, supabase, json } from "./shared";
+import { getSessionFromCookie, discordFetch, supabase, json, determineStaffTier } from "./shared";
 
 const PAGE_SIZE = 50;
 
@@ -17,7 +17,10 @@ const handler: Handler = async (event) => {
     true
   );
   const roles: string[] = member?.roles ?? [];
-  if (!roles.includes(process.env.DISCORD_STAFF_ROLE_ID!)) {
+  // Check staff via owner/webdev/admin roles OR legacy staff role
+  const staffTier = determineStaffTier(roles);
+  const hasLegacyStaff = roles.includes(process.env.DISCORD_STAFF_ROLE_ID!);
+  if (!staffTier && !hasLegacyStaff) {
     return json({ error: "Forbidden" }, 403);
   }
 

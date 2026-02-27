@@ -49,6 +49,7 @@ type StaffMember = {
 const roleOrder: StaffMember["staff_role"][] = ["Owner", "Web Developer", "Admin"];
 
 // ── Nav items ───────────────────────────────────────────────
+// "Home" scrolls to top of page (hero visible)
 const navItems = [
   { label: "Home", href: "#hero" },
   { label: "About", href: "#about" },
@@ -137,54 +138,57 @@ const TexturePackPage = () => {
       {/* ── Navbar ────────────────────────────────────────── */}
       <TacticalNavbar user={user!} pendingCount={pendingCount} />
 
-      {/* ── Hero Section ─────────────────────────────────── */}
-      <section id="hero" className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+      {/* ── Hero Section (image only) ────────────────────── */}
+      <section id="hero" className="relative h-screen">
         <div className="absolute inset-0">
           <img src="/ksk_img.jpg" alt="KSK" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-black/65" />
+          <div className="absolute inset-0 bg-black/50" />
           <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background to-transparent" />
         </div>
-        <motion.div
-          className="relative z-10 text-center px-4"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <img
-            src="/ksk.png"
-            alt="KSK Logo"
-            className="w-24 h-24 mx-auto mb-6 border-2 border-primary/30"
-          />
-          <h1 className="font-display text-6xl sm:text-8xl md:text-9xl text-primary tracking-widest mb-4">
-            KSK
-          </h1>
-          <p className="font-sub text-lg sm:text-xl text-foreground/80 uppercase tracking-[0.2em] mb-10 max-w-xl mx-auto">
-            Kommando Spezialkräfte — CosmicV KOTH
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <a
-              href="#about"
-              className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-sub font-bold text-sm px-8 py-3 uppercase tracking-wider hover:bg-primary/85 transition-colors duration-200"
-            >
-              Learn More
-            </a>
-            <Link
-              to="/ban-report"
-              className="inline-flex items-center gap-2 border border-destructive/50 text-destructive font-sub font-bold text-sm px-6 py-3 uppercase tracking-wider hover:bg-destructive/10 transition-colors duration-200 animate-pulse-subtle"
-            >
-              <AlertTriangle className="w-4 h-4" />
-              Report Ban
-            </Link>
-          </div>
-        </motion.div>
       </section>
 
-      {/* ── About Section ────────────────────────────────── */}
+      {/* ── About Section (with hero content at top) ─────── */}
       <FadeSection id="about" className="py-20 border-t divider-bronze">
         <div className="container mx-auto px-4">
+          {/* Hero content moved here */}
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <img
+              src="/ksk.png"
+              alt="KSK Logo"
+              className="h-24 w-auto mx-auto mb-6 border-2 border-primary/30 object-contain"
+            />
+            <h1 className="font-display text-5xl sm:text-6xl md:text-7xl text-primary tracking-widest mb-4">
+              KSK
+            </h1>
+            <p className="font-sub text-base sm:text-lg text-foreground/80 uppercase tracking-[0.15em] mb-8 max-w-xl mx-auto">
+              Kommando Spezialkräfte — CosmicV KOTH
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <a
+                href="#features"
+                className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-sub font-bold text-sm px-8 py-3.5 rounded hover:bg-primary/85 transition-colors duration-200 uppercase tracking-wider"
+              >
+                Learn More
+              </a>
+              <Link
+                to="/ban-report"
+                className="inline-flex items-center gap-2 border border-destructive/50 text-destructive font-sub font-bold text-sm px-6 py-3.5 rounded hover:bg-destructive/10 transition-colors duration-200 uppercase tracking-wider animate-pulse-subtle"
+              >
+                <AlertTriangle className="w-4 h-4" />
+                Report Ban
+              </Link>
+            </div>
+          </motion.div>
+
+          {/* About text */}
           <div className="max-w-3xl mx-auto text-center mb-14">
-            <h2 className="font-display text-4xl sm:text-5xl text-primary tracking-wider mb-6">
-              ABOUT KSK
+            <h2 className="font-display text-3xl sm:text-4xl text-primary tracking-wider mb-6">
+              ABOUT US
             </h2>
             <p className="text-base text-muted-foreground leading-relaxed font-body">
               We are <span className="text-primary font-semibold">KSK</span>, a
@@ -203,7 +207,7 @@ const TexturePackPage = () => {
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="bg-card border border-border p-6 text-center"
+                className="bg-card border border-border rounded p-6 text-center"
               >
                 <div className="font-display text-4xl text-primary mb-1">
                   {stat.number}
@@ -218,19 +222,19 @@ const TexturePackPage = () => {
       </FadeSection>
 
       {/* ── Features Section ─────────────────────────────── */}
-      <FadeSection id="features" className="py-20 bg-olive border-t divider-bronze">
+      <FadeSection id="features" className="py-24 bg-olive border-t divider-bronze">
         <div className="container mx-auto px-4">
-          <h2 className="font-display text-4xl sm:text-5xl text-primary tracking-wider mb-12 text-center">
+          <h2 className="font-display text-3xl sm:text-4xl text-primary tracking-wider mb-14 text-center">
             WHAT'S INCLUDED
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-4xl mx-auto">
             {features.map((feature) => (
               <div
                 key={feature.title}
-                className="bg-background/60 border border-secondary/20 p-6 group hover:border-primary/30 transition-colors duration-200"
+                className="bg-background/60 border border-secondary/15 rounded-lg p-7 group hover:border-primary/25 transition-colors duration-200"
               >
-                <feature.icon className="w-8 h-8 text-secondary mb-4" />
-                <h3 className="font-sub text-lg font-bold mb-2 text-foreground uppercase tracking-wide">
+                <feature.icon className="w-7 h-7 text-secondary mb-4" />
+                <h3 className="font-sub text-base font-bold mb-2 text-foreground uppercase tracking-wide">
                   {feature.title}
                 </h3>
                 <p className="text-sm text-muted-foreground font-body leading-relaxed">
@@ -243,15 +247,15 @@ const TexturePackPage = () => {
       </FadeSection>
 
       {/* ── Video Section ────────────────────────────────── */}
-      <FadeSection id="video" className="py-20 border-t divider-bronze">
+      <FadeSection id="video" className="py-24 border-t divider-bronze">
         <div className="container mx-auto px-4">
-          <h2 className="font-display text-4xl sm:text-5xl text-primary tracking-wider mb-4 text-center">
+          <h2 className="font-display text-3xl sm:text-4xl text-primary tracking-wider mb-4 text-center">
             SHOWCASE
           </h2>
-          <p className="text-muted-foreground text-center mb-10 max-w-lg mx-auto font-body text-sm">
+          <p className="text-muted-foreground text-center mb-12 max-w-lg mx-auto font-body text-sm">
             Check out a preview of our textures in action.
           </p>
-          <div className="max-w-4xl mx-auto border border-border overflow-hidden">
+          <div className="max-w-4xl mx-auto border border-border/50 rounded-lg overflow-hidden shadow-soft">
             <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
               <iframe
                 className="absolute inset-0 w-full h-full"
@@ -268,17 +272,17 @@ const TexturePackPage = () => {
       {/* ── Changelog Section ────────────────────────────── */}
       <FadeSection id="changelog" className="py-20 bg-olive border-t divider-bronze">
         <div className="container mx-auto px-4">
-          <h2 className="font-display text-4xl sm:text-5xl text-primary tracking-wider mb-12 text-center">
+          <h2 className="font-display text-3xl sm:text-4xl text-primary tracking-wider mb-14 text-center">
             CHANGELOG
           </h2>
-          <div className="max-w-3xl mx-auto space-y-3">
+          <div className="max-w-3xl mx-auto space-y-4">
             {latestChangelog && (
               <div className="relative pt-4">
                 {/* Stacked card effect behind latest */}
                 {!changelogExpanded && olderChangelog.slice(0, 2).map((_, i) => (
                   <div
                     key={`stack-${i}`}
-                    className="absolute left-0 right-0 bg-background/50 border border-border"
+                    className="absolute left-0 right-0 bg-background/50 border border-border/50 rounded-lg"
                     style={{
                       top: `${(i + 1) * 6}px`,
                       transform: `scale(${1 - (i + 1) * 0.01})`,
@@ -293,7 +297,7 @@ const TexturePackPage = () => {
                 <button
                   type="button"
                   onClick={() => setChangelogExpanded((prev) => !prev)}
-                  className="relative z-10 w-full text-left bg-background/70 border border-border p-6 hover:border-primary/30 transition-colors duration-200"
+                  className="relative z-10 w-full text-left bg-background/70 border border-border/50 rounded-lg p-6 hover:border-primary/30 transition-colors duration-200"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0">
@@ -339,11 +343,11 @@ const TexturePackPage = () => {
                   transition={{ duration: 0.25, ease: "easeOut" }}
                   className="overflow-hidden"
                 >
-                  <div className="space-y-3 pt-2">
+                  <div className="space-y-4 pt-2">
                     {olderChangelog.map((entry) => (
                       <div
                         key={entry.version}
-                        className="bg-background/70 border border-border p-6 hover:border-primary/30 transition-colors duration-200"
+                        className="bg-background/70 border border-border/50 rounded-lg p-6 hover:border-primary/30 transition-colors duration-200"
                       >
                         <div className="flex items-center gap-3 mb-3">
                           <Tag className="w-4 h-4 text-secondary" />
@@ -372,28 +376,28 @@ const TexturePackPage = () => {
       </FadeSection>
 
       {/* ── Staff Section ────────────────────────────────── */}
-      <FadeSection id="staff" className="py-20 border-t divider-bronze">
+      <FadeSection id="staff" className="py-24 border-t divider-bronze">
         <div className="container mx-auto px-4">
-          <h2 className="font-display text-4xl sm:text-5xl text-primary tracking-wider mb-12 text-center">
+          <h2 className="font-display text-3xl sm:text-4xl text-primary tracking-wider mb-14 text-center">
             STAFF TEAM
           </h2>
-          <div className="max-w-4xl mx-auto space-y-10">
+          <div className="max-w-4xl mx-auto space-y-12">
             {staffByRole.map((group) => (
               <div key={group.role}>
-                <h3 className="font-sub text-lg font-bold uppercase tracking-[0.15em] mb-5 text-center text-secondary">
+                <h3 className="font-sub text-base font-bold uppercase tracking-[0.15em] mb-6 text-center text-secondary">
                   {group.role}
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg mx-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-lg mx-auto">
                   {group.members.map((member) => (
                     <div
                       key={member.discord_id}
-                      className={`bg-card border border-border p-5 text-center hover:border-primary/30 transition-colors duration-200 ${
+                      className={`bg-card border border-border/50 rounded-lg p-6 text-center hover:border-primary/30 transition-colors duration-200 ${
                         group.role === "Web Developer" && group.members.length === 1
                           ? "sm:col-span-2 sm:max-w-[280px] sm:mx-auto"
                           : ""
                       }`}
                     >
-                      <div className="w-16 h-16 mx-auto mb-3 bg-muted border border-border flex items-center justify-center overflow-hidden">
+                      <div className="w-16 h-16 mx-auto mb-4 bg-muted border border-border/50 rounded-lg flex items-center justify-center overflow-hidden">
                         <img
                           src={member.avatar_url || buildDiscordAvatarUrl(member.discord_id, member.avatar_hash)}
                           alt={member.display_name}
@@ -410,12 +414,12 @@ const TexturePackPage = () => {
                           }}
                         />
                       </div>
-                      <h4 className={`font-sub text-base font-bold mb-1 ${
+                      <h4 className={`font-sub text-base font-bold mb-2 ${
                         member.display_name === "M1K3" ? "text-primary" : "text-foreground"
                       }`}>
                         {member.display_name}
                       </h4>
-                      <span className="inline-block px-3 py-0.5 bg-secondary/10 border border-secondary/20 text-xs font-sub font-bold text-secondary uppercase tracking-wider">
+                      <span className="inline-block px-3 py-1 bg-secondary/10 border border-secondary/20 rounded text-xs font-sub font-bold text-secondary uppercase tracking-wider">
                         {member.staff_role}
                       </span>
                     </div>
@@ -432,7 +436,7 @@ const TexturePackPage = () => {
         <div className="container mx-auto px-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-3">
             <div className="flex items-center gap-2">
-              <img src="/ksk.png" alt="KSK" className="w-5 h-5" />
+              <img src="/ksk.png" alt="KSK" className="h-5 w-auto object-contain" />
               <span className="font-sub text-xs font-bold text-muted-foreground uppercase tracking-[0.15em]">
                 KSK © 2026
               </span>
@@ -478,7 +482,10 @@ function TacticalNavbar({
 
   useEffect(() => {
     const onScroll = () => {
-      setScrolled(window.scrollY > 20);
+      // Navbar becomes solid after scrolling past hero (1 viewport height)
+      const heroHeight = window.innerHeight;
+      setScrolled(window.scrollY > heroHeight - 100);
+      
       const scrollPosition = window.scrollY + 120;
       let current = "#hero";
       for (const item of navItems) {
@@ -490,7 +497,11 @@ function TacticalNavbar({
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -506,16 +517,17 @@ function TacticalNavbar({
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
           ? "bg-background border-b border-border"
-          : "bg-background/80 backdrop-blur-sm"
+          : "bg-transparent"
       }`}
     >
-      <div className="container mx-auto px-4 flex items-center justify-between h-14">
-        {/* Left: Logo */}
-        <a href="#hero" className="flex items-center gap-2">
-          <img src="/ksk.png" alt="KSK" className="w-8 h-8" />
+      <div className="container mx-auto px-4 h-14">
+        <div className="flex items-center justify-between h-full max-w-6xl mx-auto">
+          {/* Left: Logo */}
+          <a href="#hero" className="flex items-center gap-2">
+          <img src="/ksk.png" alt="KSK" className="h-8 w-auto object-contain" />
           <span className="font-display text-xl text-primary tracking-widest hidden sm:block">
             KSK
           </span>
@@ -562,31 +574,33 @@ function TacticalNavbar({
                 )}
               </button>
               {staffMenuOpen && (
-                <div className="absolute right-0 top-full mt-2 w-44 bg-card border border-border z-50">
-                  <div className="px-3 pt-2 pb-1.5 text-[10px] uppercase tracking-wider text-muted-foreground border-b border-border font-sub">
+                <div className="absolute right-0 top-full mt-2 w-48 bg-card border border-border/70 rounded-lg shadow-soft overflow-hidden z-50">
+                  <div className="px-4 py-2 text-[10px] uppercase tracking-wider text-muted-foreground bg-muted/50 font-sub">
                     {user.staff_tier === "owner" ? "Owner" : user.staff_tier === "webdev" ? "Web Dev" : "Staff"}
                   </div>
-                  <Link
-                    to="/admin"
-                    onClick={() => setStaffMenuOpen(false)}
-                    className="flex items-center gap-2 px-3 py-2.5 text-xs font-sub font-bold text-foreground hover:bg-muted transition-colors"
-                  >
-                    <Shield className="w-3.5 h-3.5 text-secondary" />
-                    Admin Panel
-                    {pendingCount > 0 && (
-                      <span className="ml-auto bg-destructive text-white text-[9px] font-bold min-w-[14px] h-[14px] flex items-center justify-center px-0.5">
-                        {pendingCount > 99 ? "99+" : pendingCount}
-                      </span>
-                    )}
-                  </Link>
-                  <Link
-                    to="/clan-list"
-                    onClick={() => setStaffMenuOpen(false)}
-                    className="flex items-center gap-2 px-3 py-2.5 text-xs font-sub font-bold text-foreground hover:bg-muted transition-colors border-t border-border"
-                  >
-                    <Users className="w-3.5 h-3.5 text-secondary" />
-                    Clan List
-                  </Link>
+                  <div className="py-1">
+                    <Link
+                      to="/admin"
+                      onClick={() => setStaffMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm font-sub font-medium text-foreground hover:bg-muted/60 transition-colors"
+                    >
+                      <Shield className="w-4 h-4 text-secondary" />
+                      Admin Panel
+                      {pendingCount > 0 && (
+                        <span className="ml-auto bg-destructive text-white text-[9px] font-bold min-w-[16px] h-[16px] flex items-center justify-center px-1 rounded">
+                          {pendingCount > 99 ? "99+" : pendingCount}
+                        </span>
+                      )}
+                    </Link>
+                    <Link
+                      to="/clan-list"
+                      onClick={() => setStaffMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm font-sub font-medium text-foreground hover:bg-muted/60 transition-colors"
+                    >
+                      <Users className="w-4 h-4 text-secondary" />
+                      Clan List
+                    </Link>
+                  </div>
                 </div>
               )}
             </div>
@@ -609,6 +623,7 @@ function TacticalNavbar({
           >
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
+        </div>
         </div>
       </div>
 

@@ -359,11 +359,11 @@ const AdminPanel = () => {
       >
         <div className="container mx-auto px-4 flex items-center justify-between h-16">
           <Link
-            to="/dashboard"
+            to="/"
             className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition"
           >
             <ArrowLeft className="w-4 h-4" />
-            <img src={clanLogo} alt="KSK Logo" className="w-8 h-8" />
+            <img src={clanLogo} alt="KSK Logo" className="h-8 w-auto object-contain" />
             <span className="font-display text-sm font-bold hidden sm:block">
               Back to homepage
             </span>
@@ -416,15 +416,15 @@ const AdminPanel = () => {
       {/* ── Content ─────────────────────────────────────── */}
       <div className="container mx-auto px-4 max-w-4xl py-12">
         {/* Filters */}
-        <div className="flex gap-2 mb-4 flex-wrap justify-center">
+        <div className="flex gap-3 mb-6 flex-wrap justify-center">
           {(["pending", "accepted", "rejected", "all"] as Filter[]).map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`font-display text-sm px-4 py-1.5 rounded-sm border transition ${
+              className={`font-display text-sm px-5 py-2 rounded border transition ${
                 filter === f
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "bg-card text-muted-foreground border-border hover:border-primary/50"
+                  ? "bg-primary text-primary-foreground border-primary shadow-soft"
+                  : "bg-card text-muted-foreground border-border/50 hover:border-primary/40 hover:bg-card/80"
               }`}
             >
               {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -454,7 +454,7 @@ const AdminPanel = () => {
           <div className="flex justify-center mb-6">
             <button
               onClick={() => setArchiveAllModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-display font-bold border border-secondary/50 text-secondary hover:bg-secondary/10 hover:border-secondary rounded-sm transition"
+              className="flex items-center gap-2 px-5 py-2.5 text-sm font-display font-bold border border-secondary/50 text-secondary hover:bg-secondary/10 hover:border-secondary rounded transition"
             >
               <Trash2 className="w-4 h-4" />
               Archive All
@@ -468,7 +468,7 @@ const AdminPanel = () => {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-card border border-border rounded-sm w-full max-w-md mx-4 p-6"
+              className="bg-card border border-border/50 rounded-lg w-full max-w-md mx-4 p-6 shadow-soft"
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-display text-lg font-bold text-foreground flex items-center gap-2">
@@ -487,21 +487,27 @@ const AdminPanel = () => {
               </div>
 
               <div className="space-y-4">
-                <div className="bg-secondary/10 border border-secondary/30 rounded-sm p-3">
-                  <p className="text-sm text-secondary">
-                    <strong>This will archive:</strong>
+                <div className="bg-secondary/10 border border-secondary/30 rounded p-4">
+                  <p className="text-sm text-secondary font-medium">
+                    This will archive:
                   </p>
-                  <ul className="text-sm text-secondary/80 mt-1 list-disc list-inside">
-                    <li>All <span className="text-green-400">accepted</span> applications</li>
-                    <li>All <span className="text-red-400">rejected</span> applications</li>
+                  <ul className="text-sm text-secondary/80 mt-2 space-y-1">
+                    <li className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
+                      All accepted applications
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
+                      All rejected applications
+                    </li>
                   </ul>
-                  <p className="text-sm text-yellow-400 mt-2">
-                    ⚠️ Pending applications will NOT be archived.
+                  <p className="text-sm text-yellow-400 mt-3 flex items-center gap-2">
+                    <span>⚠️</span> Pending applications will NOT be archived.
                   </p>
                 </div>
 
                 <div>
-                  <label className="block text-sm text-muted-foreground mb-1">
+                  <label className="block text-sm text-muted-foreground mb-2">
                     Archive reason (optional)
                   </label>
                   <input
@@ -509,13 +515,13 @@ const AdminPanel = () => {
                     value={archiveAllReason}
                     onChange={(e) => setArchiveAllReason(e.target.value)}
                     placeholder="cleanup"
-                    className="w-full bg-muted border border-border rounded-sm px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-secondary/50"
+                    className="w-full bg-muted border border-border/50 rounded px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-secondary/50"
                   />
                 </div>
 
                 {archiveAllResult && (
                   <div
-                    className={`text-sm px-3 py-2 rounded-md border ${
+                    className={`text-sm px-4 py-3 rounded border ${
                       archiveAllResult.kind === "success"
                         ? "bg-green-500/10 border-green-500/30 text-green-400"
                         : "bg-red-500/10 border-red-500/30 text-red-400"
@@ -532,14 +538,14 @@ const AdminPanel = () => {
                       setArchiveAllResult(null);
                     }}
                     disabled={archiveAllLoading}
-                    className="flex-1 px-4 py-2 bg-muted hover:bg-muted/80 text-foreground font-display font-bold rounded-sm transition disabled:opacity-50"
+                    className="flex-1 px-5 py-2.5 bg-muted hover:bg-muted/80 text-foreground font-display font-bold rounded transition disabled:opacity-50"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={archiveAll}
                     disabled={archiveAllLoading}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-secondary hover:bg-secondary/80 text-background font-display font-bold rounded-sm transition disabled:opacity-50"
+                    className="flex-1 flex items-center justify-center gap-2 px-5 py-2.5 bg-secondary hover:bg-secondary/90 text-background font-display font-bold rounded transition disabled:opacity-50"
                   >
                     {archiveAllLoading ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
