@@ -26,10 +26,10 @@ export const WEBDEV_ROLE_ID = process.env.DISCORD_WEBDEV_ROLE_ID;
 export const STAFF_ROLE_ID =
   process.env.DISCORD_ADMIN_ROLE_ID ?? process.env.DISCORD_STAFF_ROLE_ID;
 
-// ── Rank role IDs ────────────────────────────────────────────
-export const MEMBER_ROLE_ID = "1379144258082046075";
-export const RECRUITER_ROLE_ID = "1379144419642703893";
-export const COMMANDER_ROLE_ID = "1379144258082046078";
+// ── Rank role IDs (from env) ─────────────────────────────────
+export const MEMBER_ROLE_ID = process.env.DISCORD_MEMBER_ROLE_ID!;
+export const RECRUITER_ROLE_ID = process.env.DISCORD_RECRUITEER_ROLE_ID!;
+export const COMMANDER_ROLE_ID = process.env.DISCORD_COMMANDER_ROLE_ID!;
 
 const PROMOTED_ROLES = [
   MEMBER_ROLE_ID,
@@ -160,10 +160,10 @@ export interface RankDef {
 }
 
 export const RANK_LADDER: RankDef[] = [
-  { name: "Trial Member", roleId: null,                    daysRequired: 0  },
-  { name: "Member",       roleId: "1379144258082046075",   daysRequired: 14 },
-  { name: "Recruiter",    roleId: "1379144419642703893",   daysRequired: 30 },
-  { name: "Commander",    roleId: "1379144258082046078",   daysRequired: 60 },
+  { name: "Trial Member", roleId: null,              daysRequired: 0  },
+  { name: "Member",       roleId: MEMBER_ROLE_ID,    daysRequired: 14 },
+  { name: "Recruiter",    roleId: RECRUITER_ROLE_ID,  daysRequired: 30 },
+  { name: "Commander",    roleId: COMMANDER_ROLE_ID,  daysRequired: 60 },
 ];
 
 export const RANK_ROLE_IDS = RANK_LADDER

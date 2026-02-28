@@ -160,7 +160,7 @@ const handler: Handler = async (event) => {
       `📋 **New application submitted**`,
       `Applicant: <@${session.discord_id}> (${session.username})`,
       `UID: ${uid}`,
-      `Review: https://ksk-site.netlify.app/admin`,
+      `Review: ${process.env.APP_BASE_URL || "https://ksk-site.netlify.app"}/admin`,
     ].join("\n");
 
     const posted = await postAppLog(logContent, true);
