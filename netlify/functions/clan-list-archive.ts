@@ -1,7 +1,7 @@
 // /.netlify/functions/clan-list-archive
 // POST: archive or restore a clan list (staff only)
 import type { Handler } from "@netlify/functions";
-import { getSessionFromCookie, discordFetch, supabase, json, determineStaffTier } from "./shared";
+import { getSessionFromCookie, discordFetch, supabase, json } from "./shared";
 
 const handler: Handler = async (event) => {
   if (event.httpMethod !== "POST") {
@@ -19,9 +19,7 @@ const handler: Handler = async (event) => {
     true
   );
   const roles: string[] = member?.roles ?? [];
-  const staffTier = determineStaffTier(roles);
-  const hasLegacyStaff = roles.includes(process.env.DISCORD_STAFF_ROLE_ID!);
-  if (!staffTier && !hasLegacyStaff) {
+  if (!roles.includes(process.env.DISCORD_STAFF_ROLE_ID!)) {
     return json({ error: "Forbidden" }, 403);
   }
 

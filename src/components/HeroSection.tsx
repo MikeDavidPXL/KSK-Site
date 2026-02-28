@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { Download, AlertTriangle } from "lucide-react";
 import { Link } from "react-router-dom";
-import heroBanner from "@/assets/420Gif.png";
-import clanLogo from "@/assets/clan-logo.png";
+import heroBanner from "@/assets/hero-banner.jpg";
+import clanLogo from "@/assets/ksk.png";
 
 const HeroSection = () => {
   return (
@@ -24,7 +24,7 @@ const HeroSection = () => {
         <motion.img
           src={clanLogo}
           alt="KSK Logo"
-          className="h-28 w-auto mx-auto mb-6 object-contain"
+          className="w-28 h-28 mx-auto mb-6 rounded-full neon-box-blue"
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ duration: 0.8, type: "spring" }}
@@ -46,9 +46,8 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.6 }}
         >
-          Come and hangout in the VC or on Cosmic.
-          Upgrade your FiveM experience with our exclusive custom textures. 
-          Clothing, weapons, vehicles, and more — all in one pack.
+          Join the ranks of [KSK] Kommando Spezialkräfte.
+          Dominate CosmicV KOTH with our organized clan — strategy, teamwork, and elite gameplay.
         </motion.p>
         <motion.div
           className="flex flex-col sm:flex-row items-center justify-center gap-4"

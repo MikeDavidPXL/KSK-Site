@@ -12,7 +12,7 @@ import {
   RANK_LADDER,
 } from "./shared";
 
-const ANNOUNCEMENT_CHANNEL = "1376309040686170254";
+const ANNOUNCEMENT_CHANNEL = process.env.DISCORD_ANNOUNCEMENT_CHANNEL_ID || "";
 
 const handler: Handler = async (event) => {
   if (event.httpMethod !== "POST") {
@@ -181,7 +181,7 @@ const handler: Handler = async (event) => {
         .join("\n");
 
       const announcement = [
-        "It is promotion time again :weed: 420 :weed:",
+        "It is promotion time again!",
         "",
         "Here are the Promotions",
         "",
@@ -193,7 +193,7 @@ const handler: Handler = async (event) => {
         "If you feel like you are due for promotion and didn't get one open a ticket ---> #ticket-logs",
         "",
         "Have a Wonderful Day :sunny:",
-        `<@&${process.env.DISCORD_MEMBER_ROLE_ID}>  :420clan:`,
+        `<@&${process.env.DISCORD_MEMBER_ROLE_ID}>`,
       ].join("\n");
 
       announcementPosted = await postChannelMessage(

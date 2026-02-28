@@ -15,7 +15,7 @@ import {
   RANK_LADDER,
 } from "./shared";
 
-const ANNOUNCEMENT_CHANNEL = "1376309040686170254";
+const ANNOUNCEMENT_CHANNEL = process.env.DISCORD_ANNOUNCEMENT_CHANNEL_ID || "";
 
 // Rate limit: 1 run per 5 min per user
 const lastRun = new Map<string, number>();
@@ -64,7 +64,7 @@ const handler: Handler = async (event) => {
     .from("clan_list_members")
     .select("*")
     .eq("status", "active")
-    .eq("has_420_tag", true)
+    .eq("has_ksk_tag", true)
     .is("archived_at", null)
     .eq("in_guild", true);
 
@@ -243,7 +243,7 @@ const handler: Handler = async (event) => {
       .join("\n");
 
     const announcement = [
-      "It is promotion time again :weed: 420 :weed:",
+      "It is promotion time again!",
       "",
       "Here are the Promotions",
       "",
@@ -255,7 +255,7 @@ const handler: Handler = async (event) => {
       "If you feel like you are due for promotion and didn't get one open a ticket ---> #ticket-logs",
       "",
       "Have a Wonderful Day :sunny:",
-      `<@&${process.env.DISCORD_MEMBER_ROLE_ID}>  :420clan:`,
+      `<@&${process.env.DISCORD_MEMBER_ROLE_ID}>`,
     ].join("\n");
 
     announcementPosted = await postChannelMessage(

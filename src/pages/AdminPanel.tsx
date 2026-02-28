@@ -23,7 +23,7 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-const clanLogo = "/ksk.png";
+import clanLogo from "@/assets/ksk.png";
 import { buildDiscordAvatarUrl } from "@/lib/discord";
 
 const POLL_INTERVAL = 10_000; // 10 seconds
@@ -331,7 +331,7 @@ const AdminPanel = () => {
 
   // Guard: staff only
   if (!authLoading && (!user || !user.is_staff)) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/pack" replace />;
   }
 
   if (authLoading) {
@@ -355,15 +355,15 @@ const AdminPanel = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
-        className="sticky top-0 z-50 bg-background border-b border-border"
+        className="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border shadow-lg"
       >
         <div className="container mx-auto px-4 flex items-center justify-between h-16">
           <Link
-            to="/"
+            to="/pack"
             className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition"
           >
             <ArrowLeft className="w-4 h-4" />
-            <img src={clanLogo} alt="KSK Logo" className="h-8 w-auto object-contain" />
+            <img src={clanLogo} alt="KSK Logo" className="w-8 h-8 rounded-full" />
             <span className="font-display text-sm font-bold hidden sm:block">
               Back to homepage
             </span>
@@ -378,7 +378,7 @@ const AdminPanel = () => {
             {/* Navigation to Clan List */}
             <Link
               to="/clan-list"
-              className="px-3 py-1.5 text-sm font-display font-bold bg-secondary/20 hover:bg-secondary/30 text-secondary rounded-sm transition border border-secondary/30 hidden sm:block"
+              className="px-3 py-1.5 text-sm font-display font-bold bg-secondary/20 hover:bg-secondary/30 text-secondary rounded-lg transition border border-secondary/30 hidden sm:block"
               title="Go to Clan List"
             >
               Clan List
@@ -416,15 +416,15 @@ const AdminPanel = () => {
       {/* ── Content ─────────────────────────────────────── */}
       <div className="container mx-auto px-4 max-w-4xl py-12">
         {/* Filters */}
-        <div className="flex gap-3 mb-6 flex-wrap justify-center">
+        <div className="flex gap-2 mb-4 flex-wrap justify-center">
           {(["pending", "accepted", "rejected", "all"] as Filter[]).map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`font-display text-sm px-5 py-2 rounded border transition ${
+              className={`font-display text-sm px-4 py-1.5 rounded-lg border transition ${
                 filter === f
-                  ? "bg-primary text-primary-foreground border-primary shadow-soft"
-                  : "bg-card text-muted-foreground border-border/50 hover:border-primary/40 hover:bg-card/80"
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "bg-card text-muted-foreground border-border hover:border-primary/50"
               }`}
             >
               {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -454,7 +454,7 @@ const AdminPanel = () => {
           <div className="flex justify-center mb-6">
             <button
               onClick={() => setArchiveAllModalOpen(true)}
-              className="flex items-center gap-2 px-5 py-2.5 text-sm font-display font-bold border border-secondary/50 text-secondary hover:bg-secondary/10 hover:border-secondary rounded transition"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-display font-bold border border-purple-500/50 text-purple-400 hover:bg-purple-500/10 hover:border-purple-500 rounded-lg transition"
             >
               <Trash2 className="w-4 h-4" />
               Archive All
@@ -464,15 +464,15 @@ const AdminPanel = () => {
 
         {/* Archive All Confirmation Modal */}
         {archiveAllModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-card border border-border/50 rounded-lg w-full max-w-md mx-4 p-6 shadow-soft"
+              className="bg-card border border-border rounded-xl shadow-2xl w-full max-w-md mx-4 p-6"
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-display text-lg font-bold text-foreground flex items-center gap-2">
-                  <Trash2 className="w-5 h-5 text-secondary" />
+                  <Trash2 className="w-5 h-5 text-purple-400" />
                   Archive All
                 </h3>
                 <button
@@ -487,27 +487,21 @@ const AdminPanel = () => {
               </div>
 
               <div className="space-y-4">
-                <div className="bg-secondary/10 border border-secondary/30 rounded p-4">
-                  <p className="text-sm text-secondary font-medium">
-                    This will archive:
+                <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3">
+                  <p className="text-sm text-purple-300">
+                    <strong>This will archive:</strong>
                   </p>
-                  <ul className="text-sm text-secondary/80 mt-2 space-y-1">
-                    <li className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
-                      All accepted applications
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
-                      All rejected applications
-                    </li>
+                  <ul className="text-sm text-purple-300/80 mt-1 list-disc list-inside">
+                    <li>All <span className="text-green-400">accepted</span> applications</li>
+                    <li>All <span className="text-red-400">rejected</span> applications</li>
                   </ul>
-                  <p className="text-sm text-yellow-400 mt-3 flex items-center gap-2">
-                    <span>⚠️</span> Pending applications will NOT be archived.
+                  <p className="text-sm text-yellow-400 mt-2">
+                    ⚠️ Pending applications will NOT be archived.
                   </p>
                 </div>
 
                 <div>
-                  <label className="block text-sm text-muted-foreground mb-2">
+                  <label className="block text-sm text-muted-foreground mb-1">
                     Archive reason (optional)
                   </label>
                   <input
@@ -515,13 +509,13 @@ const AdminPanel = () => {
                     value={archiveAllReason}
                     onChange={(e) => setArchiveAllReason(e.target.value)}
                     placeholder="cleanup"
-                    className="w-full bg-muted border border-border/50 rounded px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-secondary/50"
+                    className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
                   />
                 </div>
 
                 {archiveAllResult && (
                   <div
-                    className={`text-sm px-4 py-3 rounded border ${
+                    className={`text-sm px-3 py-2 rounded-md border ${
                       archiveAllResult.kind === "success"
                         ? "bg-green-500/10 border-green-500/30 text-green-400"
                         : "bg-red-500/10 border-red-500/30 text-red-400"
@@ -538,14 +532,14 @@ const AdminPanel = () => {
                       setArchiveAllResult(null);
                     }}
                     disabled={archiveAllLoading}
-                    className="flex-1 px-5 py-2.5 bg-muted hover:bg-muted/80 text-foreground font-display font-bold rounded transition disabled:opacity-50"
+                    className="flex-1 px-4 py-2 bg-muted hover:bg-muted/80 text-foreground font-display font-bold rounded-lg transition disabled:opacity-50"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={archiveAll}
                     disabled={archiveAllLoading}
-                    className="flex-1 flex items-center justify-center gap-2 px-5 py-2.5 bg-secondary hover:bg-secondary/90 text-background font-display font-bold rounded transition disabled:opacity-50"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-display font-bold rounded-lg transition disabled:opacity-50"
                   >
                     {archiveAllLoading ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -579,10 +573,10 @@ const AdminPanel = () => {
             return (
               <div
                 key={app.id}
-                className={`bg-card border rounded-sm overflow-hidden transition-all duration-300 ${
+                className={`bg-card border rounded-lg overflow-hidden transition-all duration-300 ${
                   isArchived
                     ? "border-muted opacity-60 hover:opacity-80"
-                    : "border-border hover:border-primary/30"
+                    : "border-border hover:neon-border-blue"
                 }`}
               >
                 <button
@@ -691,7 +685,7 @@ const AdminPanel = () => {
                           {app.application_notes.map((n) => (
                             <div
                               key={n.id}
-                              className="bg-yellow-500/5 border border-yellow-500/20 rounded-sm px-3 py-2"
+                              className="bg-yellow-500/5 border border-yellow-500/20 rounded-lg px-3 py-2"
                             >
                               <p className="text-sm text-foreground whitespace-pre-wrap">
                                 {n.note}
@@ -724,14 +718,14 @@ const AdminPanel = () => {
                           placeholder="Add internal note..."
                           maxLength={1000}
                           rows={2}
-                          className="flex-1 bg-muted border border-border rounded-sm px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 resize-none"
+                          className="flex-1 bg-muted border border-border rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 resize-none"
                         />
                         <button
                           onClick={() => saveInternalNote(app.id)}
                           disabled={
                             noteSaving === app.id || !internalNote.trim()
                           }
-                          className="self-end px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-sm transition disabled:opacity-50 flex items-center gap-1 text-sm font-display font-bold"
+                          className="self-end px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition disabled:opacity-50 flex items-center gap-1 text-sm font-display font-bold"
                         >
                           {noteSaving === app.id ? (
                             <Loader2 className="w-4 h-4 animate-spin" />
@@ -753,13 +747,13 @@ const AdminPanel = () => {
                           onChange={(e) => setNote(e.target.value)}
                           placeholder="Optional note (shown to user if rejected)..."
                           rows={2}
-                          className="w-full bg-muted border border-border rounded-sm px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+                          className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
                         />
                         <div className="flex gap-3">
                           <button
                             onClick={() => review(app.id, "accept")}
                             disabled={actionLoading === app.id}
-                            className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-display font-bold py-2.5 rounded-sm transition disabled:opacity-50"
+                            className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-display font-bold py-2.5 rounded-lg transition disabled:opacity-50"
                           >
                             {actionLoading === app.id ? (
                               <Loader2 className="w-4 h-4 animate-spin" />
@@ -771,7 +765,7 @@ const AdminPanel = () => {
                           <button
                             onClick={() => review(app.id, "reject")}
                             disabled={actionLoading === app.id}
-                            className="flex-1 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-display font-bold py-2.5 rounded-sm transition disabled:opacity-50"
+                            className="flex-1 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-display font-bold py-2.5 rounded-lg transition disabled:opacity-50"
                           >
                             {actionLoading === app.id ? (
                               <Loader2 className="w-4 h-4 animate-spin" />

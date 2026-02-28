@@ -9,7 +9,6 @@ import {
   fetchAllGuildMembers,
   searchGuildMemberCandidates,
   normalizeLookup,
-  determineStaffTier,
 } from "./shared";
 
 function normalizeUid(input: unknown): string {
@@ -48,9 +47,7 @@ const handler: Handler = async (event) => {
     true
   );
   const roles: string[] = member?.roles ?? [];
-  const staffTier = determineStaffTier(roles);
-  const hasLegacyStaff = roles.includes(process.env.DISCORD_STAFF_ROLE_ID!);
-  if (!staffTier && !hasLegacyStaff) {
+  if (!roles.includes(process.env.DISCORD_STAFF_ROLE_ID!)) {
     return json({ error: "Forbidden" }, 403);
   }
 

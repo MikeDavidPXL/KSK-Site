@@ -35,9 +35,9 @@ const ApplicationForm = () => {
   }, [confirmOverride, error]);
 
   // Guard: Discord roles are the truth for access.
-  // no session → login, accepted/private/staff → dashboard/admin flow, unverified → verify, no koth → dashboard
+  // staff / private → pack page, no session → login, unverified → verify, no koth → dashboard
   if (!authLoading && !user) return <Navigate to="/" replace />;
-  if (!authLoading && user && user.effective_status === "accepted") return <Navigate to="/dashboard" replace />;
+  if (!authLoading && user && user.effective_status === "accepted") return <Navigate to="/pack" replace />;
   if (!authLoading && user && user.is_unverified && !user.is_koth) return <Navigate to="/verify" replace />;
   if (!authLoading && user && user.effective_status !== "koth") return <Navigate to="/dashboard" replace />;
 
@@ -92,6 +92,7 @@ const ApplicationForm = () => {
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
+      <div className="absolute inset-0 smoke-overlay pointer-events-none" />
       <div className="relative z-10 container mx-auto px-4 py-12 max-w-xl">
         <Link
           to="/dashboard"
@@ -101,17 +102,17 @@ const ApplicationForm = () => {
         </Link>
 
         <motion.div
-          className="bg-card border border-border rounded-sm p-8"
+          className="bg-card border border-border rounded-xl p-8 neon-border-purple"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h1 className="font-display text-2xl font-bold mb-6 text-secondary text-center">
+          <h1 className="font-display text-2xl font-bold mb-6 neon-text-purple text-secondary text-center">
             Clan Application
           </h1>
 
           {/* Confirm override dialog */}
           {confirmOverride && (
-            <div ref={errorRef} className="bg-yellow-500/10 border border-yellow-500/30 rounded-sm p-4 mb-6 text-center">
+            <div ref={errorRef} className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 mb-6 text-center">
               <p className="text-sm text-yellow-300 font-display font-bold mb-1">
                 {confirmOverride === "ALREADY_ACCEPTED"
                   ? "You already have an accepted application."
@@ -124,7 +125,7 @@ const ApplicationForm = () => {
                 <button
                   type="button"
                   onClick={() => setConfirmOverride(null)}
-                  className="px-5 py-2 rounded-sm border border-border text-sm font-display text-muted-foreground hover:text-foreground transition"
+                  className="px-5 py-2 rounded-lg border border-border text-sm font-display text-muted-foreground hover:text-foreground transition"
                 >
                   Cancel
                 </button>
@@ -132,7 +133,7 @@ const ApplicationForm = () => {
                   type="button"
                   onClick={() => doSubmit(true)}
                   disabled={submitting}
-                  className="px-5 py-2 rounded-sm bg-primary text-primary-foreground text-sm font-display font-bold hover:bg-primary/90 transition disabled:opacity-50"
+                  className="px-5 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-display font-bold hover:bg-primary/90 transition disabled:opacity-50"
                 >
                   {submitting ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : "Send anyway"}
                 </button>
@@ -141,7 +142,7 @@ const ApplicationForm = () => {
           )}
 
           {error && (
-            <div ref={!confirmOverride ? errorRef : undefined} className="bg-destructive/10 border border-destructive/30 rounded-sm p-3 mb-6 text-sm text-destructive text-center">
+            <div ref={!confirmOverride ? errorRef : undefined} className="bg-destructive/10 border border-destructive/30 rounded-lg p-3 mb-6 text-sm text-destructive text-center">
               {error}
             </div>
           )}
@@ -227,7 +228,7 @@ const ApplicationForm = () => {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 disabled:opacity-50 text-primary-foreground font-display font-bold py-3 rounded-sm transition"
+              className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 disabled:opacity-50 text-primary-foreground font-display font-bold py-3 rounded-lg transition neon-box-blue"
             >
               {submitting ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -267,7 +268,7 @@ function Field({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         required
-        className="w-full bg-muted border border-border rounded-sm px-4 py-2.5 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/50 transition"
+        className="w-full bg-muted border border-border rounded-lg px-4 py-2.5 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/50 transition"
       />
     </div>
   );
@@ -293,7 +294,7 @@ function SelectField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         required
-        className="w-full bg-muted border border-border rounded-sm px-4 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition"
+        className="w-full bg-muted border border-border rounded-lg px-4 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition"
       >
         <option value="" disabled>
           Select an option
@@ -330,7 +331,7 @@ function TextArea({
         placeholder={placeholder}
         required
         rows={3}
-        className="w-full bg-muted border border-border rounded-sm px-4 py-2.5 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/50 transition resize-none"
+        className="w-full bg-muted border border-border rounded-lg px-4 py-2.5 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/50 transition resize-none"
       />
     </div>
   );

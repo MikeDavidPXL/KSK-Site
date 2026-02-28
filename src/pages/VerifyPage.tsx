@@ -138,17 +138,18 @@ const VerifyPage = () => {
   }
 
   if (!user) return <Navigate to="/" replace />;
-  if (user.is_staff) return <Navigate to="/admin" replace />;
-  if (user.is_private) return <Navigate to="/dashboard" replace />;
+  if (user.is_staff || user.is_private) return <Navigate to="/pack" replace />;
   if (user.is_koth) return <Navigate to="/dashboard" replace />;
   if (!user.in_guild) return <Navigate to="/dashboard" replace />;
 
   // Only unverified users should see this page
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      <nav className="relative z-10 border-b border-border bg-card">
+      <div className="absolute inset-0 smoke-overlay pointer-events-none" />
+
+      <nav className="relative z-10 border-b border-border bg-card/60 backdrop-blur">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <span className="font-display text-lg font-bold text-primary">
+          <span className="font-display text-lg font-bold neon-text-blue text-primary">
             KSK
           </span>
           <a
@@ -162,7 +163,7 @@ const VerifyPage = () => {
 
       <div className="relative z-10 container mx-auto px-4 py-16 max-w-lg">
         <motion.div
-          className="bg-card border border-border rounded-sm p-10 text-center"
+          className="bg-card border border-border rounded-xl p-10 text-center neon-border-blue"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -203,7 +204,7 @@ const VerifyPage = () => {
           )}
 
           {error && (
-            <div className="flex items-center gap-2 justify-center bg-destructive/10 border border-destructive/30 rounded-sm p-3 mb-6 text-sm text-destructive">
+            <div className="flex items-center gap-2 justify-center bg-destructive/10 border border-destructive/30 rounded-lg p-3 mb-6 text-sm text-destructive">
               <AlertTriangle className="w-4 h-4 shrink-0" />
               {error}
             </div>
@@ -212,7 +213,7 @@ const VerifyPage = () => {
           <button
             onClick={handleVerify}
             disabled={!captchaToken || verifying}
-            className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 disabled:opacity-50 text-primary-foreground font-display font-bold py-3 rounded-sm transition"
+            className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 disabled:opacity-50 text-primary-foreground font-display font-bold py-3 rounded-lg transition neon-box-blue"
           >
             {verifying ? (
               <Loader2 className="w-5 h-5 animate-spin" />

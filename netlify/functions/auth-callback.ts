@@ -1,42 +1,9 @@
 // /.netlify/functions/auth-callback
-// Exchanges Discord code for token, creates session cookie, redirects to /
+// Exchanges Discord code for token, creates session cookie, redirects to /dashboard
 import type { Handler } from "@netlify/functions";
 import { createSession, discordFetch, redirect } from "./shared";
 
 const handler: Handler = async (event) => {
-  const clientId = process.env.DISCORD_CLIENT_ID;
-  const clientSecret = process.env.DISCORD_CLIENT_SECRET;
-  const redirectUri = process.env.DISCORD_REDIRECT_URI;
-  let redirectOrigin: string;
-
-  if (!clientId || !clientSecret || !redirectUri) {
-    return {
-      statusCode: 500,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        error: "Missing OAuth environment variables",
-        missing: [
-          !clientId ? "DISCORD_CLIENT_ID" : null,
-          !clientSecret ? "DISCORD_CLIENT_SECRET" : null,
-          !redirectUri ? "DISCORD_REDIRECT_URI" : null,
-        ].filter(Boolean),
-      }),
-    };
-  }
-
-  try {
-    redirectOrigin = new URL(redirectUri).origin;
-  } catch {
-    return {
-      statusCode: 500,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        error: "Invalid OAuth environment variables",
-        invalid: ["DISCORD_REDIRECT_URI"],
-      }),
-    };
-  }
-
   const code = event.queryStringParameters?.code;
   if (!code) {
     return { statusCode: 400, body: "Missing code parameter" };
@@ -47,11 +14,11 @@ const handler: Handler = async (event) => {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
-      client_id: clientId,
-      client_secret: clientSecret,
+      client_id: process.env.DISCORD_CLIENT_ID!,
+      client_secret: process.env.DISCORD_CLIENT_SECRET!,
       grant_type: "authorization_code",
       code,
-      redirect_uri: redirectUri,
+      redirect_uri: process.env.DISCORD_REDIRECT_URI!,
     }),
   });
 
@@ -79,7 +46,8 @@ const handler: Handler = async (event) => {
   const cookie = `session=${sessionToken}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${7 * 24 * 60 * 60}`;
 
   // Determine base URL from redirect URI
-  return redirect(`${redirectOrigin}/`, cookie);
+  const base = new URL(process.env.DISCORD_REDIRECT_URI!).origin;
+  return redirect(`${base}/dashboard`, cookie);
 };
 
 export { handler };

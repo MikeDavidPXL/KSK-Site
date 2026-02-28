@@ -6,9 +6,9 @@ import { User } from "lucide-react";
 // Staff members configuration
 const staffMembers = [
   {
-    name: "M1K3",
+    name: "Leader",
     role: "Owner",
-    avatar_url: "/images/staff/mike.png", // Placeholder - replace with actual path
+    avatar_url: "/images/staff/leader.png", // Placeholder - replace with actual path
   },
   {
     name: "WebDev",
@@ -53,17 +53,15 @@ const AboutSection = () => {
             About KSK
           </h2>
           <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-            We are <span className="text-primary font-semibold">KSK</span>, a 
-            community built for lovers of the CosmicV KOTH FiveM server who want to 
-            take their experience to the next level. Our texture pack made by{" "}
-            <span className="text-primary font-semibold neon-text-blue">M1K3</span>{" "}
-            is designed to fully transform your server experience with high-quality 
-            custom content, clean weapon skins, and effects that pop to make your 
-            gameplay look and feel unique.
+            We are <span className="text-primary font-semibold">[KSK] Kommando Spezialkräfte</span>, a 
+            competitive KOTH clan on the CosmicV FiveM server. We focus on 
+            teamwork, strategy, and dominating the battlefield. Join us to 
+            take your gameplay to the next level with organized squads, 
+            tactical coordination, and a dedicated community.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
-              { number: "50+", label: "Custom Textures" },
+              { number: "50+", label: "Active Members" },
               { number: "24/7", label: "Community Support In Discord" },
             ].map((stat, i) => (
               <motion.div
@@ -138,7 +136,7 @@ const AboutSection = () => {
 
                       {/* Name */}
                       <h5 className={`font-display text-lg font-bold mb-2 ${
-                        member.name === "M1K3" ? "neon-text-blue" : "text-foreground"
+                        "text-foreground"
                       }`}>
                         {member.name}
                       </h5>

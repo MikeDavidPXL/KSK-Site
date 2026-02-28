@@ -1,6 +1,6 @@
 // /.netlify/functions/clan-list-member
 // POST: create or update a single clan_list_members row (staff only)
-// Handles freeze / unfreeze logic when status or has_420_tag changes
+// Handles freeze / unfreeze logic when status or has_ksk_tag changes
 import type { Handler } from "@netlify/functions";
 import {
   getSessionFromCookie,
@@ -17,7 +17,6 @@ import {
   normalizeLookup,
   signResolveToken,
   verifyResolveToken,
-  determineStaffTier,
 } from "./shared";
 
 interface MemberBody {
@@ -28,7 +27,7 @@ interface MemberBody {
   uid?: string;
   join_date?: string;
   status?: "active" | "inactive";
-  has_420_tag?: boolean;
+  has_ksk_tag?: boolean;
   rank_current?: string;
   needs_resolution?: boolean;
   source?: "csv" | "manual" | "application";
@@ -50,9 +49,7 @@ const handler: Handler = async (event) => {
     true
   );
   const roles: string[] = discordMember?.roles ?? [];
-  const staffTier = determineStaffTier(roles);
-  const hasLegacyStaff = roles.includes(process.env.DISCORD_STAFF_ROLE_ID!);
-  if (!staffTier && !hasLegacyStaff) {
+  if (!roles.includes(process.env.DISCORD_STAFF_ROLE_ID!)) {
     return json({ error: "Forbidden" }, 403);
   }
 
@@ -127,12 +124,12 @@ const handler: Handler = async (event) => {
     // Determine new status + tag for freeze logic
     const newStatus = body.status ?? existing.status;
     const newTag =
-      body.has_420_tag !== undefined ? body.has_420_tag : existing.has_420_tag;
+      body.has_ksk_tag !== undefined ? body.has_ksk_tag : existing.has_ksk_tag;
     upd.status = newStatus;
-    upd.has_420_tag = newTag;
+    upd.has_ksk_tag = newTag;
 
     const wasActive =
-      existing.status === "active" && existing.has_420_tag === true;
+      existing.status === "active" && existing.has_ksk_tag === true;
     const nowActive = newStatus === "active" && newTag === true;
 
     // Handle freeze / unfreeze
@@ -160,7 +157,7 @@ const handler: Handler = async (event) => {
       (upd.counting_since as string | null) ?? existing.counting_since;
     const days = computeTimeDays(frozenDays, countingSince);
     const currentRank =
-      (upd.rank_current as string) ?? existing.rank_current ?? "Private";
+      (upd.rank_current as string) ?? existing.rank_current ?? "Trial Member";
     const earned = earnedRank(days);
     const currentIdx = rankIndex(currentRank);
     const earnedIdx = RANK_LADDER.indexOf(earned);
@@ -228,8 +225,8 @@ const handler: Handler = async (event) => {
   }
 
   const status = body.status ?? "active";
-  const hasTag = body.has_420_tag ?? false;
-  const rankCurrent = body.rank_current ?? "Private";
+  const hasTag = body.has_ksk_tag ?? false;
+  const rankCurrent = body.rank_current ?? "Trial Member";
   const isActive = status === "active" && hasTag;
 
   let resolvedDiscordId: string | null = null;
@@ -331,7 +328,7 @@ const handler: Handler = async (event) => {
     uid: body.uid,
     join_date: body.join_date,
     status,
-    has_420_tag: hasTag,
+    has_ksk_tag: hasTag,
     rank_current: rankCurrent,
     rank_next: nxt?.name ?? null,
     frozen_days: frozenDays,

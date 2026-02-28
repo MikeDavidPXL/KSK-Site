@@ -36,7 +36,7 @@ const handler: Handler = async (event) => {
     .from("clan_list_members")
     .select("*")
     .eq("status", "active")
-    .eq("has_420_tag", true)
+    .eq("has_ksk_tag", true)
     .is("archived_at", null)
     .eq("in_guild", true);
 

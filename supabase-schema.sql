@@ -1,5 +1,5 @@
 -- ============================================================
--- 420 Clan – Supabase Database Schema
+-- KSK – Supabase Database Schema
 -- Run this in Supabase SQL Editor (Dashboard → SQL → New Query)
 -- ============================================================
 

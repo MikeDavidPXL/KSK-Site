@@ -39,13 +39,12 @@ interface QueueCounts {
   unresolved: number;
 }
 
-const RANKS = ["Private", "Corporal", "Sergeant", "Lieutenant", "Major"];
+const RANKS = ["Trial Member", "Member", "Recruiter", "Commander"];
 const RANK_COLORS = {
-  Private: "text-green-300",
-  Corporal: "text-blue-400",
-  Sergeant: "text-orange-400",
-  Lieutenant: "text-cyan-400",
-  Major: "text-red-400",
+  "Trial Member": "text-green-300",
+  Member: "text-blue-400",
+  Recruiter: "text-orange-400",
+  Commander: "text-red-400",
 };
 
 const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {
@@ -217,12 +216,12 @@ const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="mt-8 rounded-sm bg-card border border-secondary/30 overflow-hidden"
+      className="mt-8 rounded-xl bg-gradient-to-b from-secondary/5 to-secondary/0 border border-secondary/30 shadow-2xl shadow-secondary/10 overflow-hidden"
     >
       {/* ─── HEADER ─── */}
-      <div className="border-b border-secondary/20 bg-secondary/[0.03] px-6 py-4 flex items-center justify-between">
+      <div className="border-b border-secondary/20 bg-secondary/[0.03] backdrop-blur-sm px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-secondary/15 rounded-sm">
+          <div className="p-2 bg-secondary/15 rounded-lg">
             <Clock className="w-5 h-5 text-secondary" />
           </div>
           <div>
@@ -235,7 +234,7 @@ const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {
         
         <button
           onClick={() => setShowQueueInfo(!showQueueInfo)}
-          className="text-muted-foreground hover:text-secondary transition p-2 hover:bg-secondary/10 rounded-sm"
+          className="text-muted-foreground hover:text-secondary transition p-2 hover:bg-secondary/10 rounded-lg"
           title="Queue info"
         >
           <Info className="w-4 h-4" />
@@ -250,7 +249,7 @@ const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="bg-secondary/10 border border-secondary/30 rounded-sm px-4 py-3 text-sm text-muted-foreground space-y-1"
+              className="bg-secondary/10 border border-secondary/30 rounded-lg px-4 py-3 text-sm text-muted-foreground space-y-1"
             >
               <p>
                 <strong className="text-secondary">Build:</strong> Scans eligible members and queues them.
@@ -276,7 +275,7 @@ const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {
             <motion.div
               key={label}
               whileHover={{ y: -2 }}
-              className={`bg-gradient-to-b ${color} border rounded-sm px-3 py-3 text-center`}
+              className={`bg-gradient-to-b ${color} border rounded-lg px-3 py-3 text-center`}
             >
               <div className="text-xs font-display font-bold uppercase tracking-wider text-muted-foreground mb-1">
                 {label}
@@ -295,10 +294,10 @@ const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {
             whileTap={{ scale: 0.98 }}
             onClick={buildQueue}
             disabled={building}
-            className="group relative inline-flex items-center justify-center gap-2 rounded-sm font-display font-bold px-4 py-3 text-sm transition overflow-hidden"
+            className="group relative inline-flex items-center justify-center gap-2 rounded-lg font-display font-bold px-4 py-3 text-sm transition overflow-hidden"
           >
-            
-            <div className="absolute inset-0 bg-secondary/20 border border-secondary/40 rounded-sm group-hover:bg-secondary/30 group-disabled:from-muted/30 group-disabled:to-muted/20 group-disabled:border-muted/30 transition" />
+            {/* Background gradient */}
+            <div className="absolute inset-0 bg-gradient-to-r from-secondary/40 to-secondary/20 border border-secondary/50 rounded-lg group-hover:from-secondary/60 group-hover:to-secondary/40 group-disabled:from-muted/30 group-disabled:to-muted/20 group-disabled:border-muted/30 transition" />
             <div className="relative flex items-center gap-2 text-secondary group-disabled:text-muted-foreground">
               {building ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
               <span>Build</span>
@@ -310,9 +309,9 @@ const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {
             whileTap={{ scale: 0.98 }}
             onClick={clearQueue}
             disabled={loading || (queuedCount + confirmedCount === 0)}
-            className="group relative inline-flex items-center justify-center gap-2 rounded-sm font-display font-bold px-4 py-3 text-sm transition overflow-hidden"
+            className="group relative inline-flex items-center justify-center gap-2 rounded-lg font-display font-bold px-4 py-3 text-sm transition overflow-hidden"
           >
-            <div className="absolute inset-0 bg-red-500/20 border border-red-500/40 rounded-sm group-hover:bg-red-500/30 group-disabled:from-muted/30 group-disabled:to-muted/20 group-disabled:border-muted/30 transition" />
+            <div className="absolute inset-0 bg-gradient-to-r from-red-500/30 to-red-500/10 border border-red-500/40 rounded-lg group-hover:from-red-500/50 group-hover:to-red-500/30 group-disabled:from-muted/30 group-disabled:to-muted/20 group-disabled:border-muted/30 transition" />
             <div className="relative flex items-center gap-2 text-red-400 group-disabled:text-muted-foreground">
               <Trash2 className="w-4 h-4" />
               <span>Clear</span>
@@ -325,11 +324,11 @@ const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {
               whileTap={canConfirm ? { scale: 0.98 } : {}}
               onClick={() => setShowConfirmModal(true)}
               disabled={!canConfirm || confirming}
-              className="group relative inline-flex items-center justify-center gap-2 rounded-sm font-display font-bold px-4 py-3 text-sm transition overflow-hidden col-span-2 sm:col-span-1"
+              className="group relative inline-flex items-center justify-center gap-2 rounded-lg font-display font-bold px-4 py-3 text-sm transition overflow-hidden col-span-2 sm:col-span-1"
             >
-              <div className={`absolute inset-0 border rounded-sm transition ${
+              <div className={`absolute inset-0 border rounded-lg transition ${
                 canConfirm
-                  ? "bg-green-500/20 border-green-500/40 group-hover:bg-green-500/30"
+                  ? "bg-gradient-to-r from-green-500/40 to-green-500/20 border-green-500/60 group-hover:from-green-500/60 group-hover:to-green-500/40 group-hover:shadow-lg group-hover:shadow-green-500/20"
                   : "bg-muted/20 border-muted/30"
               }`} />
               <div className={`relative flex items-center gap-2 ${canConfirm ? "text-green-400" : "text-muted-foreground"}`}>
@@ -345,9 +344,9 @@ const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {
               whileTap={{ scale: 0.98 }}
               onClick={processQueue}
               disabled={processing}
-              className="group relative inline-flex items-center justify-center gap-2 rounded-sm font-display font-bold px-4 py-3 text-sm transition overflow-hidden col-span-2 sm:col-span-1"
+              className="group relative inline-flex items-center justify-center gap-2 rounded-lg font-display font-bold px-4 py-3 text-sm transition overflow-hidden col-span-2 sm:col-span-1"
             >
-              <div className="absolute inset-0 bg-yellow-500/20 border border-yellow-500/40 rounded-sm group-hover:bg-yellow-500/30 group-disabled:from-muted/30 group-disabled:to-muted/20 group-disabled:border-muted/30 transition" />
+              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/50 to-yellow-500/30 border border-yellow-500/70 rounded-lg group-hover:from-yellow-500/70 group-hover:to-yellow-500/50 group-hover:shadow-lg group-hover:shadow-yellow-500/30 group-disabled:from-muted/30 group-disabled:to-muted/20 group-disabled:border-muted/30 transition" />
               <div className="relative flex items-center gap-2 text-yellow-400 group-disabled:text-muted-foreground">
                 {processing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />}
                 <span>Process</span>
@@ -363,7 +362,7 @@ const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="bg-red-500/10 border border-red-500/30 rounded-sm px-4 py-3 text-red-400 text-sm flex items-start gap-3"
+              className="bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-3 text-red-400 text-sm flex items-start gap-3"
             >
               <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
               <span>{error}</span>
@@ -374,7 +373,7 @@ const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="bg-green-500/10 border border-green-500/30 rounded-sm px-4 py-3 text-green-400 text-sm font-display font-bold"
+              className="bg-green-500/10 border border-green-500/30 rounded-lg px-4 py-3 text-green-400 text-sm font-display font-bold"
             >
               ✓ {successMessage}
             </motion.div>
@@ -394,7 +393,7 @@ const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {
             </div>
 
             {/* Desktop: Table */}
-            <div className="hidden sm:block rounded-sm border border-secondary/20 overflow-hidden">
+            <div className="hidden sm:block rounded-lg border border-secondary/20 overflow-hidden">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-secondary/10 border-b border-secondary/20">
@@ -471,7 +470,7 @@ const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ delay: i * 0.05 }}
-                    className="bg-card border border-secondary/20 rounded-sm p-4 space-y-3 hover:bg-card/80 transition"
+                    className="bg-card border border-secondary/20 rounded-lg p-4 space-y-3 hover:bg-card/80 transition"
                   >
                     <div className="flex items-start justify-between">
                       <div>
@@ -513,7 +512,7 @@ const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-orange-500/10 border border-orange-500/30 rounded-sm p-4 space-y-3"
+            className="bg-gradient-to-b from-orange-500/15 to-orange-500/5 border border-orange-500/30 rounded-lg p-4 space-y-3"
           >
             <div className="flex items-center gap-2">
               <div className="p-1.5 bg-orange-500/20 rounded">
@@ -565,7 +564,7 @@ const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-blue-500/10 border border-blue-500/30 rounded-sm p-4 space-y-3"
+            className="bg-gradient-to-b from-blue-500/20 to-blue-500/5 border border-blue-500/30 rounded-lg p-4 space-y-3"
           >
             <div className="flex items-center gap-2">
               <div className="p-1.5 bg-blue-500/20 rounded">
@@ -606,13 +605,13 @@ const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-card border border-secondary/40 rounded-sm shadow-2xl max-w-md w-full space-y-6 p-6"
+              className="bg-card border border-secondary/40 rounded-xl shadow-2xl max-w-md w-full space-y-6 p-6"
             >
               <div className="space-y-2">
                 <h3 className="font-display text-xl font-bold text-foreground">
@@ -629,7 +628,7 @@ const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {
                     key={item.id}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="flex items-center justify-between p-2 bg-secondary/10 rounded-sm border border-secondary/20"
+                    className="flex items-center justify-between p-2 bg-secondary/10 rounded-lg border border-secondary/20"
                   >
                     <div className="flex-1">
                       <div className="text-sm font-semibold text-foreground">
@@ -654,9 +653,9 @@ const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {
                   whileTap={{ scale: 0.98 }}
                   onClick={confirmQueue}
                   disabled={confirming}
-                  className="flex-1 group relative inline-flex items-center justify-center gap-2 rounded-sm font-display font-bold py-3 transition overflow-hidden"
+                  className="flex-1 group relative inline-flex items-center justify-center gap-2 rounded-lg font-display font-bold py-3 transition overflow-hidden"
                 >
-                  <div className="absolute inset-0 bg-green-500/20 border border-green-500/40 rounded-sm group-hover:bg-green-500/30 group-disabled:from-muted/30 group-disabled:to-muted/20 transition" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-500/50 to-green-500/30 border border-green-500/60 rounded-lg group-hover:from-green-500/70 group-hover:to-green-500/50 group-disabled:from-muted/30 group-disabled:to-muted/20 transition" />
                   <div className="relative flex items-center gap-2 text-green-400 group-disabled:text-muted-foreground">
                     {confirming ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
                     <span>{confirming ? "Confirming..." : "Confirm"}</span>
@@ -666,9 +665,9 @@ const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setShowConfirmModal(false)}
-                  className="flex-1 group relative inline-flex items-center justify-center rounded-sm font-display font-bold py-3 transition overflow-hidden"
+                  className="flex-1 group relative inline-flex items-center justify-center rounded-lg font-display font-bold py-3 transition overflow-hidden"
                 >
-                  <div className="absolute inset-0 bg-muted/30 border border-muted/40 rounded-sm group-hover:bg-muted/40 transition" />
+                  <div className="absolute inset-0 bg-muted/30 border border-muted/40 rounded-lg group-hover:bg-muted/40 transition" />
                   <div className="relative text-foreground">Cancel</div>
                 </motion.button>
               </div>

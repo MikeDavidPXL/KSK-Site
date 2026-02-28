@@ -18,139 +18,51 @@ export interface SessionPayload {
   avatar_hash: string | null;
 }
 
-export type StaffTier = "owner" | "webdev" | "admin";
+export type StaffTier = "leader" | "coleader" | "webdev" | "staff";
 
-export const OWNER_ROLE_ID = process.env.DISCORD_OWNER_ROLE_ID;
+export const LEADER_ROLE_ID = process.env.DISCORD_OWNER_ROLE_ID;      // Leader
+export const COLEADER_ROLE_ID = process.env.DISCORD_COLEADER_ROLE_ID; // Co-Leader
 export const WEBDEV_ROLE_ID = process.env.DISCORD_WEBDEV_ROLE_ID;
-export const ADMIN_ROLE_ID =
+export const STAFF_ROLE_ID =
   process.env.DISCORD_ADMIN_ROLE_ID ?? process.env.DISCORD_STAFF_ROLE_ID;
 
-// ── KSK rank role IDs (Member and higher can download the pack) ────
-export const MEMBER_ROLE_ID = process.env.DISCORD_MEMBER_ROLE_ID ?? null;
-export const OG_ROLE_ID = process.env.DISCORD_OG_ROLE_ID ?? null;
-export const RECRUITEER_ROLE_ID = process.env.DISCORD_RECRUITEER_ROLE_ID ?? null;
-export const COMMANDER_ROLE_ID = process.env.DISCORD_COMMANDER_ROLE_ID ?? null;
+// ── Rank role IDs ────────────────────────────────────────────
+export const MEMBER_ROLE_ID = "1379144258082046075";
+export const RECRUITER_ROLE_ID = "1379144419642703893";
+export const COMMANDER_ROLE_ID = "1379144258082046078";
 
-const DOWNLOAD_ELIGIBLE_ROLES = [
+const PROMOTED_ROLES = [
   MEMBER_ROLE_ID,
-  OG_ROLE_ID,
-  RECRUITEER_ROLE_ID,
+  RECRUITER_ROLE_ID,
   COMMANDER_ROLE_ID,
-].filter((roleId): roleId is string => !!roleId);
-
-const normalizeRankName = (rank: string) => rank.trim().toLowerCase();
-
-const LEGACY_TO_KSK_RANK: Record<string, string> = {
-  private: "Trial Member",
-  corporal: "Member",
-  sergeant: "OG",
-  lieutenant: "Recruiteer",
-  major: "Commander",
-};
-
-const KSK_TO_LEGACY_RANK: Record<string, string> = {
-  "trial member": "Private",
-  member: "Corporal",
-  og: "Sergeant",
-  recruiteer: "Lieutenant",
-  commander: "Major",
-};
-
-export function toKskRankName(rank: string): string {
-  const normalized = normalizeRankName(rank);
-  return LEGACY_TO_KSK_RANK[normalized] ?? rank;
-}
-
-export function fromKskRankName(rank: string): string {
-  const normalized = normalizeRankName(rank);
-  return KSK_TO_LEGACY_RANK[normalized] ?? rank;
-}
-
-export function normalizeStoredRank(rank: string): string {
-  const normalized = normalizeRankName(rank);
-  if (KSK_TO_LEGACY_RANK[normalized]) return KSK_TO_LEGACY_RANK[normalized];
-  if (LEGACY_TO_KSK_RANK[normalized]) return rank;
-  return rank;
-}
-
-export function toKskRankForDisplay(rank: string): string {
-  return toKskRankName(normalizeStoredRank(rank));
-}
-
-export const KSK_RANK_SEQUENCE = [
-  "Trial Member",
-  "Member",
-  "OG",
-  "Recruiteer",
-  "Commander",
 ];
 
-export function kskRankOrder(rank: string): number {
-  const normalized = normalizeRankName(rank);
-  const mapped = normalizeRankName(toKskRankForDisplay(rank));
-  const idx = KSK_RANK_SEQUENCE.findIndex((item) => normalizeRankName(item) === mapped);
-  if (idx !== -1) return idx;
-  const fallback = KSK_RANK_SEQUENCE.findIndex((item) => normalizeRankName(item) === normalized);
-  return fallback === -1 ? 0 : fallback;
-}
-
-export function kskNextRank(rank: string): string | null {
-  const idx = kskRankOrder(rank);
-  if (idx >= KSK_RANK_SEQUENCE.length - 1) return null;
-  return KSK_RANK_SEQUENCE[idx + 1];
-}
-
-export function toLegacyRankName(rank: string): string {
-  return fromKskRankName(rank);
-}
-
-export function toKskRankArray(ranks: string[]): string[] {
-  return ranks.map((rank) => toKskRankForDisplay(rank));
-}
-
-export function toLegacyRankArray(ranks: string[]): string[] {
-  return ranks.map((rank) => normalizeStoredRank(rank));
-}
-
-export const KSK_RANK_COLORS: Record<string, string> = {
-  "Trial Member": "text-green-300",
-  Member: "text-blue-400",
-  OG: "text-orange-400",
-  Recruiteer: "text-cyan-400",
-  Commander: "text-red-400",
-};
-
-export function kskRankColor(rank: string): string {
-  return KSK_RANK_COLORS[toKskRankForDisplay(rank)] ?? "text-muted-foreground";
-}
-
-export function isDownloadEligibleRank(roles: string[]): boolean {
-  return DOWNLOAD_ELIGIBLE_ROLES.some((roleId) => roles.includes(roleId));
-}
-
-// Backward-compat export name used in current handlers/frontend payload fields
-export function isCorporalOrHigher(roles: string[]): boolean {
-  return isDownloadEligibleRank(roles);
+/** Returns true if the user holds Member, Recruiter, or Commander role */
+export function isMemberOrHigher(roles: string[]): boolean {
+  return PROMOTED_ROLES.some((r) => roles.includes(r));
 }
 
 export function determineStaffTier(roles: string[]): StaffTier | null {
-  if (OWNER_ROLE_ID && roles.includes(OWNER_ROLE_ID)) return "owner";
+  if (LEADER_ROLE_ID && roles.includes(LEADER_ROLE_ID)) return "leader";
+  if (COLEADER_ROLE_ID && roles.includes(COLEADER_ROLE_ID)) return "coleader";
   if (WEBDEV_ROLE_ID && roles.includes(WEBDEV_ROLE_ID)) return "webdev";
-  if (ADMIN_ROLE_ID && roles.includes(ADMIN_ROLE_ID)) return "admin";
+  if (STAFF_ROLE_ID && roles.includes(STAFF_ROLE_ID)) return "staff";
   return null;
 }
 
 export function staffTierRank(tier: StaffTier | null): number {
-  if (tier === "owner") return 3;
+  if (tier === "leader") return 4;
+  if (tier === "coleader") return 3;
   if (tier === "webdev") return 2;
-  if (tier === "admin") return 1;
+  if (tier === "staff") return 1;
   return 0;
 }
 
-export function staffTierLabel(tier: StaffTier): "Owner" | "Web Developer" | "Admin" {
-  if (tier === "owner") return "Owner";
+export function staffTierLabel(tier: StaffTier): "Leader" | "Co-Leader" | "Web Developer" | "Staff" {
+  if (tier === "leader") return "Leader";
+  if (tier === "coleader") return "Co-Leader";
   if (tier === "webdev") return "Web Developer";
-  return "Admin";
+  return "Staff";
 }
 
 export function getDiscordDefaultAvatarIndex(discordId: string): number {
@@ -248,11 +160,10 @@ export interface RankDef {
 }
 
 export const RANK_LADDER: RankDef[] = [
-  { name: "Private",    roleId: process.env.DISCORD_TRIAL_MEMBER_ROLE_ID ?? null, daysRequired: 0  },
-  { name: "Corporal",   roleId: MEMBER_ROLE_ID,                                  daysRequired: 14 },
-  { name: "Sergeant",   roleId: OG_ROLE_ID,                                       daysRequired: 30 },
-  { name: "Lieutenant", roleId: RECRUITEER_ROLE_ID,                               daysRequired: 60 },
-  { name: "Major",      roleId: COMMANDER_ROLE_ID,                                daysRequired: 90 },
+  { name: "Trial Member", roleId: null,                    daysRequired: 0  },
+  { name: "Member",       roleId: "1379144258082046075",   daysRequired: 14 },
+  { name: "Recruiter",    roleId: "1379144419642703893",   daysRequired: 30 },
+  { name: "Commander",    roleId: "1379144258082046078",   daysRequired: 60 },
 ];
 
 export const RANK_ROLE_IDS = RANK_LADDER
@@ -288,10 +199,10 @@ export function earnedRank(days: number): RankDef {
   return earned;
 }
 
-/** Determine next rank above current rank (null if already Major) */
+/** Determine next rank above current rank (null if already Commander) */
 export function nextRankFor(currentRank: string, days: number): RankDef | null {
   const idx = rankIndex(currentRank);
-  if (idx >= RANK_LADDER.length - 1) return null; // already Major
+  if (idx >= RANK_LADDER.length - 1) return null; // already Commander
   const next = RANK_LADDER[idx + 1];
   if (days >= next.daysRequired) return next;
   return next; // show upcoming rank even if not yet earned
@@ -418,14 +329,14 @@ export function resolveDiscordId(
   return { id: null, multiple: false };
 }
 
-/** Check if a guild member has "420" in any name field */
-export function has420InName(member: GuildMember): boolean {
+/** Check if a guild member has "KSK" in any name field */
+export function hasKSKInName(member: GuildMember): boolean {
   const names = [
     member.user.username,
     member.user.global_name,
     member.nick,
   ].filter(Boolean) as string[];
-  return names.some((n) => n.includes("420"));
+  return names.some((n) => n.toUpperCase().includes("KSK"));
 }
 
 // ── Post to a Discord channel ───────────────────────────────
@@ -449,7 +360,7 @@ export async function postChannelMessage(
 }
 
 // ── Application log channel ID ──────────────────────────────
-export const APP_LOG_CHANNEL_ID = "1374059564168773863";
+export const APP_LOG_CHANNEL_ID = "1468737258768175296";
 
 // ── Post application log (ping optional) ────────────────────
 export async function postAppLog(content: string, withPing = false): Promise<boolean> {

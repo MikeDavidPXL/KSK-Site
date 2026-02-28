@@ -1,12 +1,12 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Shirt, Crosshair, Car, Monitor, Zap, RefreshCw } from "lucide-react";
+import { Crosshair, Car, Zap, RefreshCw } from "lucide-react";
 
 const features = [
-  { icon: Crosshair, title: "Weapon Skins", description: "Exclusive weapon textures for all weapons in CosmicV" },
-  { icon: Car, title: "Vehicle Liveries", description: "!!STILL A WIP!!" },
-  { icon: Zap, title: "Performance Friendly", description: "Optimized as best i can for minimal FPS impact with the beautiful textures. It will cost some fps." },
-  { icon: RefreshCw, title: "Regular Updates", description: "New content and improvements when i got time... This is all still a test." },
+  { icon: Crosshair, title: "Tactical Loadouts", description: "Optimized weapon and gear setups for dominating CosmicV KOTH" },
+  { icon: Car, title: "Vehicle Strategy", description: "Coordinated vehicle tactics for map control" },
+  { icon: Zap, title: "Active Community", description: "Join an active Discord with organized squads and regular events" },
+  { icon: RefreshCw, title: "Regular Events", description: "Scheduled clan matches, training sessions, and community events" },
 ];
 
 const FeaturesSection = () => {

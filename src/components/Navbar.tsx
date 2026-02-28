@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import clanLogo from "@/assets/clan-logo.png";
+import clanLogo from "@/assets/ksk.png";
 
 const navItems = [
   { label: "Home", href: "#hero" },
@@ -31,32 +31,30 @@ const Navbar = () => {
           : "bg-transparent"
       }`}
     >
-      <div className="container mx-auto px-4 h-16">
-        <div className="h-full max-w-6xl mx-auto grid grid-cols-[1fr_auto_1fr] items-center">
-          <a href="#hero" className="flex items-center gap-2 justify-self-start">
-            <img src={clanLogo} alt="KSK Logo" className="h-10 w-auto object-contain" />
-            <span className="font-display text-lg font-bold gradient-neon-text hidden sm:block">
-              KSK
-            </span>
-          </a>
-          <div className="hidden md:flex items-center gap-6 justify-self-center">
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="font-body text-sm font-medium hover:text-primary transition-colors duration-200 uppercase tracking-wider"
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
-          <a
-            href="#download"
-            className="justify-self-end bg-primary/20 border border-primary/50 text-primary font-display text-xs font-bold px-4 py-2 rounded-md hover:bg-primary/30 neon-border-blue transition-all duration-200 uppercase tracking-wider"
-          >
-            Download
-          </a>
+      <div className="container mx-auto px-4 flex items-center justify-between h-16">
+        <a href="#hero" className="flex items-center gap-2">
+          <img src={clanLogo} alt="KSK Logo" className="w-10 h-10 rounded-full" />
+          <span className="font-display text-lg font-bold gradient-neon-text hidden sm:block">
+            KSK
+          </span>
+        </a>
+        <div className="hidden md:flex items-center gap-6">
+          {navItems.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className="font-body text-sm font-medium hover:text-primary transition-colors duration-200 uppercase tracking-wider"
+            >
+              {item.label}
+            </a>
+          ))}
         </div>
+        <a
+          href="#download"
+          className="bg-primary/20 border border-primary/50 text-primary font-display text-xs font-bold px-4 py-2 rounded-md hover:bg-primary/30 neon-border-blue transition-all duration-200 uppercase tracking-wider"
+        >
+          Download
+        </a>
       </div>
     </motion.nav>
   );

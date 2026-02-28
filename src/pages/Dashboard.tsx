@@ -4,7 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { ExternalLink, FileText, Loader2, ShieldAlert, RefreshCw } from "lucide-react";
 import { Link, Navigate } from "react-router-dom";
 
-const DISCORD_INVITE = "https://discord.gg/qBpYXRgmcH";
+const DISCORD_INVITE = "https://discord.gg/RPFyYZBCZM";
 const POLL_INTERVAL = 10_000; // 10 seconds
 
 const Dashboard = () => {
@@ -53,34 +53,14 @@ const Dashboard = () => {
     );
   }
 
-  // No session → login page
+  // No session → back to login
   if (!user) {
-    return <Navigate to="/verify" replace />;
+    return <Navigate to="/" replace />;
   }
 
-  // Staff → admin panel
-  if (user.is_staff) {
-    return <Navigate to="/admin" replace />;
-  }
-
-  // Private members: pack section is disabled
-  if (user.is_private) {
-    return (
-      <GatePage>
-        <GateCard
-          icon={<FileText className="w-8 h-8 text-primary" />}
-          title="Pack tijdelijk niet beschikbaar"
-          description="Het download- en installatiegedeelte is verwijderd. We bouwen dit later opnieuw op."
-        >
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-display font-bold px-8 py-3 rounded-sm transition"
-          >
-            Back to Homepage
-          </Link>
-        </GateCard>
-      </GatePage>
-    );
+  // Staff or Private → straight to pack page
+  if (user.is_staff || user.is_private) {
+    return <Navigate to="/pack" replace />;
   }
 
   // Not in guild at all → join Discord card
@@ -96,7 +76,7 @@ const Dashboard = () => {
             href={DISCORD_INVITE}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-[#5865F2] hover:bg-[#4752C4] text-white font-display font-bold px-8 py-3 rounded-sm transition"
+            className="inline-flex items-center gap-2 bg-[#5865F2] hover:bg-[#4752C4] text-white font-display font-bold px-8 py-3 rounded-lg transition hover:scale-105"
           >
             <ExternalLink className="w-4 h-4" /> Join Discord
           </a>
@@ -121,7 +101,7 @@ const Dashboard = () => {
         >
           <Link
             to="/verify"
-            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-display font-bold px-8 py-3 rounded-sm transition"
+            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-display font-bold px-8 py-3 rounded-lg transition hover:scale-105"
           >
             <ShieldAlert className="w-4 h-4" /> Go to Verification
           </Link>
@@ -146,7 +126,7 @@ const Dashboard = () => {
         >
           <Link
             to="/apply"
-            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-display font-bold px-8 py-3 rounded-sm transition"
+            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-display font-bold px-8 py-3 rounded-lg transition hover:scale-105"
           >
             <FileText className="w-4 h-4" /> Start Application
           </Link>
@@ -198,7 +178,7 @@ const Dashboard = () => {
           description="Unfortunately your application was not accepted. You may re-apply."
         >
           {app.reviewer_note && (
-            <div className="mb-6 p-4 bg-destructive/10 border border-destructive/30 rounded-sm">
+            <div className="mb-6 p-4 bg-destructive/10 border border-destructive/30 rounded-lg">
               <p className="text-sm text-muted-foreground font-display font-bold mb-2">
                 Feedback from Staff:
               </p>
@@ -209,7 +189,7 @@ const Dashboard = () => {
           )}
           <Link
             to="/apply"
-            className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-display font-bold px-8 py-3 rounded-sm transition"
+            className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-display font-bold px-8 py-3 rounded-lg transition hover:scale-105"
           >
             <FileText className="w-4 h-4" /> Re-Apply
           </Link>
@@ -223,9 +203,10 @@ const Dashboard = () => {
 function GatePage({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      <nav className="relative z-10 border-b border-border bg-card">
+      <div className="absolute inset-0 smoke-overlay pointer-events-none" />
+      <nav className="relative z-10 border-b border-border bg-card/60 backdrop-blur">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <span className="font-display text-lg font-bold text-primary">
+          <span className="font-display text-lg font-bold neon-text-blue text-primary">
             KSK
           </span>
           <a
@@ -257,7 +238,7 @@ function GateCard({
 }) {
   return (
     <motion.div
-      className="bg-card border border-border rounded-sm p-10 text-center"
+      className="bg-card border border-border rounded-xl p-10 text-center neon-border-blue"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}

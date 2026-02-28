@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
@@ -25,8 +25,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<TexturePackPage />} />
-            <Route path="/landing" element={<LandingPage />} />
+            <Route path="/" element={<LandingPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/verify" element={<VerifyPage />} />
             <Route path="/apply" element={<ApplicationForm />} />
@@ -40,7 +39,6 @@ const App = () => (
                 </ClanListErrorBoundary>
               }
             />
-            <Route path="/installation" element={<Navigate to="/dashboard" replace />} />
             <Route path="/ban-report" element={<BanReportPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

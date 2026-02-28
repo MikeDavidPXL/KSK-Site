@@ -1,7 +1,7 @@
 // /.netlify/functions/clan-list-upload
 // POST: receive parsed rows from XLSX (client-side parsed), store in DB
 import type { Handler } from "@netlify/functions";
-import { getSessionFromCookie, discordFetch, supabase, json, determineStaffTier } from "./shared";
+import { getSessionFromCookie, discordFetch, supabase, json } from "./shared";
 
 const MAX_ROWS = 5000;
 const MAX_FILE_NAME_LENGTH = 255;
@@ -26,9 +26,7 @@ const handler: Handler = async (event) => {
     true
   );
   const roles: string[] = member?.roles ?? [];
-  const staffTier = determineStaffTier(roles);
-  const hasLegacyStaff = roles.includes(process.env.DISCORD_STAFF_ROLE_ID!);
-  if (!staffTier && !hasLegacyStaff) {
+  if (!roles.includes(process.env.DISCORD_STAFF_ROLE_ID!)) {
     return json({ error: "Forbidden" }, 403);
   }
 

@@ -1,6 +1,6 @@
 // /.netlify/functions/clan-list-import
 // POST: receive parsed CSV rows (client-side parsed), upsert into clan_list_members
-// Resolves discord_id via guild members, detects 420 tag
+// Resolves discord_id via guild members, detects KSK tag
 import type { Handler } from "@netlify/functions";
 import {
   getSessionFromCookie,
@@ -9,14 +9,13 @@ import {
   json,
   fetchAllGuildMembers,
   resolveDiscordId,
-  has420InName,
+  hasKSKInName,
   RANK_LADDER,
   computeTimeDays,
   earnedRank,
   nextRankFor,
   rankIndex,
   GuildMember,
-  determineStaffTier,
 } from "./shared";
 
 const MAX_ROWS = 5000;
@@ -46,7 +45,7 @@ type Field =
   | "time_in_clan"
   | "rank_current"
   | "status"
-  | "has_420_tag"
+  | "has_ksk_tag"
   | "_needs_role_updated";
 
 /** Map of canonical header aliases → internal field */
@@ -97,11 +96,11 @@ const HEADER_ALIASES: Record<string, Field> = {
   "active status":     "status",
   "activity":          "status",
 
-  // has 420 tag
-  "has 420 tag":       "has_420_tag",
-  "has 420 tag?":      "has_420_tag",  // after canonical: "has 420 tag"
-  "420 tag":           "has_420_tag",
-  "tag":               "has_420_tag",
+  // has ksk tag
+  "has ksk tag":       "has_ksk_tag",
+  "has ksk tag?":      "has_ksk_tag",  // after canonical: "has ksk tag"
+  "ksk tag":           "has_ksk_tag",
+  "tag":               "has_ksk_tag",
 
   // needs role updated (ignored but mapped so it doesn't noise)
   "needs role updated":"_needs_role_updated",
@@ -170,10 +169,10 @@ function normalizeRow(
 
 // Normalize rank name to a known rank
 function normalizeRank(raw: string | undefined): string {
-  if (!raw) return "Private";
+  if (!raw) return "Trial Member";
   const lower = raw.toLowerCase().trim();
   const found = RANK_LADDER.find((r) => r.name.toLowerCase() === lower);
-  return found ? found.name : "Private";
+  return found ? found.name : "Trial Member";
 }
 
 // Parse date from various formats:
@@ -254,9 +253,7 @@ const handler: Handler = async (event) => {
     true
   );
   const roles: string[] = member?.roles ?? [];
-  const staffTier = determineStaffTier(roles);
-  const hasLegacyStaff = roles.includes(process.env.DISCORD_STAFF_ROLE_ID!);
-  if (!staffTier && !hasLegacyStaff) {
+  if (!roles.includes(process.env.DISCORD_STAFF_ROLE_ID!)) {
     return json({ error: "Forbidden" }, 403);
   }
 
@@ -355,17 +352,17 @@ const handler: Handler = async (event) => {
     let needsResolution = false;
     let detectedTag = false;
 
-    // Check CSV has_420_tag value as fallback
-    const csvTag = raw.has_420_tag?.toLowerCase();
+    // Check CSV has_ksk_tag value as fallback
+    const csvTag = raw.has_ksk_tag?.toLowerCase();
     const csvTagValue = csvTag === "true" || csvTag === "yes" || csvTag === "1";
 
     if (guildMembers.length > 0) {
       const resolved = resolveDiscordId(raw.discord_name, guildMembers);
       if (resolved.id) {
         discordId = resolved.id;
-        // Check 420 tag from actual Discord name
+        // Check KSK tag from actual Discord name
         const gm = guildMembers.find((m) => m.user.id === resolved.id);
-        if (gm) detectedTag = has420InName(gm);
+        if (gm) detectedTag = hasKSKInName(gm);
         // Fallback to CSV value if Discord detection didn't find tag
         if (!detectedTag && csvTagValue) detectedTag = true;
       } else {
@@ -420,7 +417,7 @@ const handler: Handler = async (event) => {
       uid: raw.uid,
       join_date: joinDate,
       status,
-      has_420_tag: detectedTag,
+      has_ksk_tag: detectedTag,
       rank_current: finalRank,
       rank_next: nxt?.name ?? null,
       frozen_days: frozenDays,

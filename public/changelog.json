@@ -1,78 +1,16 @@
 [
   {
-    "version": "1.2.3",
-    "date": "26-02-2026",
-    "title": "Discord Sync + Archive Flow",
+    "version": "1.0.0",
+    "date": "2025-06-15",
+    "title": "KSK Site Launch",
     "changes": [
-      "Added one-click Discord membership sync for clan staff",
-      "Members who leave the Discord server are now auto-archived instead of deleted",
-      "Archived members are excluded from promotion previews and promotion runs",
-      "Added Show Archived toggle with re-add flow (rejoin starts progression from scratch)",
-      "Changelog now shows latest update first with stacked older entries and smooth expand animation"
-    ]
-  },
-  {
-    "version": "1.2.2",
-    "date": "26-02-2026",
-    "title": "Smoother Homepage + Ban Report Improvements",
-    "changes": [
-      "Homepage now opens cleaner: you first see only the hero banner for a more premium look",
-      "Navbar appears smoothly after you start scrolling instead of showing instantly",
-      "Main content sections now reveal smoothly while scrolling down",
-      "Added an in-game ban report flow so members can report bans directly from the website",
-      "Ban report success screen is now cleaner and no longer shows appeal timing details"
-    ]
-  },
-  {
-    "version": "1.2.1",
-    "date": "25-02-2026",
-    "title": "Clan Homepage & Staff Team Update",
-    "changes": [
-      "Added Staff Team section on homepage with dynamic card layout grouped by roles",
-      "Clan-focused About Us rewrite reflecting CosmicV KOTH identity",
-      "Login page title updated to \"CosmicV KOTH Clan\"",
-      "\"Updates & Showcase\" renamed to \"Showcase\" with updated subtitle",
-      "Shield admin tools menu for staff navigation",
-      "Clan List structural improvements",
-      "Improved layout consistency and mobile responsiveness"
-    ]
-  },
-  {
-    "version": "1.1.3",
-    "date": "24-02-2026",
-    "fileSize": "601.6 MB",
-    "title": "Update 3",
-    "changes": [
-      "Added 6 pistol variants: Pistol, Pistol MK2, Heavy Pistol, .50, AP Pistol, XM3 (with mags & suppressors)",
-      "Added Assault Shotgun with magazine variants",
-      "Afterburner color changed",
-      "Headshot effect changed"
-    ]
-  },
-  {
-    "version": "1.1.2",
-    "date": "13-02-2026",
-    "fileSize": "576.9 mb",
-    "title": "Update 2",
-    "changes": [
-      "Added 4 LMGs: Combat MG, Combat MG MK2, MG, Gusenberg (with barrels & mags)",
-      "Added large weapons: RPG, Homing Launcher, Grenade Launcher",
-      "Added complete sniper collection: Sniper, Marksman, Marksman MK2, Musket, Precision Rifle",
-      "Added 9 separate attachments (compensators, suppressors, grips)",
-      "Sun bloom fixed"
-    ]
-  },
-  {
-    "version": "1.1.1",
-    "date": "07-02-2026",
-    "fileSize": "475.2 mb",
-    "title": "First Release - Complete Rifle Pack",
-    "changes": [
-      "13 Assault Rifles: Advanced, Assault, Compact AK, Bullpup, Carbine, Special Carbine (all with MK2 variants)",
-      "Added Battle Rifle, Military Rifle, Service Rifle",
-      "Base Shotguns: Combat Shotgun, Pump, Pump MK2",
-      "All rifles include body textures, magazines (1-3 variants), barrels, and sights",
-      "Performance optimized for all systems"
+      "Website launched for [KSK] Kommando Spezialkräfte",
+      "Discord login with role-based access control",
+      "Clan member list with rank tracking and promotion system",
+      "Application system for new members",
+      "Admin panel for staff to review applications",
+      "Ban report system for in-game bans",
+      "Promotion queue with Discord role automation"
     ]
   }
 ]

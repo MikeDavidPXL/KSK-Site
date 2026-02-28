@@ -14,9 +14,9 @@ export interface User {
   avatar_hash?: string | null;
   in_guild: boolean;
   is_staff: boolean;
-  staff_tier?: "owner" | "webdev" | "admin" | null;
+  staff_tier?: "leader" | "coleader" | "webdev" | "staff" | null;
   is_private: boolean;
-  is_corporal_or_higher: boolean;
+  is_member_or_higher: boolean;
   is_koth: boolean;
   is_unverified: boolean;
   effective_status: "accepted" | "koth" | "unverified" | "none";

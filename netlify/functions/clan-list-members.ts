@@ -11,7 +11,6 @@ import {
   nextRankFor,
   rankIndex,
   RANK_LADDER,
-  determineStaffTier,
 } from "./shared";
 
 const PAGE_SIZE = 50;
@@ -31,9 +30,7 @@ const handler: Handler = async (event) => {
     true
   );
   const roles: string[] = member?.roles ?? [];
-  const staffTier = determineStaffTier(roles);
-  const hasLegacyStaff = roles.includes(process.env.DISCORD_STAFF_ROLE_ID!);
-  if (!staffTier && !hasLegacyStaff) {
+  if (!roles.includes(process.env.DISCORD_STAFF_ROLE_ID!)) {
     return json({ error: "Forbidden" }, 403);
   }
 
@@ -42,7 +39,7 @@ const handler: Handler = async (event) => {
   const page = Math.max(1, parseInt(params.page ?? "1", 10));
   const search = (params.search ?? "").trim();
   const statusFilter = params.status; // active | inactive
-  const tagFilter = params.has_420_tag; // true | false
+  const tagFilter = params.has_ksk_tag; // true | false
   const promoFilter = params.promotion_due; // true | false
   const archivedFilter = params.show_archived; // true = show archived only, false/omit = active only
 
@@ -62,8 +59,8 @@ const handler: Handler = async (event) => {
   if (statusFilter === "active" || statusFilter === "inactive") {
     query = query.eq("status", statusFilter);
   }
-  if (tagFilter === "true") query = query.eq("has_420_tag", true);
-  if (tagFilter === "false") query = query.eq("has_420_tag", false);
+  if (tagFilter === "true") query = query.eq("has_ksk_tag", true);
+  if (tagFilter === "false") query = query.eq("has_ksk_tag", false);
   if (promoFilter === "true") query = query.eq("promote_eligible", true);
   if (promoFilter === "false") query = query.eq("promote_eligible", false);
 
@@ -94,7 +91,7 @@ const handler: Handler = async (event) => {
     // Determine if promotion is due
     const needsPromo =
       m.status === "active" &&
-      m.has_420_tag &&
+      m.has_ksk_tag &&
       earnedIdx > currentIdx &&
       currentIdx < RANK_LADDER.length - 1;
     const nxt = nextRankFor(m.rank_current, days);
@@ -103,7 +100,7 @@ const handler: Handler = async (event) => {
     let days_until_next_rank: string | number;
     if (currentIdx >= RANK_LADDER.length - 1) {
       days_until_next_rank = "Max rank";
-    } else if (m.status !== "active" || !m.has_420_tag) {
+    } else if (m.status !== "active" || !m.has_ksk_tag) {
       days_until_next_rank = "Paused";
     } else if (nxt && days >= nxt.daysRequired) {
       days_until_next_rank = "Ready";
