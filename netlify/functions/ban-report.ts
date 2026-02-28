@@ -9,7 +9,7 @@ const RATE_LIMIT_WINDOW = 60_000; // 1 minute
 const RATE_LIMIT_MAX = 5;
 
 // Ban report log channel
-const BAN_REPORT_CHANNEL_ID = "1476342947644444693";
+const BAN_REPORT_CHANNEL_ID = process.env.DISCORD_BAN_REPORT_CHANNEL_ID || "";
 const BAN_REPORT_PING_ROLE_ID =
   process.env.DISCORD_OWNER_ROLE_ID ?? null;
 
@@ -166,7 +166,11 @@ const handler: Handler = async (event) => {
       day: "numeric",
     })}`;
 
-    await postChannelMessage(BAN_REPORT_CHANNEL_ID, logMsg);
+    if (BAN_REPORT_CHANNEL_ID) {
+      await postChannelMessage(BAN_REPORT_CHANNEL_ID, logMsg);
+    } else {
+      console.error("ban-report: DISCORD_BAN_REPORT_CHANNEL_ID is not set");
+    }
   } catch (e) {
     // Log error but don't fail submission
     console.error("Discord log error:", e);

@@ -34,7 +34,7 @@ interface ChangelogEntry {
 
 const features = [
   { icon: Swords, title: "Competitive KOTH", description: "Dominate King of the Hill on CosmicV with organized squad play and tactics." },
-  { icon: Trophy, title: "Rank System", description: "Climb the ranks from Trial Member to Commander through dedication and activity." },
+  { icon: Trophy, title: "Rank System", description: "Climb the ranks from Role1 to Role5 through dedication and activity." },
   { icon: Flame, title: "Active Community", description: "Join an active Discord with regular events, squad sessions, and banter." },
   { icon: CalendarCheck, title: "Regular Events", description: "Weekly KOTH sessions, tournaments, and community game nights." },
 ];

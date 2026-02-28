@@ -55,7 +55,7 @@ async function upsertClanMemberFromApplication(
     join_date: existing?.join_date || joinDate,
     status: "active",
     has_ksk_tag: false,
-    rank_current: "Trial Member",
+    rank_current: "Role1",
     frozen_days: 0,
     counting_since: acceptedAtIso,
     source: "application" as const,

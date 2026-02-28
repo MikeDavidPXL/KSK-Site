@@ -157,6 +157,12 @@ const handler: Handler = async (event) => {
 
   // ── Discord channel logging ───────────────────────────────
   try {
+    const forwardedHost = event.headers["x-forwarded-host"] || event.headers.host || "";
+    const forwardedProto = event.headers["x-forwarded-proto"] || "https";
+    const derivedBaseUrl = forwardedHost ? `${forwardedProto}://${forwardedHost}` : "";
+    const baseUrl = (process.env.APP_BASE_URL || derivedBaseUrl).replace(/\/$/, "");
+    const reviewUrl = baseUrl ? `${baseUrl}/admin` : "/admin";
+
     const recruiterPingRoleId =
       process.env.DISCORD_RECRUITER_PING_ROLE_ID ??
       process.env.DISCORD_RECRUITER_ROLE_ID ??
@@ -167,7 +173,7 @@ const handler: Handler = async (event) => {
       `📋 **New application submitted**`,
       `Applicant: <@${session.discord_id}> (${session.username})`,
       `UID: ${uid}`,
-      `Review: ${process.env.APP_BASE_URL || "https://ksk-site.netlify.app"}/admin`,
+      `Review: ${reviewUrl}`,
     ].join("\n");
 
     const posted = await postAppLog(logContent, true, recruiterPingRoleId);

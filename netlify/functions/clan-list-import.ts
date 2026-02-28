@@ -170,10 +170,16 @@ function normalizeRow(
 
 // Normalize rank name to a known rank
 function normalizeRank(raw: string | undefined): string {
-  if (!raw) return "Trial Member";
+  if (!raw) return "Role1";
   const lower = raw.toLowerCase().trim();
+  // Support both old names (Member/Recruiter/Commander) and new names (Role1-5)
+  const OLD_TO_NEW: Record<string, string> = {
+    "member": "Role1", "private": "Role1", "trial member": "Trial Member",
+    "recruiter": "Role2", "commander": "Role3",
+  };
+  if (OLD_TO_NEW[lower]) return OLD_TO_NEW[lower];
   const found = RANK_LADDER.find((r) => r.name.toLowerCase() === lower);
-  return found ? found.name : "Trial Member";
+  return found ? found.name : "Role1";
 }
 
 // Parse date from various formats:

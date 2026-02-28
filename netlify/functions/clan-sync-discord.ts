@@ -28,8 +28,8 @@ let cachedGuildRoleMap: Map<string, string[]> | null = null;
 let cacheTimestamp = 0;
 const CACHE_TTL = 60_000;
 
-// Log channel same as APP_LOG_CHANNEL_ID
-const SYNC_LOG_CHANNEL_ID = "1374059564168773863";
+const SYNC_LOG_CHANNEL_ID =
+  process.env.DISCORD_SYNC_LOG_CHANNEL_ID || process.env.DISCORD_APP_LOG_CHANNEL_ID || "";
 
 const handler: Handler = async (event) => {
   if (event.httpMethod !== "POST") {
@@ -109,7 +109,7 @@ const handler: Handler = async (event) => {
           .reverse()
           .find((r) => r.roleId && discordRoles.includes(r.roleId));
 
-        const syncedCurrentRank = highestRoleRank?.name ?? "Trial Member";
+        const syncedCurrentRank = highestRoleRank?.name ?? "Role1";
         const frozenDays = cm.frozen_days ?? 0;
         const countingSince = cm.counting_since ?? null;
         const status = cm.status ?? "active";
@@ -141,7 +141,7 @@ const handler: Handler = async (event) => {
           })
           .eq("id", cm.id);
 
-        if ((cm.rank_current ?? "Trial Member") !== syncedCurrentRank) {
+        if ((cm.rank_current ?? "Role1") !== syncedCurrentRank) {
           ranksSyncedCount++;
         }
       } else {
@@ -209,7 +209,11 @@ const handler: Handler = async (event) => {
       logMsg += `\n⚠️ **Unresolved (no Discord ID):** ${unresolvedCount}`;
     }
 
-    await postChannelMessage(SYNC_LOG_CHANNEL_ID, logMsg);
+    if (SYNC_LOG_CHANNEL_ID) {
+      await postChannelMessage(SYNC_LOG_CHANNEL_ID, logMsg);
+    } else {
+      console.error("clan-sync-discord: missing DISCORD_SYNC_LOG_CHANNEL_ID and DISCORD_APP_LOG_CHANNEL_ID");
+    }
 
     return json({
       ok: true,

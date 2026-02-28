@@ -30,20 +30,34 @@ export const STAFF_ROLE_ID =
   process.env.DISCORD_ADMIN_ROLE_ID ?? process.env.DISCORD_STAFF_ROLE_ID;
 
 // ── Rank role IDs (from env) ─────────────────────────────────
-export const MEMBER_ROLE_ID = process.env.DISCORD_MEMBER_ROLE_ID!;
-export const RECRUITER_ROLE_ID =
-  process.env.DISCORD_RECRUITER_ROLE_ID ?? process.env.DISCORD_RECRUITEER_ROLE_ID!;
-export const COMMANDER_ROLE_ID = process.env.DISCORD_COMMANDER_ROLE_ID!;
+export const ROLE1_ROLE_ID = process.env.DISCORD_MEMBER_ROLE_ID!;          // KSK - Role1 (on accept)
+export const ROLE2_ROLE_ID =
+  process.env.DISCORD_RECRUITER_ROLE_ID ?? process.env.DISCORD_RECRUITEER_ROLE_ID!; // KSK - Role2 (10 days)
+export const ROLE3_ROLE_ID = process.env.DISCORD_COMMANDER_ROLE_ID!;        // KSK - Role3 (20 days)
+export const ROLE4_ROLE_ID = process.env.DISCORD_ROLE4_ROLE_ID!;            // KSK - Role4 (40 days)
+export const ROLE5_ROLE_ID = process.env.DISCORD_ROLE5_ROLE_ID!;            // KSK - Role5 (65 days)
+export const OG_ROLE_ID    = process.env.DISCORD_OG_ROLE_ID!;              // KSK - OG (manual / force only)
+export const SQUAD_LEADER_ROLE_ID = process.env.DISCORD_SQUAD_LEADER_ROLE_ID!; // KSK - Squad leader (force only)
+export const SQUAD_ROLE_ID = process.env.DISCORD_SQUAD_ROLE_ID!;            // KSK - Squad (not implemented yet)
+
+// Legacy aliases (used throughout codebase)
+export const MEMBER_ROLE_ID    = ROLE1_ROLE_ID;
+export const RECRUITER_ROLE_ID = ROLE2_ROLE_ID;
+export const COMMANDER_ROLE_ID = ROLE3_ROLE_ID;
 
 const PROMOTED_ROLES = [
-  MEMBER_ROLE_ID,
-  RECRUITER_ROLE_ID,
-  COMMANDER_ROLE_ID,
+  ROLE1_ROLE_ID,
+  ROLE2_ROLE_ID,
+  ROLE3_ROLE_ID,
+  ROLE4_ROLE_ID,
+  ROLE5_ROLE_ID,
+  OG_ROLE_ID,
+  SQUAD_LEADER_ROLE_ID,
 ];
 
-/** Returns true if the user holds Member, Recruiter, or Commander role */
+/** Returns true if the user holds any clan rank role (Role1+) */
 export function isMemberOrHigher(roles: string[]): boolean {
-  return PROMOTED_ROLES.some((r) => roles.includes(r));
+  return PROMOTED_ROLES.some((r) => r && roles.includes(r));
 }
 
 export function determineStaffTier(roles: string[]): StaffTier | null {
@@ -177,17 +191,29 @@ export interface RankDef {
 }
 
 export const RANK_LADDER: RankDef[] = [
-  { name: "Trial Member", roleId: null,              daysRequired: 0  },
-  { name: "Member",       roleId: MEMBER_ROLE_ID,    daysRequired: 14 },
-  { name: "Recruiter",    roleId: RECRUITER_ROLE_ID,  daysRequired: 30 },
-  { name: "Commander",    roleId: COMMANDER_ROLE_ID,  daysRequired: 60 },
+  { name: "Trial Member", roleId: null,           daysRequired: 0  },
+  { name: "Role1",        roleId: ROLE1_ROLE_ID,  daysRequired: 0  },  // Granted on acceptance
+  { name: "Role2",        roleId: ROLE2_ROLE_ID,  daysRequired: 10 },
+  { name: "Role3",        roleId: ROLE3_ROLE_ID,  daysRequired: 20 },
+  { name: "Role4",        roleId: ROLE4_ROLE_ID,  daysRequired: 40 },
+  { name: "Role5",        roleId: ROLE5_ROLE_ID,  daysRequired: 65 },
 ];
+
+// Special ranks outside the automatic ladder (force promote / manual only)
+export const SPECIAL_RANKS: RankDef[] = [
+  { name: "OG",           roleId: OG_ROLE_ID,           daysRequired: -1 },
+  { name: "Squad Leader", roleId: SQUAD_LEADER_ROLE_ID,  daysRequired: -1 },
+  { name: "Squad",        roleId: SQUAD_ROLE_ID,         daysRequired: -1 },
+];
+
+// All valid ranks (ladder + special) for force promote validation
+export const ALL_RANKS: RankDef[] = [...RANK_LADDER, ...SPECIAL_RANKS];
 
 export const RANK_ROLE_IDS = RANK_LADDER
   .map((r) => r.roleId)
   .filter(Boolean) as string[];
 
-/** Get the rank index (0 = Private, 4 = Major) */
+/** Get the rank index in the automatic ladder (0 = Trial Member, 5 = Role5) */
 export function rankIndex(name: string): number {
   const idx = RANK_LADDER.findIndex(
     (r) => r.name.toLowerCase() === name.toLowerCase()
@@ -377,7 +403,7 @@ export async function postChannelMessage(
 }
 
 // ── Application log channel ID ──────────────────────────────
-export const APP_LOG_CHANNEL_ID = "1468737258768175296";
+export const APP_LOG_CHANNEL_ID = process.env.DISCORD_APP_LOG_CHANNEL_ID || "";
 
 // ── Post application log (ping optional) ────────────────────
 export async function postAppLog(
@@ -385,6 +411,11 @@ export async function postAppLog(
   withPing = false,
   explicitPingRoleId?: string | null
 ): Promise<boolean> {
+  if (!APP_LOG_CHANNEL_ID) {
+    console.error("postAppLog skipped: DISCORD_APP_LOG_CHANNEL_ID is not set");
+    return false;
+  }
+
   let fullContent = content;
   if (withPing) {
     const pingRoleId = explicitPingRoleId || process.env.DISCORD_STAFF_PING_ROLE_ID;

@@ -8,7 +8,7 @@ import {
   supabase,
   json,
   assignRole,
-  RANK_LADDER,
+  ALL_RANKS,
   isStaffRole,
 } from "./shared";
 
@@ -48,8 +48,8 @@ const handler: Handler = async (event) => {
     return json({ error: "member_id and new_rank are required" }, 400);
   }
 
-  // Validate rank
-  const rankData = RANK_LADDER.find((r) => r.name === body.new_rank);
+  // Validate rank (supports ladder + special ranks like OG, Squad Leader)
+  const rankData = ALL_RANKS.find((r) => r.name === body.new_rank);
   if (!rankData) {
     return json({ error: "Invalid rank" }, 400);
   }
