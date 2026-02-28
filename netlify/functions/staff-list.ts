@@ -13,7 +13,7 @@ import {
 type StaffListItem = {
   discord_id: string;
   display_name: string;
-  staff_role: "Owner" | "Web Developer" | "Admin";
+  staff_role: "Leader" | "Co-Leader" | "Web Developer" | "Staff";
   staff_role_rank: number;
   avatar_hash: string | null;
   avatar_url: string;
