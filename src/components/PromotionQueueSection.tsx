@@ -39,12 +39,15 @@ interface QueueCounts {
   unresolved: number;
 }
 
-const RANKS = ["Trial Member", "Member", "Recruiter", "Commander"];
-const RANK_COLORS = {
-  "Trial Member": "text-green-300",
-  Member: "text-blue-400",
-  Recruiter: "text-orange-400",
-  Commander: "text-red-400",
+const RANKS = ["Role1", "Role2", "Role3", "Role4", "Role5", "OG", "Squad Leader"];
+const RANK_COLORS: Record<string, string> = {
+  Role1: "text-green-300",
+  Role2: "text-blue-400",
+  Role3: "text-orange-400",
+  Role4: "text-red-400",
+  Role5: "text-purple-400",
+  OG: "text-yellow-400",
+  "Squad Leader": "text-pink-400",
 };
 
 const PromotionQueueSection = ({ onQueueUpdate }: PromotionQueueProps) => {

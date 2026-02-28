@@ -191,7 +191,6 @@ export interface RankDef {
 }
 
 export const RANK_LADDER: RankDef[] = [
-  { name: "Trial Member", roleId: null,           daysRequired: 0  },
   { name: "Role1",        roleId: ROLE1_ROLE_ID,  daysRequired: 0  },  // Granted on acceptance
   { name: "Role2",        roleId: ROLE2_ROLE_ID,  daysRequired: 10 },
   { name: "Role3",        roleId: ROLE3_ROLE_ID,  daysRequired: 20 },
@@ -213,7 +212,7 @@ export const RANK_ROLE_IDS = RANK_LADDER
   .map((r) => r.roleId)
   .filter(Boolean) as string[];
 
-/** Get the rank index in the automatic ladder (0 = Trial Member, 5 = Role5) */
+/** Get the rank index in the automatic ladder (0 = Role1, 4 = Role5) */
 export function rankIndex(name: string): number {
   const idx = RANK_LADDER.findIndex(
     (r) => r.name.toLowerCase() === name.toLowerCase()

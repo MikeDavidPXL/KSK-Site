@@ -9,6 +9,7 @@ import {
   assignRole,
   removeRole,
   isStaffRole,
+  isMemberOrHigher,
 } from "./shared";
 
 // ── Simple in-memory rate limiter (per cold-start; good enough for lambda) ──
@@ -104,11 +105,11 @@ const handler: Handler = async (event) => {
     roles_before: roles,
   });
   const isStaff = isStaffRole(roles);
-  const isPrivate = roles.includes(process.env.DISCORD_MEMBER_ROLE_ID!);
+  const isClanMember = isMemberOrHigher(roles);
   const isKoth = roles.includes(process.env.DISCORD_KOTH_PLAYER_ROLE_ID!);
 
   // ── Already verified? Skip captcha ────────────────────────
-  if (isStaff || isPrivate || isKoth) {
+  if (isStaff || isClanMember || isKoth) {
     return json({ ok: true, skipped: true });
   }
 

@@ -174,7 +174,7 @@ function normalizeRank(raw: string | undefined): string {
   const lower = raw.toLowerCase().trim();
   // Support both old names (Member/Recruiter/Commander) and new names (Role1-5)
   const OLD_TO_NEW: Record<string, string> = {
-    "member": "Role1", "private": "Role1", "trial member": "Trial Member",
+    "member": "Role1", "private": "Role1", "trial member": "Role1",
     "recruiter": "Role2", "commander": "Role3",
   };
   if (OLD_TO_NEW[lower]) return OLD_TO_NEW[lower];

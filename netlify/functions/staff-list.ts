@@ -9,6 +9,7 @@ import {
   staffTierRank,
   buildDiscordAvatarUrl,
   isStaffRole,
+  isMemberOrHigher,
 } from "./shared";
 
 type StaffListItem = {
@@ -35,11 +36,11 @@ const handler: Handler = async (event) => {
   );
 
   const requesterRoles: string[] = requester?.roles ?? [];
-  const isPrivate = requesterRoles.includes(process.env.DISCORD_MEMBER_ROLE_ID!);
+  const isClanMember = isMemberOrHigher(requesterRoles);
   const isStaff = isStaffRole(requesterRoles);
 
-  // Allow any authenticated member (Private or Staff) to see the staff list
-  if (!isPrivate && !isStaff) {
+  // Allow any authenticated clan member or staff to see the staff list
+  if (!isClanMember && !isStaff) {
     return json({ error: "Forbidden" }, 403);
   }
 

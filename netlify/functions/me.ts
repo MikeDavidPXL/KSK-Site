@@ -11,6 +11,7 @@ import {
   buildDiscordAvatarUrl,
   determineStaffTier,
   isMemberOrHigher,
+  isStaffRole,
 } from "./shared";
 
 const handler: Handler = async (event) => {
@@ -44,21 +45,19 @@ const handler: Handler = async (event) => {
 
   // Role priority: leader > coleader > webdev > staff
   const staffTier = determineStaffTier(roles);
-  const hasLegacyStaffRole = roles.includes(process.env.DISCORD_STAFF_ROLE_ID!);
-  const isStaff = !!staffTier || hasLegacyStaffRole;
-  const isPrivate = roles.includes(process.env.DISCORD_MEMBER_ROLE_ID!);
+  const isStaff = isStaffRole(roles);
+  const isClanMember = isMemberOrHigher(roles);
   const isKoth = roles.includes(process.env.DISCORD_KOTH_PLAYER_ROLE_ID!);
   const isUnverified = roles.includes(process.env.DISCORD_UNVERIFIED_ROLE_ID!);
-  const isMemberPlus = isMemberOrHigher(roles);
 
   // ── Effective status: purely based on Discord roles ───────
-  // staff/private → "accepted" (has pack access)
-  // koth only     → "koth"     (can apply)
-  // unverified    → "unverified" (must captcha verify first)
+  // staff/clan member → "accepted" (has pack access)
+  // koth only         → "koth"     (can apply)
+  // unverified        → "unverified" (must captcha verify first)
   // in guild, no roles → "none"
   // not in guild       → "none"
   let effectiveStatus: "accepted" | "koth" | "unverified" | "none" = "none";
-  if (isStaff || isPrivate) {
+  if (isStaff || isClanMember) {
     effectiveStatus = "accepted";
   } else if (isKoth) {
     effectiveStatus = "koth";
@@ -75,13 +74,13 @@ const handler: Handler = async (event) => {
     .limit(1)
     .maybeSingle();
 
-  // ── Auto-revoke: DB says accepted but Discord says no Private role ──
+  // ── Auto-revoke: DB says accepted but Discord says no clan role ──
   // This catches users who left the guild, got role removed, etc.
   // Mark the old application as "revoked" so they can re-apply cleanly.
   if (
     app &&
     app.status === "accepted" &&
-    !isPrivate &&
+    !isClanMember &&
     !isStaff
   ) {
     // If user left the guild entirely, also soft-archive the application
@@ -91,7 +90,7 @@ const handler: Handler = async (event) => {
       .from("applications")
       .update({
         status: "revoked",
-        reviewer_note: "Auto-revoked: Private role no longer present",
+        reviewer_note: "Auto-revoked: Clan role no longer present",
         ...(shouldArchive
           ? {
               archived_at: new Date().toISOString(),
@@ -112,7 +111,7 @@ const handler: Handler = async (event) => {
       details: {
         reason: shouldArchive
           ? "User left the guild — application archived"
-          : "User no longer has Private role in Discord",
+          : "User no longer has any clan rank role in Discord",
         discord_id: session.discord_id,
         in_guild: inGuild,
         had_koth: isKoth,
@@ -121,7 +120,7 @@ const handler: Handler = async (event) => {
 
     // Update the local app object so the response reflects reality
     app.status = "revoked";
-    app.reviewer_note = "Auto-revoked: Private role no longer present";
+    app.reviewer_note = "Auto-revoked: Clan role no longer present";
   }
 
   // For the frontend: if app was revoked, treat as no application
@@ -138,8 +137,8 @@ const handler: Handler = async (event) => {
       in_guild: inGuild,
       is_staff: isStaff,
       staff_tier: staffTier,
-      is_private: isPrivate,
-      is_member_or_higher: isMemberPlus,
+      is_private: isClanMember,
+      is_member_or_higher: isClanMember,
       is_koth: isKoth,
       is_unverified: isUnverified,
       effective_status: effectiveStatus,

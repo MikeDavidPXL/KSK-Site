@@ -95,14 +95,17 @@ interface ResolveCandidate {
   resolve_token: string;
 }
 
-const RANKS = ["Trial Member", "Member", "Recruiter", "Commander"];
+const RANKS = ["Role1", "Role2", "Role3", "Role4", "Role5", "OG", "Squad Leader"];
 
 // Rank order for sorting (higher index = higher rank)
 const RANK_ORDER: Record<string, number> = {
-  "Trial Member": 0,
-  Member: 1,
-  Recruiter: 2,
-  Commander: 3,
+  Role1: 0,
+  Role2: 1,
+  Role3: 2,
+  Role4: 3,
+  Role5: 4,
+  OG: 5,
+  "Squad Leader": 6,
 };
 
 // Sortable columns
@@ -166,7 +169,7 @@ const ClanListPage = () => {
     join_date: new Date().toISOString().split("T")[0],
     status: "active" as "active" | "inactive",
     has_ksk_tag: false,
-    rank_current: "Trial Member",
+    rank_current: "Role1",
     source: "manual" as const,
   });
   const [addSaving, setAddSaving] = useState(false);
@@ -426,7 +429,7 @@ const ClanListPage = () => {
           join_date: new Date().toISOString().split("T")[0],
           status: "active",
           has_ksk_tag: false,
-          rank_current: "Trial Member",
+          rank_current: "Role1",
           source: "rejoin",
           discord_id: archivedMember.discord_id,
           allow_unresolved: !archivedMember.discord_id,
@@ -585,7 +588,7 @@ const ClanListPage = () => {
         join_date: new Date().toISOString().split("T")[0],
         status: "active",
         has_ksk_tag: false,
-        rank_current: "Trial Member",
+        rank_current: "Role1",
         source: "manual",
       });
       setResolveCandidates([]);

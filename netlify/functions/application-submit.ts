@@ -8,6 +8,7 @@ import {
   json,
   postAppLog,
   isStaffRole,
+  isMemberOrHigher,
 } from "./shared";
 
 const handler: Handler = async (event) => {
@@ -34,10 +35,10 @@ const handler: Handler = async (event) => {
   }
   const roles: string[] = member.roles ?? [];
   const isStaff = isStaffRole(roles);
-  const isPrivate = roles.includes(process.env.DISCORD_MEMBER_ROLE_ID!);
+  const isClanMember = isMemberOrHigher(roles);
   const isKoth = roles.includes(process.env.DISCORD_KOTH_PLAYER_ROLE_ID!);
 
-  if (isStaff || isPrivate) {
+  if (isStaff || isClanMember) {
     return json({ error: "You already have clan access" }, 403);
   }
   if (!isKoth) {

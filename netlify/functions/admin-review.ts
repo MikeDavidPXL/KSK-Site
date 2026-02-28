@@ -1,6 +1,6 @@
 // /.netlify/functions/admin-review
 // POST: accept or reject an application (staff only)
-// On accept: assign Private role, remove KOTH role, upsert clan_list_members
+// On accept: assign Role1, remove KOTH Player, upsert clan_list_members
 // Posts all logs to Discord channel with staff ping
 import type { Handler } from "@netlify/functions";
 import {
@@ -268,7 +268,7 @@ const handler: Handler = async (event) => {
       );
     }
 
-    // 2. Assign Private role + remove KOTH role
+    // 2. Assign Role1 + remove KOTH Player
     const roleAssigned = await assignRole(
       app.discord_id,
       process.env.DISCORD_MEMBER_ROLE_ID!
@@ -296,8 +296,8 @@ const handler: Handler = async (event) => {
       const roleMsg = [
         `🔄 **Role update result**`,
         `Applicant: <@${app.discord_id}>`,
-        `Private added: ${roleAssigned ? "✓" : "✗"}`,
-        `KOTH removed: ${roleRemoved ? "✓" : "✗"}`,
+        `Role1 added: ${roleAssigned ? "✓" : "✗"}`,
+        `KOTH Player removed: ${roleRemoved ? "✓" : "✗"}`,
         !roleAssigned || !roleRemoved
           ? `⚠️ Role update incomplete — check manually`
           : null,
@@ -340,8 +340,8 @@ const handler: Handler = async (event) => {
       details: {
         application_id,
         discord_id: app.discord_id,
-        private_added: roleAssigned,
-        koth_removed: roleRemoved,
+        role1_added: roleAssigned,
+        koth_player_removed: roleRemoved,
       },
     });
 
