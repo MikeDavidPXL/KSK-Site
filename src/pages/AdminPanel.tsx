@@ -26,7 +26,7 @@ import {
 import clanLogo from "@/assets/ksk.png";
 import { buildDiscordAvatarUrl } from "@/lib/discord";
 
-const POLL_INTERVAL = 10_000; // 10 seconds
+const POLL_INTERVAL = 2_500; // 10 seconds
 
 // ── Types ─────────────────────────────────────────────────
 interface AdminNote {
