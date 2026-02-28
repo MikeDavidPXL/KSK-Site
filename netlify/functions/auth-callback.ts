@@ -7,6 +7,7 @@ const handler: Handler = async (event) => {
   const clientId = process.env.DISCORD_CLIENT_ID;
   const clientSecret = process.env.DISCORD_CLIENT_SECRET;
   const redirectUri = process.env.DISCORD_REDIRECT_URI;
+  let redirectOrigin: string;
 
   if (!clientId || !clientSecret || !redirectUri) {
     return {
@@ -19,6 +20,19 @@ const handler: Handler = async (event) => {
           !clientSecret ? "DISCORD_CLIENT_SECRET" : null,
           !redirectUri ? "DISCORD_REDIRECT_URI" : null,
         ].filter(Boolean),
+      }),
+    };
+  }
+
+  try {
+    redirectOrigin = new URL(redirectUri).origin;
+  } catch {
+    return {
+      statusCode: 500,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        error: "Invalid OAuth environment variables",
+        invalid: ["DISCORD_REDIRECT_URI"],
       }),
     };
   }
@@ -65,8 +79,7 @@ const handler: Handler = async (event) => {
   const cookie = `session=${sessionToken}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${7 * 24 * 60 * 60}`;
 
   // Determine base URL from redirect URI
-  const base = new URL(redirectUri).origin;
-  return redirect(`${base}/`, cookie);
+  return redirect(`${redirectOrigin}/`, cookie);
 };
 
 export { handler };

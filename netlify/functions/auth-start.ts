@@ -20,6 +20,19 @@ const handler: Handler = async () => {
     };
   }
 
+  try {
+    new URL(redirectUri);
+  } catch {
+    return {
+      statusCode: 500,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        error: "Invalid OAuth environment variables",
+        invalid: ["DISCORD_REDIRECT_URI"],
+      }),
+    };
+  }
+
   const params = new URLSearchParams({
     client_id: clientId,
     redirect_uri: redirectUri,
