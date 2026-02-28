@@ -32,7 +32,7 @@ export const STAFF_ROLE_ID =
 // ── Rank role IDs (from env) ─────────────────────────────────
 export const ROLE1_ROLE_ID = process.env.DISCORD_MEMBER_ROLE_ID!;          // KSK - Role1 (on accept)
 export const ROLE2_ROLE_ID =
-  process.env.DISCORD_RECRUITER_ROLE_ID ?? process.env.DISCORD_RECRUITEER_ROLE_ID!; // KSK - Role2 (10 days)
+  process.env.DISCORD_ROLE2_ROLE_ID ?? process.env.DISCORD_RECRUITER_ROLE_ID!; // KSK - Role2 (10 days)
 export const ROLE3_ROLE_ID = process.env.DISCORD_COMMANDER_ROLE_ID!;        // KSK - Role3 (20 days)
 export const ROLE4_ROLE_ID = process.env.DISCORD_ROLE4_ROLE_ID!;            // KSK - Role4 (40 days)
 export const ROLE5_ROLE_ID = process.env.DISCORD_ROLE5_ROLE_ID!;            // KSK - Role5 (65 days)
@@ -42,7 +42,6 @@ export const SQUAD_ROLE_ID = process.env.DISCORD_SQUAD_ROLE_ID!;            // K
 
 // Legacy aliases (used throughout codebase)
 export const MEMBER_ROLE_ID    = ROLE1_ROLE_ID;
-export const RECRUITER_ROLE_ID = ROLE2_ROLE_ID;
 export const COMMANDER_ROLE_ID = ROLE3_ROLE_ID;
 
 const PROMOTED_ROLES = [
