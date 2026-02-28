@@ -164,11 +164,10 @@ const handler: Handler = async (event) => {
     const baseUrl = (process.env.APP_BASE_URL || derivedBaseUrl).replace(/\/$/, "");
     const reviewUrl = baseUrl ? `${baseUrl}/admin` : "/admin";
 
-    const recruiterPingRoleId =
-      process.env.DISCORD_RECRUITER_PING_ROLE_ID ??
-      process.env.DISCORD_RECRUITER_ROLE_ID ??
-      process.env.DISCORD_RECRUITEER_ROLE_ID ??
-      null;
+    const adminPingRoleId =
+      process.env.DISCORD_ADMIN_ROLE_ID ??
+      process.env.DISCORD_STAFF_PING_ROLE_ID ??
+      "1477336301328924761";
 
     const logContent = [
       `📋 **New application submitted**`,
@@ -177,7 +176,7 @@ const handler: Handler = async (event) => {
       `Review: ${reviewUrl}`,
     ].join("\n");
 
-    const posted = await postAppLog(logContent, true, recruiterPingRoleId);
+    const posted = await postAppLog(logContent, true, adminPingRoleId);
     if (!posted) {
       // Log Discord failure but don't fail submission
       await supabase.from("audit_log").insert({
