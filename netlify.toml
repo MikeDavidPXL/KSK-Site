@@ -5,6 +5,8 @@
 
 [build.environment]
   NODE_VERSION = "18"
+  # Turnstile site key is a PUBLIC key — safe to appear in built JS
+  SECRETS_SCAN_OMIT_KEYS = "VITE_TURNSTILE_SITE_KEY"
 
 # SPA fallback – serve index.html for all routes not matched by a static file
 [[redirects]]
