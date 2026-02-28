@@ -8,6 +8,7 @@ import {
   json,
   assignRole,
   removeRole,
+  isStaffRole,
 } from "./shared";
 
 // ── Simple in-memory rate limiter (per cold-start; good enough for lambda) ──
@@ -102,7 +103,7 @@ const handler: Handler = async (event) => {
     session_discord_id: session.discord_id,
     roles_before: roles,
   });
-  const isStaff = roles.includes(process.env.DISCORD_STAFF_ROLE_ID!);
+  const isStaff = isStaffRole(roles);
   const isPrivate = roles.includes(process.env.DISCORD_MEMBER_ROLE_ID!);
   const isKoth = roles.includes(process.env.DISCORD_KOTH_PLAYER_ROLE_ID!);
 

@@ -50,6 +50,19 @@ export function determineStaffTier(roles: string[]): StaffTier | null {
   return null;
 }
 
+/**
+ * Returns true if the user holds any staff-level role.
+ * Mirrors the logic in /me — checks all tiered roles (leader, coleader,
+ * webdev, admin) plus the legacy DISCORD_STAFF_ROLE_ID as fallback.
+ */
+export function isStaffRole(roles: string[]): boolean {
+  if (determineStaffTier(roles) !== null) return true;
+  // Legacy fallback: raw DISCORD_STAFF_ROLE_ID env var
+  const legacyId = process.env.DISCORD_STAFF_ROLE_ID;
+  if (legacyId && roles.includes(legacyId)) return true;
+  return false;
+}
+
 export function staffTierRank(tier: StaffTier | null): number {
   if (tier === "leader") return 4;
   if (tier === "coleader") return 3;

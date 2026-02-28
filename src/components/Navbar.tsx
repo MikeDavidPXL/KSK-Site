@@ -33,7 +33,7 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 flex items-center justify-between h-16">
         <a href="#hero" className="flex items-center gap-2">
-          <img src={clanLogo} alt="KSK Logo" className="w-10 h-10 rounded-full" />
+          <img src={clanLogo} alt="KSK Logo" className="h-10 w-auto object-contain" />
           <span className="font-display text-lg font-bold gradient-neon-text hidden sm:block">
             KSK
           </span>

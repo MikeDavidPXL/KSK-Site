@@ -11,6 +11,7 @@ import {
   nextRankFor,
   rankIndex,
   RANK_LADDER,
+  isStaffRole,
 } from "./shared";
 
 const PAGE_SIZE = 50;
@@ -30,7 +31,7 @@ const handler: Handler = async (event) => {
     true
   );
   const roles: string[] = member?.roles ?? [];
-  if (!roles.includes(process.env.DISCORD_STAFF_ROLE_ID!)) {
+  if (!isStaffRole(roles)) {
     return json({ error: "Forbidden" }, 403);
   }
 

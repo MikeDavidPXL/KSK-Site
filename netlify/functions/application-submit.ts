@@ -7,6 +7,7 @@ import {
   supabase,
   json,
   postAppLog,
+  isStaffRole,
 } from "./shared";
 
 const handler: Handler = async (event) => {
@@ -32,7 +33,7 @@ const handler: Handler = async (event) => {
     return json({ error: "You must be in the Discord server" }, 403);
   }
   const roles: string[] = member.roles ?? [];
-  const isStaff = roles.includes(process.env.DISCORD_STAFF_ROLE_ID!);
+  const isStaff = isStaffRole(roles);
   const isPrivate = roles.includes(process.env.DISCORD_MEMBER_ROLE_ID!);
   const isKoth = roles.includes(process.env.DISCORD_KOTH_PLAYER_ROLE_ID!);
 

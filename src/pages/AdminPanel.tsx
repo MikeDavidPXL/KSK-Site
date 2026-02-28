@@ -359,11 +359,11 @@ const AdminPanel = () => {
       >
         <div className="container mx-auto px-4 flex items-center justify-between h-16">
           <Link
-            to="/pack"
+            to="/"
             className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition"
           >
             <ArrowLeft className="w-4 h-4" />
-            <img src={clanLogo} alt="KSK Logo" className="w-8 h-8 rounded-full" />
+            <img src={clanLogo} alt="KSK Logo" className="h-8 w-auto object-contain" />
             <span className="font-display text-sm font-bold hidden sm:block">
               Back to homepage
             </span>

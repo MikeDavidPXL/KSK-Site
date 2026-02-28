@@ -1,7 +1,7 @@
 // /.netlify/functions/discord-diagnostics
 // GET: staff-only Discord diagnostics for guild/member access
 import type { Handler } from "@netlify/functions";
-import { getSessionFromCookie, discordFetch, json, supabase } from "./shared";
+import { getSessionFromCookie, discordFetch, json, supabase, isStaffRole } from "./shared";
 
 const DISCORD_API = "https://discord.com/api/v10";
 
@@ -35,7 +35,7 @@ const handler: Handler = async (event) => {
     true
   );
   const roles: string[] = staffMember?.roles ?? [];
-  if (!roles.includes(process.env.DISCORD_STAFF_ROLE_ID!)) {
+  if (!isStaffRole(roles)) {
     return json({ error: "Forbidden" }, 403);
   }
 

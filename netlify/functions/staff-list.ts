@@ -8,6 +8,7 @@ import {
   staffTierLabel,
   staffTierRank,
   buildDiscordAvatarUrl,
+  isStaffRole,
 } from "./shared";
 
 type StaffListItem = {
@@ -35,7 +36,7 @@ const handler: Handler = async (event) => {
 
   const requesterRoles: string[] = requester?.roles ?? [];
   const isPrivate = requesterRoles.includes(process.env.DISCORD_MEMBER_ROLE_ID!);
-  const isStaff = !!determineStaffTier(requesterRoles) || requesterRoles.includes(process.env.DISCORD_STAFF_ROLE_ID!);
+  const isStaff = isStaffRole(requesterRoles);
 
   // Allow any authenticated member (Private or Staff) to see the staff list
   if (!isPrivate && !isStaff) {

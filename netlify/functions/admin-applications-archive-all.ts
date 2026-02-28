@@ -2,7 +2,7 @@
 // POST: archive all accepted/rejected applications (staff only)
 // Body: { reason?: string }
 import type { Handler } from "@netlify/functions";
-import { getSessionFromCookie, discordFetch, supabase, json, postAppLog } from "./shared";
+import { getSessionFromCookie, discordFetch, supabase, json, postAppLog, isStaffRole } from "./shared";
 
 // Simple in-memory rate limiter (per deployment instance)
 const rateLimitMap = new Map<string, number>();
@@ -25,7 +25,7 @@ const handler: Handler = async (event) => {
     true
   );
   const roles: string[] = member?.roles ?? [];
-  if (!roles.includes(process.env.DISCORD_STAFF_ROLE_ID!)) {
+  if (!isStaffRole(roles)) {
     return json({ error: "Forbidden" }, 403);
   }
 

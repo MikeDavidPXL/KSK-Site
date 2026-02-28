@@ -1,7 +1,7 @@
 // /.netlify/functions/admin-list
 // GET: list all applications (staff only)
 import type { Handler } from "@netlify/functions";
-import { getSessionFromCookie, discordFetch, supabase, json } from "./shared";
+import { getSessionFromCookie, discordFetch, supabase, json, isStaffRole } from "./shared";
 
 type NoteRow = {
   id: string;
@@ -24,7 +24,7 @@ const handler: Handler = async (event) => {
     true
   );
   const roles: string[] = member?.roles ?? [];
-  if (!roles.includes(process.env.DISCORD_STAFF_ROLE_ID!)) {
+  if (!isStaffRole(roles)) {
     return json({ error: "Forbidden" }, 403);
   }
 

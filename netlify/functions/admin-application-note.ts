@@ -1,7 +1,7 @@
 // /.netlify/functions/admin-application-note
 // POST: add an internal note to an application (staff only)
 import type { Handler } from "@netlify/functions";
-import { getSessionFromCookie, discordFetch, supabase, json } from "./shared";
+import { getSessionFromCookie, discordFetch, supabase, json, isStaffRole } from "./shared";
 
 const MAX_NOTE_LENGTH = 1000;
 
@@ -21,7 +21,7 @@ const handler: Handler = async (event) => {
     true
   );
   const roles: string[] = member?.roles ?? [];
-  if (!roles.includes(process.env.DISCORD_STAFF_ROLE_ID!)) {
+  if (!isStaffRole(roles)) {
     return json({ error: "Forbidden" }, 403);
   }
 

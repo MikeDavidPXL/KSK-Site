@@ -7,6 +7,7 @@ import {
   discordFetch,
   supabase,
   json,
+  isStaffRole,
 } from "./shared";
 
 interface ConfirmBody {
@@ -28,7 +29,7 @@ const handler: Handler = async (event) => {
     true
   );
   const roles: string[] = discordMember?.roles ?? [];
-  if (!roles.includes(process.env.DISCORD_STAFF_ROLE_ID!)) {
+  if (!isStaffRole(roles)) {
     return json({ error: "Forbidden" }, 403);
   }
 

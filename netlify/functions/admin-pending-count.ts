@@ -1,7 +1,7 @@
 // /.netlify/functions/admin-pending-count
 // GET: return count of pending (non-archived) applications (staff only)
 import type { Handler } from "@netlify/functions";
-import { getSessionFromCookie, discordFetch, supabase, json } from "./shared";
+import { getSessionFromCookie, discordFetch, supabase, json, isStaffRole } from "./shared";
 
 const handler: Handler = async (event) => {
   const session = getSessionFromCookie(event.headers.cookie);
@@ -14,7 +14,7 @@ const handler: Handler = async (event) => {
     true
   );
   const roles: string[] = member?.roles ?? [];
-  if (!roles.includes(process.env.DISCORD_STAFF_ROLE_ID!)) {
+  if (!isStaffRole(roles)) {
     return json({ error: "Forbidden" }, 403);
   }
 

@@ -10,6 +10,7 @@ import {
   fetchAllGuildMembers,
   postChannelMessage,
   determineStaffTier,
+  isStaffRole,
 } from "./shared";
 
 // Rate limiting
@@ -40,12 +41,10 @@ const handler: Handler = async (event) => {
   );
   const roles: string[] = member?.roles ?? [];
   
-  // Staff check: must have staff role or be owner/webdev/admin
-  const staffTier = determineStaffTier(roles);
-  const hasLegacyStaff = roles.includes(process.env.DISCORD_STAFF_ROLE_ID!);
-  if (!staffTier && !hasLegacyStaff) {
+  if (!isStaffRole(roles)) {
     return json({ error: "Forbidden" }, 403);
   }
+  const staffTier = determineStaffTier(roles);
 
   // ── Rate limit ────────────────────────────────────────────
   const now = Date.now();
