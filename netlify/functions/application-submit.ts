@@ -157,6 +157,12 @@ const handler: Handler = async (event) => {
 
   // ── Discord channel logging ───────────────────────────────
   try {
+    const recruiterPingRoleId =
+      process.env.DISCORD_RECRUITER_PING_ROLE_ID ??
+      process.env.DISCORD_RECRUITER_ROLE_ID ??
+      process.env.DISCORD_RECRUITEER_ROLE_ID ??
+      null;
+
     const logContent = [
       `📋 **New application submitted**`,
       `Applicant: <@${session.discord_id}> (${session.username})`,
@@ -164,7 +170,7 @@ const handler: Handler = async (event) => {
       `Review: ${process.env.APP_BASE_URL || "https://ksk-site.netlify.app"}/admin`,
     ].join("\n");
 
-    const posted = await postAppLog(logContent, true);
+    const posted = await postAppLog(logContent, true, recruiterPingRoleId);
     if (!posted) {
       // Log Discord failure but don't fail submission
       await supabase.from("audit_log").insert({

@@ -19,7 +19,7 @@ const LandingPage = () => {
         <motion.img
           src={clanLogo}
           alt="KSK"
-          className="w-32 h-32 mb-8 drop-shadow-2xl"
+          className="h-32 w-auto object-contain mb-8 drop-shadow-2xl"
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.5 }}

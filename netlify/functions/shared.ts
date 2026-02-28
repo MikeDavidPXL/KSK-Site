@@ -20,15 +20,19 @@ export interface SessionPayload {
 
 export type StaffTier = "leader" | "coleader" | "webdev" | "staff";
 
-export const LEADER_ROLE_ID = process.env.DISCORD_OWNER_ROLE_ID;      // Leader
-export const COLEADER_ROLE_ID = process.env.DISCORD_COLEADER_ROLE_ID; // Co-Leader
-export const WEBDEV_ROLE_ID = process.env.DISCORD_WEBDEV_ROLE_ID;
+export const LEADER_ROLE_ID =
+  process.env.DISCORD_OWNER_ROLE_ID ?? process.env.LEADER_ROLE_ID;
+export const COLEADER_ROLE_ID =
+  process.env.DISCORD_COLEADER_ROLE_ID ?? process.env.COLEADER_ROLE_ID;
+export const WEBDEV_ROLE_ID =
+  process.env.DISCORD_WEBDEV_ROLE_ID ?? process.env.WEB_DEV_ROLE_ID;
 export const STAFF_ROLE_ID =
   process.env.DISCORD_ADMIN_ROLE_ID ?? process.env.DISCORD_STAFF_ROLE_ID;
 
 // ── Rank role IDs (from env) ─────────────────────────────────
 export const MEMBER_ROLE_ID = process.env.DISCORD_MEMBER_ROLE_ID!;
-export const RECRUITER_ROLE_ID = process.env.DISCORD_RECRUITEER_ROLE_ID!;
+export const RECRUITER_ROLE_ID =
+  process.env.DISCORD_RECRUITER_ROLE_ID ?? process.env.DISCORD_RECRUITEER_ROLE_ID!;
 export const COMMANDER_ROLE_ID = process.env.DISCORD_COMMANDER_ROLE_ID!;
 
 const PROMOTED_ROLES = [
@@ -376,12 +380,16 @@ export async function postChannelMessage(
 export const APP_LOG_CHANNEL_ID = "1468737258768175296";
 
 // ── Post application log (ping optional) ────────────────────
-export async function postAppLog(content: string, withPing = false): Promise<boolean> {
+export async function postAppLog(
+  content: string,
+  withPing = false,
+  explicitPingRoleId?: string | null
+): Promise<boolean> {
   let fullContent = content;
   if (withPing) {
-    const staffPingRoleId = process.env.DISCORD_STAFF_PING_ROLE_ID;
-    if (staffPingRoleId) {
-      fullContent = `<@&${staffPingRoleId}>\n` + content;
+    const pingRoleId = explicitPingRoleId || process.env.DISCORD_STAFF_PING_ROLE_ID;
+    if (pingRoleId) {
+      fullContent = `<@&${pingRoleId}>\n` + content;
     }
   }
   return postChannelMessage(APP_LOG_CHANNEL_ID, fullContent);

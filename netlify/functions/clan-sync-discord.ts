@@ -11,6 +11,11 @@ import {
   postChannelMessage,
   determineStaffTier,
   isStaffRole,
+  computeTimeDays,
+  earnedRank,
+  nextRankFor,
+  rankIndex,
+  RANK_LADDER,
 } from "./shared";
 
 // Rate limiting
@@ -19,6 +24,7 @@ const RATE_LIMIT_COOLDOWN = 30_000; // 30 seconds between sync calls
 
 // Guild member cache (60s TTL)
 let cachedGuildIds: Set<string> | null = null;
+let cachedGuildRoleMap: Map<string, string[]> | null = null;
 let cacheTimestamp = 0;
 const CACHE_TTL = 60_000;
 
@@ -60,13 +66,19 @@ const handler: Handler = async (event) => {
     if (!cachedGuildIds || now - cacheTimestamp > CACHE_TTL) {
       const guildMembers = await fetchAllGuildMembers();
       cachedGuildIds = new Set(guildMembers.map((m) => m.user.id));
+      cachedGuildRoleMap = new Map(guildMembers.map((m) => [m.user.id, m.roles ?? []]));
       cacheTimestamp = now;
     }
+
+    const guildIds = cachedGuildIds ?? new Set<string>();
+    const guildRoleMap = cachedGuildRoleMap ?? new Map<string, string[]>();
 
     // ── Load active clan members with discord_id ──────────────
     const { data: clanMembers, error: fetchErr } = await supabase
       .from("clan_list_members")
-      .select("id, discord_id, discord_name, ign, uid, in_guild, left_guild_at")
+      .select(
+        "id, discord_id, discord_name, ign, uid, in_guild, left_guild_at, rank_current, frozen_days, counting_since, status, has_ksk_tag"
+      )
       .not("discord_id", "is", null)
       .is("archived_at", null);
 
@@ -80,25 +92,59 @@ const handler: Handler = async (event) => {
 
     let stillInGuildCount = 0;
     let archivedLeftGuildCount = 0;
+    let ranksSyncedCount = 0;
     const archivedNames: string[] = [];
+
+    const roleLadder = RANK_LADDER.filter((r) => r.roleId);
 
     // ── Process each member ───────────────────────────────────
     for (const cm of members) {
-      const inGuild = cachedGuildIds.has(cm.discord_id);
+      const inGuild = guildIds.has(cm.discord_id);
 
       if (inGuild) {
-        // Member is in guild - update tracking fields
         stillInGuildCount++;
+
+        const discordRoles = guildRoleMap.get(cm.discord_id) ?? [];
+        const highestRoleRank = [...roleLadder]
+          .reverse()
+          .find((r) => r.roleId && discordRoles.includes(r.roleId));
+
+        const syncedCurrentRank = highestRoleRank?.name ?? "Trial Member";
+        const frozenDays = cm.frozen_days ?? 0;
+        const countingSince = cm.counting_since ?? null;
+        const status = cm.status ?? "active";
+        const hasTag = cm.has_ksk_tag ?? false;
+        const isActive = status === "active" && hasTag;
+
+        const days = computeTimeDays(frozenDays, countingSince);
+        const earned = earnedRank(days);
+        const currentIdx = rankIndex(syncedCurrentRank);
+        const earnedIdx = RANK_LADDER.indexOf(earned);
+        const nxt = nextRankFor(syncedCurrentRank, days);
+
         await supabase
           .from("clan_list_members")
           .update({
             in_guild: true,
             last_guild_check_at: nowIso,
             left_guild_at: null,
+            rank_current: syncedCurrentRank,
+            rank_next: nxt?.name ?? null,
+            promote_eligible:
+              isActive &&
+              earnedIdx > currentIdx &&
+              currentIdx < RANK_LADDER.length - 1,
+            promote_reason:
+              isActive && earnedIdx > currentIdx && nxt
+                ? `${days} days in clan, meets ${earned.name} threshold (${earned.daysRequired} days)`
+                : null,
           })
           .eq("id", cm.id);
+
+        if ((cm.rank_current ?? "Trial Member") !== syncedCurrentRank) {
+          ranksSyncedCount++;
+        }
       } else {
-        // Member left guild - archive them
         archivedLeftGuildCount++;
         archivedNames.push(cm.discord_name || cm.ign || cm.uid || "Unknown");
 
@@ -108,11 +154,9 @@ const handler: Handler = async (event) => {
             in_guild: false,
             last_guild_check_at: nowIso,
             left_guild_at: cm.left_guild_at ?? nowIso,
-            // Archive
             archived_at: nowIso,
             archived_by: session.discord_id,
             archive_reason: "left_guild",
-            // Mark for start-over
             reset_required: true,
             reset_reason: "left_guild",
             reset_at: nowIso,
@@ -136,8 +180,9 @@ const handler: Handler = async (event) => {
         checked_count: members.length,
         still_in_guild_count: stillInGuildCount,
         archived_left_guild_count: archivedLeftGuildCount,
+        ranks_synced_count: ranksSyncedCount,
         unresolved_count: unresolvedCount ?? 0,
-        archived_names: archivedNames.slice(0, 50), // Cap for log size
+        archived_names: archivedNames.slice(0, 50),
       },
     });
 
@@ -148,7 +193,8 @@ const handler: Handler = async (event) => {
     logMsg += `**By:** <@${session.discord_id}>\n`;
     logMsg += `**Checked:** ${members.length} members\n`;
     logMsg += `**Still in guild:** ${stillInGuildCount}\n`;
-    logMsg += `**Archived (left guild):** ${archivedLeftGuildCount}`;
+    logMsg += `**Archived (left guild):** ${archivedLeftGuildCount}\n`;
+    logMsg += `**Rank updates from Discord:** ${ranksSyncedCount}`;
 
     if (archivedLeftGuildCount > 0 && archivedNames.length > 0) {
       const displayNames = archivedNames.slice(0, 10).join(", ");
@@ -170,6 +216,7 @@ const handler: Handler = async (event) => {
       checked_count: members.length,
       still_in_guild_count: stillInGuildCount,
       archived_left_guild_count: archivedLeftGuildCount,
+      ranks_synced_count: ranksSyncedCount,
       unresolved_count: unresolvedCount ?? 0,
       archived_names: archivedNames,
     });

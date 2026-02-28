@@ -35,6 +35,43 @@ interface MemberBody {
   allow_unresolved?: boolean;
 }
 
+function normalizeJoinDate(value: string | undefined): string | null {
+  if (!value) return null;
+  const trimmed = value.trim().replace(/^[^\d]+/, "");
+  if (!trimmed) return null;
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+    const dt = new Date(`${trimmed}T00:00:00.000Z`);
+    if (Number.isNaN(dt.getTime())) return null;
+    return trimmed;
+  }
+
+  const dmy = trimmed.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})$/);
+  if (!dmy) return null;
+
+  const day = Number(dmy[1]);
+  const month = Number(dmy[2]);
+  const year = Number(dmy[3]);
+
+  if (month < 1 || month > 12 || day < 1 || day > 31) return null;
+
+  const iso = `${year.toString().padStart(4, "0")}-${month
+    .toString()
+    .padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+
+  const dt = new Date(`${iso}T00:00:00.000Z`);
+  if (
+    Number.isNaN(dt.getTime()) ||
+    dt.getUTCFullYear() !== year ||
+    dt.getUTCMonth() + 1 !== month ||
+    dt.getUTCDate() !== day
+  ) {
+    return null;
+  }
+
+  return iso;
+}
+
 const handler: Handler = async (event) => {
   if (event.httpMethod !== "POST") {
     return json({ error: "Method not allowed" }, 405);
@@ -118,7 +155,16 @@ const handler: Handler = async (event) => {
     }
     if (body.ign !== undefined) upd.ign = body.ign;
     if (body.uid !== undefined) upd.uid = body.uid;
-    if (body.join_date !== undefined) upd.join_date = body.join_date;
+    if (body.join_date !== undefined) {
+      const normalizedJoinDate = normalizeJoinDate(body.join_date);
+      if (!normalizedJoinDate) {
+        return json(
+          { error: "join_date must be a valid date (YYYY-MM-DD or DD/MM/YYYY)" },
+          400
+        );
+      }
+      upd.join_date = normalizedJoinDate;
+    }
     if (body.rank_current !== undefined) upd.rank_current = body.rank_current;
     if (body.needs_resolution !== undefined) upd.needs_resolution = body.needs_resolution;
 
@@ -229,6 +275,14 @@ const handler: Handler = async (event) => {
   const hasTag = body.has_ksk_tag ?? false;
   const rankCurrent = body.rank_current ?? "Trial Member";
   const isActive = status === "active" && hasTag;
+  const normalizedJoinDate = normalizeJoinDate(body.join_date);
+
+  if (!normalizedJoinDate) {
+    return json(
+      { error: "join_date must be a valid date (YYYY-MM-DD or DD/MM/YYYY)" },
+      400
+    );
+  }
 
   let resolvedDiscordId: string | null = null;
   let resolutionStatus: "unresolved" | "resolved_auto" | "resolved_manual" = "unresolved";
@@ -313,7 +367,7 @@ const handler: Handler = async (event) => {
   }
 
   const countingSince = isActive
-    ? `${body.join_date}T00:00:00.000Z`
+    ? `${normalizedJoinDate}T00:00:00.000Z`
     : null;
   const frozenDays = 0;
   const days = computeTimeDays(frozenDays, countingSince);
@@ -327,7 +381,7 @@ const handler: Handler = async (event) => {
     discord_id: resolvedDiscordId,
     ign: body.ign,
     uid: body.uid,
-    join_date: body.join_date,
+    join_date: normalizedJoinDate,
     status,
     has_ksk_tag: hasTag,
     rank_current: rankCurrent,

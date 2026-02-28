@@ -18,6 +18,7 @@ import {
   Trophy,
   Flame,
   CalendarCheck,
+  BookOpen,
 } from "lucide-react";
 import clanLogo from "@/assets/ksk.png";
 import heroBanner from "@/assets/hero-banner.jpg";
@@ -48,6 +49,14 @@ type StaffMember = {
   avatar_url: string;
 };
 const roleOrder: StaffMember["staff_role"][] = ["Leader", "Co-Leader", "Web Developer", "Staff"];
+
+function getStaffRowContainerClass(memberCount: number): string {
+  if (memberCount <= 1) return "flex flex-wrap justify-center gap-6 max-w-[280px] mx-auto";
+  if (memberCount === 2) return "flex flex-wrap justify-center gap-6 max-w-[620px] mx-auto";
+  if (memberCount === 3) return "flex flex-wrap justify-center gap-6 max-w-[940px] mx-auto";
+  if (memberCount === 4) return "flex flex-wrap justify-center gap-6 max-w-[1260px] mx-auto";
+  return "flex flex-wrap justify-center gap-6 max-w-[940px] mx-auto";
+}
 
 // ── Nav items (staff gets Admin Panel link, private/staff get Installation) ──
 const getNavItems = (isStaff: boolean) => {
@@ -204,7 +213,7 @@ const TexturePackPage = () => {
           <img
             src={clanLogo}
             alt="KSK Logo"
-            className="w-28 h-28 mx-auto mb-6 rounded-full neon-box-blue"
+            className="h-28 w-auto object-contain mx-auto mb-6 neon-box-blue"
           />
           <h1
             className="font-display text-4xl sm:text-5xl md:text-7xl font-black uppercase mb-4 gradient-neon-text"
@@ -288,15 +297,11 @@ const TexturePackPage = () => {
                     <h4 className="font-display text-xl font-bold uppercase mb-6 text-center text-secondary">
                       {group.role}
                     </h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-[620px] mx-auto">
+                    <div className={getStaffRowContainerClass(group.members.length)}>
                       {group.members.map((member, memberIndex) => (
                         <motion.div
                           key={member.discord_id}
-                          className={`bg-card border border-border rounded-lg p-6 text-center hover:border-primary/50 transition-all duration-300 w-full ${
-                            group.role === "Web Developer" && group.members.length === 1
-                              ? "sm:col-span-2 sm:max-w-[280px] sm:mx-auto"
-                              : ""
-                          }`}
+                          className="bg-card border border-border rounded-lg p-6 text-center hover:border-primary/50 transition-all duration-300 w-full sm:w-[280px]"
                           initial={{ opacity: 0, y: 20 }}
                           animate={isInView ? { opacity: 1, y: 0 } : {}}
                           transition={{
@@ -536,7 +541,7 @@ const TexturePackPage = () => {
         <div className="container mx-auto px-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-3">
             <div className="flex items-center gap-2">
-              <img src={clanLogo} alt="KSK" className="w-6 h-6 rounded-full" />
+                <img src={clanLogo} alt="KSK" className="h-6 w-auto object-contain" />
               <span className="font-display text-xs font-bold text-muted-foreground uppercase tracking-wider">
                 [KSK] Kommando Spezialkräfte © 2026
               </span>
@@ -629,7 +634,7 @@ function PackNavbar({
     >
       <div className="container mx-auto px-4 flex items-center justify-between h-16">
         <a href="#hero" className="flex items-center gap-2">
-          <img src={clanLogo} alt="KSK Logo" className="w-10 h-10 rounded-full" />
+          <img src={clanLogo} alt="KSK Logo" className="h-10 w-auto object-contain" />
           <span className="font-display text-lg font-bold gradient-neon-text hidden sm:block">
             KSK
           </span>
