@@ -53,9 +53,9 @@ const Dashboard = () => {
     );
   }
 
-  // No session → back to login
+  // No session → login page
   if (!user) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/verify" replace />;
   }
 
   // Staff → admin panel

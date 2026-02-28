@@ -115,7 +115,7 @@ const TexturePackPage = () => {
 
   // Guard: must be logged in + have private or staff role
   if (!loading && (!user || (!user.is_private && !user.is_staff))) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/verify" replace />;
   }
 
   if (loading) {
