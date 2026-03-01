@@ -550,6 +550,9 @@ const TexturePackPage = () => {
               Not affiliated with Rockstar Games or FiveM.
             </p>
           </div>
+          <p className="text-center text-muted-foreground text-xs">
+            Site developed by: M1K3
+          </p>
         </div>
       </footer>
     </div>
