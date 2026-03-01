@@ -52,12 +52,23 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        surface: {
+          1: "hsl(var(--surface-1))",
+          2: "hsl(var(--surface-2))",
+        },
+        tactical: {
+          olive: "hsl(84 22% 42%)",
+          "olive-hover": "hsl(84 24% 48%)",
+          steel: "hsl(210 14% 34%)",
+          orange: "hsl(28 92% 56%)",
+          amber: "hsl(38 88% 58%)",
+        },
         military: {
-          olive: "hsl(84, 18%, 35%)",
+          olive: "hsl(84, 22%, 42%)",
           sand: "hsl(35, 25%, 60%)",
-          wolf: "hsl(210, 10%, 25%)",
+          wolf: "hsl(210, 14%, 34%)",
           night: "hsl(220, 15%, 7%)",
-          orange: "hsl(28, 90%, 50%)",
+          orange: "hsl(28, 92%, 56%)",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -75,6 +86,12 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      backgroundImage: {
+        "gradient-tactical": "linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%)",
+        "olive-glow": "radial-gradient(circle at top, hsl(84 22% 42% / 0.15), transparent 70%)",
+        "steel-glow": "radial-gradient(circle at top, hsl(210 14% 34% / 0.1), transparent 70%)",
+        "amber-glow": "radial-gradient(circle at top, hsl(38 88% 58% / 0.08), transparent 70%)",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -88,6 +105,10 @@ export default {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.7" },
         },
+        "pulse-soft": {
+          "0%, 100%": { opacity: "1", transform: "scale(1)" },
+          "50%": { opacity: "0.88", transform: "scale(0.985)" },
+        },
         "radar": {
           "0%": { transform: "rotate(0deg)" },
           "100%": { transform: "rotate(360deg)" },
@@ -97,6 +118,7 @@ export default {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "ui-pulse": "ui-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "pulse-soft": "pulse-soft 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "radar-sweep": "radar 4s linear infinite",
       },
     },
