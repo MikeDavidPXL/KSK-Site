@@ -16,7 +16,7 @@ const Footer = () => (
       </div>
       <div className="text-center space-y-1">
         <p className="text-muted-foreground text-xs font-semibold">
-          Website made by the KSK team
+          Website made by M1k3
         </p>
       </div>
     </div>

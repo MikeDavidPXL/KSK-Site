@@ -546,13 +546,14 @@ const TexturePackPage = () => {
                 [KSK] Kommando Spezialkräfte © 2026
               </span>
             </div>
+            <p className="text-center text-muted-foreground text-xs">
+            Site developed by: M1K3
+           </p>
             <p className="text-muted-foreground text-xs">
               Not affiliated with Rockstar Games or FiveM.
             </p>
           </div>
-          <p className="text-center text-muted-foreground text-xs">
-            Site developed by: M1K3
-          </p>
+          
         </div>
       </footer>
     </div>
