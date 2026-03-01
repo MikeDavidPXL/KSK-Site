@@ -1,4 +1,4 @@
-// Pack page — restored old look with full section layout
+// Pack page — Tactical Spec-Ops theme
 // Staff sees admin panel link in navbar; private/staff both see this page
 import { useEffect, useState, useRef, useCallback } from "react";
 import { AnimatePresence, motion, useInView } from "framer-motion";
@@ -33,10 +33,10 @@ interface ChangelogEntry {
 }
 
 const features = [
-  { icon: Swords, title: "Competitive KOTH", description: "Dominate King of the Hill on CosmicV with organized squad play and tactics." },
-  { icon: Trophy, title: "Rank System", description: "Climb the ranks from Role1 to Role5 through dedication and activity." },
-  { icon: Flame, title: "Active Community", description: "Join an active Discord with regular events, squad sessions, and banter." },
-  { icon: CalendarCheck, title: "Regular Events", description: "Weekly KOTH sessions, tournaments, and community game nights." },
+  { icon: Swords, title: "Tactical KOTH", description: "Dominate King of the Hill on CosmicV with organized squad play and tactical coordination." },
+  { icon: Trophy, title: "Rank Progression", description: "Advance through the ranks from Role1 to Role5 through dedication and operational activity." },
+  { icon: Flame, title: "Active Operations", description: "Join an active Discord with regular operations, squad deployments, and strategic planning." },
+  { icon: CalendarCheck, title: "Scheduled Missions", description: "Weekly KOTH operations, tournaments, and community mission nights." },
 ];
 
 // ── Staff members configuration ─────────────────────────────
@@ -191,14 +191,19 @@ const TexturePackPage = () => {
       <PackNavbar navItems={navItems} user={user!} pendingCount={pendingCount} visible={showNav} />
 
       {/* ── Hero Section ─────────────────────────────────── */}
-      {/* Hero background image only - fully clean at scrollY=0 */}
+      {/* Hero background image with tactical overlays */}
       <div style={{ opacity: heroOpacity }} className="will-change-[opacity]">
         <section id="hero" className="relative min-h-screen overflow-hidden">
           <div className="absolute inset-0">
             <img src={heroBanner} alt="KSK Banner" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-background/30" />
-            <div className="absolute inset-0 smoke-overlay" />
-            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
+            <div className="absolute inset-0 bg-background/40" />
+            <div className="absolute inset-0 vignette" />
+            <div className="absolute inset-0 tactical-grid opacity-20" />
+            <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background to-transparent" />
+          </div>
+          {/* Coordinates ticker */}
+          <div className="absolute bottom-6 left-6 font-mono text-[10px] text-primary/40 tracking-widest uppercase select-none hidden md:block">
+            51.9244° N &bull; 8.1344° E &bull; KSK HQ
           </div>
         </section>
       </div>
@@ -212,17 +217,18 @@ const TexturePackPage = () => {
         }`}
       >
 
-      {/* ── Intro Section (moved from hero overlay) ────────── */}
-      <section className="py-20 relative smoke-overlay">
-        <div className="container mx-auto px-4 text-center">
+      {/* ── Intro Section ────────────────────────────────── */}
+      <section className="py-20 relative">
+        <div className="absolute inset-0 topo-overlay opacity-5" />
+        <div className="container mx-auto px-4 text-center relative z-10">
           <img
             src={clanLogo}
             alt="KSK Logo"
-            className="h-28 w-auto object-contain mx-auto mb-6 neon-box-blue"
+            className="h-28 w-auto object-contain mx-auto mb-6 drop-shadow-[0_0_20px_rgba(107,114,67,0.3)]"
           />
           <h1
-            className="font-display text-4xl sm:text-5xl md:text-7xl font-black uppercase mb-4 gradient-neon-text"
-            style={{ WebkitTextStroke: "2px rgba(0, 0, 0, 0.2)" }}
+            className="font-display text-4xl sm:text-5xl md:text-7xl font-black uppercase mb-4 gradient-tactical-text"
+            style={{ WebkitTextStroke: "2px rgba(0, 0, 0, 0.3)" }}
           >
             KSK
           </h1>
@@ -233,7 +239,7 @@ const TexturePackPage = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/ban-report"
-              className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-display font-bold text-base px-6 py-3 rounded-lg hover:scale-105 transition-all duration-200 uppercase tracking-wider animate-pulse-subtle"
+              className="inline-flex items-center gap-2 bg-destructive hover:bg-destructive/90 text-white font-display font-bold text-base px-6 py-3 rounded-lg hover:scale-105 transition-all duration-200 uppercase tracking-wider"
             >
               <AlertTriangle className="w-4 h-4" />
               I Have Been Banned
@@ -243,7 +249,7 @@ const TexturePackPage = () => {
       </section>
 
       {/* ── About Section ────────────────────────────────── */}
-      <AnimatedSection id="about" className="py-24 relative smoke-overlay">
+      <AnimatedSection id="about" className="py-24 relative">
         {(isInView) => (
           <div className="container mx-auto px-4">
             {/* About Us Text */}
@@ -253,7 +259,7 @@ const TexturePackPage = () => {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="font-display text-3xl sm:text-4xl font-bold uppercase mb-6 neon-text-blue text-primary">
+              <h2 className="font-display text-3xl sm:text-4xl font-bold uppercase mb-6 tactical-text text-primary">
                 About KSK
               </h2>
               <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
@@ -269,12 +275,12 @@ const TexturePackPage = () => {
                 ].map((stat, i) => (
                   <motion.div
                     key={stat.label}
-                    className="bg-card border border-border rounded-lg p-6 neon-border-blue"
+                    className="glass-card border border-border rounded-lg p-6 tactical-border-hover"
                     initial={{ opacity: 0, y: 20 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
                   >
-                    <div className="font-display text-3xl font-black gradient-neon-text mb-1">
+                    <div className="font-display text-3xl font-black gradient-tactical-text mb-1">
                       {stat.number}
                     </div>
                     <div className="text-muted-foreground text-sm uppercase tracking-wider">
@@ -292,7 +298,7 @@ const TexturePackPage = () => {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.4, duration: 0.6 }}
             >
-              <h3 className="font-display text-2xl sm:text-3xl font-bold uppercase mb-12 text-center neon-text-blue text-primary">
+              <h3 className="font-display text-2xl sm:text-3xl font-bold uppercase mb-12 text-center tactical-text text-primary">
                 Staff Team
               </h3>
 
@@ -300,14 +306,14 @@ const TexturePackPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-[620px] mx-auto">
                   {[leaderGroup, coLeaderGroup].filter(Boolean).map((group, groupIndex) => (
                     <div key={group!.role}>
-                      <h4 className="font-display text-xl font-bold uppercase mb-4 text-center text-secondary">
+                      <h4 className="font-display text-xl font-bold uppercase mb-4 text-center text-muted-foreground">
                         {group!.role}
                       </h4>
                       <div className="flex justify-center">
                         {group!.members.map((member, memberIndex) => (
                           <motion.div
                             key={member.discord_id}
-                            className="bg-card border border-border rounded-lg p-6 text-center hover:border-primary/50 transition-all duration-300 w-full sm:w-[280px]"
+                            className="glass-card border border-border rounded-lg p-6 text-center hover:border-primary/50 transition-all duration-300 w-full sm:w-[280px] border-l-2 border-l-primary/60"
                             initial={{ opacity: 0, y: 20 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{
@@ -347,14 +353,14 @@ const TexturePackPage = () => {
 
                 {otherStaffGroups.map((group, groupIndex) => (
                   <div key={group.role}>
-                    <h4 className="font-display text-xl font-bold uppercase mb-4 text-center text-secondary">
+                    <h4 className="font-display text-xl font-bold uppercase mb-4 text-center text-muted-foreground">
                       {group.role}
                     </h4>
                     <div className={getStaffRowContainerClass(group.members.length)}>
                       {group.members.map((member, memberIndex) => (
                         <motion.div
                           key={member.discord_id}
-                          className="bg-card border border-border rounded-lg p-6 text-center hover:border-primary/50 transition-all duration-300 w-full sm:w-[280px]"
+                          className="glass-card border border-border rounded-lg p-6 text-center hover:border-primary/50 transition-all duration-300 w-full sm:w-[280px] border-l-2 border-l-primary/60"
                           initial={{ opacity: 0, y: 20 }}
                           animate={isInView ? { opacity: 1, y: 0 } : {}}
                           transition={{
@@ -401,7 +407,7 @@ const TexturePackPage = () => {
         {(isInView) => (
           <div className="container mx-auto px-4">
             <motion.h2
-              className="font-display text-3xl sm:text-4xl font-bold uppercase mb-12 text-center neon-text-purple text-secondary"
+              className="font-display text-3xl sm:text-4xl font-bold uppercase mb-12 text-center tactical-text text-primary"
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5 }}
@@ -412,14 +418,14 @@ const TexturePackPage = () => {
               {features.map((feature, i) => (
                 <motion.div
                   key={feature.title}
-                  className="bg-card border border-border rounded-lg p-6 group hover:neon-border-purple transition-all duration-300"
+                  className="glass-card border border-border rounded-lg p-6 group hover:border-primary/50 transition-all duration-300"
                   initial={{ opacity: 0, y: 30 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.1 * i, duration: 0.5 }}
                 >
-                  <feature.icon className="w-10 h-10 text-secondary mb-4 group-hover:drop-shadow-[0_0_10px_hsl(270_80%_60%_/_0.6)] transition-all duration-300" />
+                  <feature.icon className="w-10 h-10 text-accent mb-4 group-hover:text-primary transition-colors duration-300" />
                   <h3 className="font-display text-lg font-bold mb-2 text-foreground">{feature.title}</h3>
-                  <p className={`text-sm ${feature.description.includes("WIP") ? "text-secondary neon-text-purple font-semibold tracking-wider uppercase animate-pulse" : "text-muted-foreground"}`}>
+                  <p className={`text-sm ${feature.description.includes("WIP") ? "text-accent font-semibold tracking-wider uppercase animate-pulse" : "text-muted-foreground"}`}>
                     {feature.description}
                   </p>
                 </motion.div>
@@ -430,11 +436,11 @@ const TexturePackPage = () => {
       </AnimatedSection>
 
       {/* ── Video Section ────────────────────────────────── */}
-      <AnimatedSection id="video" className="py-24 relative smoke-overlay">
+      <AnimatedSection id="video" className="py-24 relative">
         {(isInView) => (
           <div className="container mx-auto px-4">
             <motion.h2
-              className="font-display text-3xl sm:text-4xl font-bold uppercase mb-4 text-center neon-text-blue text-primary"
+              className="font-display text-3xl sm:text-4xl font-bold uppercase mb-4 text-center tactical-text text-primary"
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5 }}
@@ -450,7 +456,7 @@ const TexturePackPage = () => {
               Check out a preview of our gameplay in action.
             </motion.p>
             <motion.div
-              className="max-w-4xl mx-auto rounded-xl overflow-hidden border border-border neon-border-blue"
+              className="max-w-4xl mx-auto rounded-xl overflow-hidden border border-border tactical-border-hover"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={isInView ? { opacity: 1, scale: 1 } : {}}
               transition={{ delay: 0.3, duration: 0.5 }}
@@ -474,7 +480,7 @@ const TexturePackPage = () => {
         {(isInView) => (
           <div className="container mx-auto px-4">
             <motion.h2
-              className="font-display text-3xl sm:text-4xl font-bold uppercase mb-12 text-center neon-text-purple text-secondary"
+              className="font-display text-3xl sm:text-4xl font-bold uppercase mb-12 text-center tactical-text text-primary"
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5 }}
@@ -505,7 +511,7 @@ const TexturePackPage = () => {
                   <motion.button
                     type="button"
                     onClick={() => setChangelogExpanded((prev) => !prev)}
-                    className="relative z-10 w-full text-left bg-card border border-border rounded-lg p-6 hover:neon-border-purple transition-all duration-300"
+                    className="relative z-10 w-full text-left glass-card border border-border rounded-lg p-6 hover:border-primary/50 transition-all duration-300"
                     initial={{ opacity: 0, x: -30 }}
                     animate={isInView ? { opacity: 1, x: 0 } : {}}
                     transition={{ duration: 0.5 }}
@@ -513,8 +519,8 @@ const TexturePackPage = () => {
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0">
                         <div className="flex items-center gap-3 mb-3">
-                          <Tag className="w-5 h-5 text-secondary" />
-                          <span className="font-display text-sm font-bold text-secondary">v{latestChangelog.version}</span>
+                          <Tag className="w-5 h-5 text-primary" />
+                          <span className="font-display text-sm font-bold text-primary">v{latestChangelog.version}</span>
                           <span className="text-muted-foreground text-xs">{latestChangelog.date}</span>
                         </div>
                         <h3 className="font-display text-lg font-bold mb-3 text-foreground">{latestChangelog.title}</h3>
@@ -529,7 +535,7 @@ const TexturePackPage = () => {
                       </div>
 
                       {olderChangelog.length > 0 && (
-                        <div className="shrink-0 flex items-center gap-1 text-xs text-secondary font-display font-bold mt-0.5">
+                        <div className="shrink-0 flex items-center gap-1 text-xs text-primary font-display font-bold mt-0.5">
                           <span>{changelogExpanded ? "Hide older" : `${olderChangelog.length} older`}</span>
                           <ChevronDown
                             className={`w-4 h-4 transition-transform duration-300 ${
@@ -557,14 +563,14 @@ const TexturePackPage = () => {
                       {olderChangelog.map((entry, i) => (
                         <motion.div
                           key={entry.version}
-                          className="bg-card border border-border rounded-lg p-6 hover:neon-border-purple transition-all duration-300"
+                          className="glass-card border border-border rounded-lg p-6 hover:border-primary/50 transition-all duration-300"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.05 * i, duration: 0.25 }}
                         >
                           <div className="flex items-center gap-3 mb-3">
-                            <Tag className="w-5 h-5 text-secondary" />
-                            <span className="font-display text-sm font-bold text-secondary">v{entry.version}</span>
+                            <Tag className="w-5 h-5 text-primary" />
+                            <span className="font-display text-sm font-bold text-primary">v{entry.version}</span>
                             <span className="text-muted-foreground text-xs">{entry.date}</span>
                           </div>
                           <h3 className="font-display text-lg font-bold mb-3 text-foreground">{entry.title}</h3>
@@ -590,8 +596,9 @@ const TexturePackPage = () => {
       </div>{/* end content reveal wrapper */}
 
       {/* ── Footer ───────────────────────────────────────── */}
-      <footer className="border-t border-border py-8">
-        <div className="container mx-auto px-4">
+      <footer className="border-t border-border py-8 relative">
+        <div className="absolute inset-0 topo-overlay opacity-[0.03]" />
+        <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-3">
             <div className="flex items-center gap-2">
                 <img src={clanLogo} alt="KSK" className="h-6 w-auto object-contain" />
@@ -692,7 +699,7 @@ function PackNavbar({
       <div className="container mx-auto px-4 flex items-center justify-between h-16">
         <a href="#hero" className="flex items-center gap-2">
           <img src={clanLogo} alt="KSK Logo" className="h-10 w-auto object-contain" />
-          <span className="font-display text-lg font-bold gradient-neon-text hidden sm:block">
+          <span className="font-display text-lg font-bold gradient-tactical-text hidden sm:block">
             KSK
           </span>
         </a>
@@ -737,8 +744,8 @@ function PackNavbar({
                 onClick={() => setShieldOpen((o) => !o)}
                 className={`relative inline-flex h-8 w-8 items-center justify-center rounded-md transition ${
                   shieldOpen
-                    ? "text-secondary drop-shadow-[0_0_6px_rgba(168,85,247,0.7)]"
-                    : "text-secondary/70 hover:text-secondary hover:drop-shadow-[0_0_6px_rgba(168,85,247,0.5)]"
+                    ? "text-primary drop-shadow-[0_0_6px_rgba(107,114,67,0.7)]"
+                    : "text-primary/70 hover:text-primary hover:drop-shadow-[0_0_6px_rgba(107,114,67,0.5)]"
                 }`}
                 aria-label="Admin tools"
               >
@@ -750,14 +757,14 @@ function PackNavbar({
                 )}
               </button>
               {shieldOpen && (
-                <div className="absolute right-0 top-full mt-2 w-48 bg-card/95 backdrop-blur-sm border border-secondary/40 rounded-xl shadow-2xl shadow-secondary/20 z-50">
-                  <div className="px-4 pt-3 pb-2 text-[11px] uppercase tracking-wide text-muted-foreground border-b border-secondary/20">
+                <div className="absolute right-0 top-full mt-2 w-48 bg-card/95 backdrop-blur-sm border border-primary/40 rounded-xl shadow-2xl shadow-primary/10 z-50">
+                  <div className="px-4 pt-3 pb-2 text-[11px] uppercase tracking-wide text-muted-foreground border-b border-primary/20">
                     Signed in as {user.staff_tier === "leader" ? "Leader" : user.staff_tier === "coleader" ? "Co-Leader" : user.staff_tier === "webdev" ? "Web Developer" : user.staff_tier === "staff" ? "Staff" : "Staff"}
                   </div>
                   <Link
                     to="/admin"
                     onClick={() => setShieldOpen(false)}
-                    className="flex items-center gap-2 px-4 py-3 text-sm font-display font-bold text-secondary hover:bg-secondary/15 transition"
+                    className="flex items-center gap-2 px-4 py-3 text-sm font-display font-bold text-primary hover:bg-primary/15 transition"
                   >
                     <Shield className="w-4 h-4" />
                     Admin Panel
@@ -770,7 +777,7 @@ function PackNavbar({
                   <Link
                     to="/clan-list"
                     onClick={() => setShieldOpen(false)}
-                    className="flex items-center gap-2 px-4 py-3 text-sm font-display font-bold text-secondary hover:bg-secondary/15 transition border-t border-secondary/20 rounded-b-xl"
+                    className="flex items-center gap-2 px-4 py-3 text-sm font-display font-bold text-primary hover:bg-primary/15 transition border-t border-primary/20 rounded-b-xl"
                   >
                     <Users className="w-4 h-4" />
                     Clan List
