@@ -93,9 +93,29 @@ interface ResolveCandidate {
   label: string;
   sublabel: string;
   resolve_token: string;
+  roles?: string[];
 }
 
 const RANKS = ["Role1", "Role2", "Role3", "Role4", "Role5", "OG", "Squad Leader"];
+
+// Discord rank role IDs (highest rank = last)
+const RANK_ROLE_IDS: { roleId: string; rank: string; order: number }[] = [
+  { roleId: "1477336301320671251", rank: "Role1", order: 0 },
+  { roleId: "1477336301328924754", rank: "Role2", order: 1 },
+  { roleId: "1477336301328924757", rank: "Role3", order: 2 },
+  { roleId: "1477348475845869648", rank: "Role4", order: 3 },
+  { roleId: "1477348550060019825", rank: "Role5", order: 4 },
+];
+
+function detectHighestRank(roles: string[]): string | null {
+  let best: { rank: string; order: number } | null = null;
+  for (const entry of RANK_ROLE_IDS) {
+    if (roles.includes(entry.roleId)) {
+      if (!best || entry.order > best.order) best = entry;
+    }
+  }
+  return best?.rank ?? null;
+}
 
 // Rank order for sorting (higher index = higher rank)
 const RANK_ORDER: Record<string, number> = {
@@ -180,6 +200,15 @@ const ClanListPage = () => {
   );
   const [saveUnresolvedAllowed, setSaveUnresolvedAllowed] = useState(false);
   const [uiError, setUiError] = useState<string | null>(null);
+
+  // ── Resolve status details ──────────────────────────────
+  const [resolveStatus, setResolveStatus] = useState<{
+    resolvedName: string | null;
+    inGuild: boolean | null;
+    detectedRank: string | null;
+  } | null>(null);
+  // Track which fields the user manually edited (don't overwrite on resolve)
+  const [dirtyFields, setDirtyFields] = useState<Set<string>>(new Set());
 
   // ── Manual unresolved resolver ──────────────────────────
   const [resolveTargetId, setResolveTargetId] = useState<string | null>(null);
@@ -507,6 +536,7 @@ const ClanListPage = () => {
     setResolving(true);
     setAddError(null);
     setSaveUnresolvedAllowed(false);
+    setResolveStatus(null);
     try {
       const q = encodeURIComponent(addForm.discord_name.trim());
       const res = await fetch(`/.netlify/functions/guild-member-search?q=${q}`);
@@ -519,12 +549,37 @@ const ClanListPage = () => {
       const candidates: ResolveCandidate[] = data?.candidates ?? [];
       setResolveCandidates(candidates);
 
+      if (candidates.length === 0) {
+        // No results = not in guild
+        setResolveStatus({
+          resolvedName: null,
+          inGuild: false,
+          detectedRank: null,
+        });
+        setAddError("User is not in the Discord server.");
+        return;
+      }
+
       if (candidates.length === 1) {
+        const c = candidates[0];
+        const roles = c.roles ?? [];
+        const highestRank = detectHighestRank(roles);
+
         setAddForm((f) => ({
           ...f,
-          resolve_token: candidates[0].resolve_token,
-          discord_name: candidates[0].label || f.discord_name,
+          resolve_token: c.resolve_token,
+          discord_name: c.label || f.discord_name,
+          // Only auto-fill rank if field was not manually edited
+          ...(highestRank && !dirtyFields.has("rank_current")
+            ? { rank_current: highestRank }
+            : {}),
         }));
+
+        setResolveStatus({
+          resolvedName: c.label,
+          inGuild: true,
+          detectedRank: highestRank,
+        });
       }
     } catch {
       setAddError("Network error while searching Discord members.");
@@ -593,6 +648,8 @@ const ClanListPage = () => {
       });
       setResolveCandidates([]);
       setSaveUnresolvedAllowed(false);
+      setResolveStatus(null);
+      setDirtyFields(new Set());
       fetchMembers(page, debouncedSearch);
     } catch {
       setAddError("Network error");
@@ -1175,7 +1232,10 @@ const ClanListPage = () => {
                             resolve_token: "",
                           }))
                         }
-                        onBlur={findDiscordCandidates}
+                        onBlur={() => {
+                          setResolveStatus(null);
+                          findDiscordCandidates();
+                        }}
                         className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
                       />
                       <button
@@ -1187,9 +1247,22 @@ const ClanListPage = () => {
                         {resolving ? "..." : "Find"}
                       </button>
                     </div>
-                    {addForm.resolve_token && (
-                      <p className="text-xs text-green-400 mt-1">
-                        Resolved
+                    {addForm.resolve_token && resolveStatus && (
+                      <div className="text-xs mt-1 space-y-0.5">
+                        <p className="text-green-400">
+                          ✓ Resolved: {resolveStatus.resolvedName}
+                        </p>
+                        <p className="text-green-400">✓ In guild</p>
+                        <p className={resolveStatus.detectedRank ? "text-green-400" : "text-muted-foreground"}>
+                          {resolveStatus.detectedRank
+                            ? `✓ Rank detected: ${resolveStatus.detectedRank}`
+                            : "— No rank roles detected"}
+                        </p>
+                      </div>
+                    )}
+                    {!addForm.resolve_token && resolveStatus?.inGuild === false && (
+                      <p className="text-xs text-destructive mt-1">
+                        ✗ User is not in the Discord server.
                       </p>
                     )}
                   </div>
@@ -1199,9 +1272,10 @@ const ClanListPage = () => {
                     </label>
                     <input
                       value={addForm.ign}
-                      onChange={(e) =>
-                        setAddForm((f) => ({ ...f, ign: e.target.value }))
-                      }
+                      onChange={(e) => {
+                        setDirtyFields((s) => new Set(s).add("ign"));
+                        setAddForm((f) => ({ ...f, ign: e.target.value }));
+                      }}
                       className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
                     />
                   </div>
@@ -1211,9 +1285,10 @@ const ClanListPage = () => {
                     </label>
                     <input
                       value={addForm.uid}
-                      onChange={(e) =>
-                        setAddForm((f) => ({ ...f, uid: e.target.value }))
-                      }
+                      onChange={(e) => {
+                        setDirtyFields((s) => new Set(s).add("uid"));
+                        setAddForm((f) => ({ ...f, uid: e.target.value }));
+                      }}
                       className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
                     />
                   </div>
@@ -1257,12 +1332,13 @@ const ClanListPage = () => {
                     </label>
                     <select
                       value={addForm.rank_current}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        setDirtyFields((s) => new Set(s).add("rank_current"));
                         setAddForm((f) => ({
                           ...f,
                           rank_current: e.target.value,
-                        }))
-                      }
+                        }));
+                      }}
                       className="w-full bg-muted border border-border rounded-lg pl-3 pr-10 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
                     >
                       {RANKS.map((r) => (
@@ -1300,11 +1376,29 @@ const ClanListPage = () => {
                         const selected = resolveCandidates.find(
                           (c) => c.resolve_token === e.target.value
                         );
-                        setAddForm((f) => ({
-                          ...f,
-                          resolve_token: e.target.value,
-                          discord_name: selected?.label || f.discord_name,
-                        }));
+                        if (selected) {
+                          const roles = selected.roles ?? [];
+                          const highestRank = detectHighestRank(roles);
+                          setAddForm((f) => ({
+                            ...f,
+                            resolve_token: e.target.value,
+                            discord_name: selected.label || f.discord_name,
+                            ...(highestRank && !dirtyFields.has("rank_current")
+                              ? { rank_current: highestRank }
+                              : {}),
+                          }));
+                          setResolveStatus({
+                            resolvedName: selected.label,
+                            inGuild: true,
+                            detectedRank: highestRank,
+                          });
+                        } else {
+                          setAddForm((f) => ({
+                            ...f,
+                            resolve_token: e.target.value,
+                          }));
+                          setResolveStatus(null);
+                        }
                       }}
                       className="w-full bg-muted border border-border rounded-lg pl-3 pr-10 py-2 text-sm text-foreground focus:ring-2 focus:ring-secondary/50 focus:outline-none"
                     >
@@ -1323,7 +1417,7 @@ const ClanListPage = () => {
                 <div className="flex flex-wrap gap-2">
                   <button
                     onClick={() => handleAddMember(false)}
-                    disabled={addSaving}
+                    disabled={addSaving || (resolveStatus?.inGuild === false)}
                     className="inline-flex items-center gap-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground font-display font-bold px-5 py-2 rounded-lg transition disabled:opacity-50"
                   >
                     {addSaving ? (

@@ -266,6 +266,7 @@ export interface GuildMemberCandidate {
   display_name: string;
   username: string;
   nick: string | null;
+  roles: string[];
 }
 
 export function normalizeLookup(input: string | null | undefined): string {
@@ -299,6 +300,7 @@ export function guildMemberToCandidate(member: GuildMember): GuildMemberCandidat
     display_name: fields.displayName,
     username: fields.username,
     nick: member.nick ?? null,
+    roles: member.roles ?? [],
   };
 }
 

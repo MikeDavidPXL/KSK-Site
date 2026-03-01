@@ -52,6 +52,7 @@ const handler: Handler = async (event) => {
         label,
         sublabel: `@${directMember.user.username}${directMember.nick ? ` (nick: ${directMember.nick})` : ""}`,
         resolve_token: signResolveToken(directMember.user.id),
+        roles: (directMember.roles ?? []) as string[],
       };
 
       await supabase.from("audit_log").insert({
@@ -82,10 +83,12 @@ const handler: Handler = async (event) => {
   const rawCandidates = searchGuildMemberCandidates(guildMembers, query, 20);
 
   // Map to opaque format: no discord_id exposed, only resolve_token
+  // Include roles so the frontend can detect rank and guild membership
   const candidates = rawCandidates.map((c) => ({
     label: c.display_name,
     sublabel: `@${c.username}${c.nick ? ` (nick: ${c.nick})` : ""}`,
     resolve_token: signResolveToken(c.discord_id),
+    roles: c.roles,
   }));
 
   await supabase.from("audit_log").insert({
