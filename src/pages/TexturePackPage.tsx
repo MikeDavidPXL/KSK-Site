@@ -170,6 +170,11 @@ const TexturePackPage = () => {
     role,
     members: staffMembers.filter((m) => m.staff_role === role),
   }));
+  const leaderGroup = staffByRole.find((group) => group.role === "Leader");
+  const coLeaderGroup = staffByRole.find((group) => group.role === "Co-Leader");
+  const otherStaffGroups = staffByRole.filter(
+    (group) => group.role !== "Leader" && group.role !== "Co-Leader"
+  );
   const latestChangelog = changelog[0];
   const olderChangelog = changelog.slice(1);
 
@@ -292,7 +297,55 @@ const TexturePackPage = () => {
               </h3>
 
               <div className="space-y-12">
-                {staffByRole.map((group, groupIndex) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                  {[leaderGroup, coLeaderGroup].filter(Boolean).map((group, groupIndex) => (
+                    <div key={group!.role}>
+                      <h4 className="font-display text-xl font-bold uppercase mb-6 text-center text-secondary">
+                        {group!.role}
+                      </h4>
+                      <div className={getStaffRowContainerClass(group!.members.length)}>
+                        {group!.members.map((member, memberIndex) => (
+                          <motion.div
+                            key={member.discord_id}
+                            className="bg-card border border-border rounded-lg p-6 text-center hover:border-primary/50 transition-all duration-300 w-full sm:w-[280px]"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={isInView ? { opacity: 1, y: 0 } : {}}
+                            transition={{
+                              delay: 0.5 + groupIndex * 0.1 + memberIndex * 0.05,
+                              duration: 0.5,
+                            }}
+                          >
+                            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-muted border-2 border-primary/30 flex items-center justify-center overflow-hidden">
+                              <img
+                                src={member.avatar_url || buildDiscordAvatarUrl(member.discord_id, member.avatar_hash)}
+                                alt={member.display_name}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = "none";
+                                  const parent = e.currentTarget.parentElement;
+                                  if (parent && !parent.querySelector(".fallback-icon")) {
+                                    const icon = document.createElement("div");
+                                    icon.className = "fallback-icon flex items-center justify-center";
+                                    icon.innerHTML = '<svg class="w-10 h-10 text-muted-foreground" stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
+                                    parent.appendChild(icon);
+                                  }
+                                }}
+                              />
+                            </div>
+                            <h5 className={`font-display text-lg font-bold mb-2 text-foreground`}>
+                              {member.display_name}
+                            </h5>
+                            <div className="inline-block px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-xs font-semibold text-primary uppercase tracking-wide">
+                              {member.staff_role}
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {otherStaffGroups.map((group, groupIndex) => (
                   <div key={group.role}>
                     <h4 className="font-display text-xl font-bold uppercase mb-6 text-center text-secondary">
                       {group.role}
@@ -305,7 +358,7 @@ const TexturePackPage = () => {
                           initial={{ opacity: 0, y: 20 }}
                           animate={isInView ? { opacity: 1, y: 0 } : {}}
                           transition={{
-                            delay: 0.5 + groupIndex * 0.1 + memberIndex * 0.05,
+                            delay: 0.7 + groupIndex * 0.1 + memberIndex * 0.05,
                             duration: 0.5,
                           }}
                         >
