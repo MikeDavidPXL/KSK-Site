@@ -296,14 +296,14 @@ const TexturePackPage = () => {
                 Staff Team
               </h3>
 
-              <div className="space-y-12">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div className="space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-[620px] mx-auto">
                   {[leaderGroup, coLeaderGroup].filter(Boolean).map((group, groupIndex) => (
                     <div key={group!.role}>
-                      <h4 className="font-display text-xl font-bold uppercase mb-6 text-center text-secondary">
+                      <h4 className="font-display text-xl font-bold uppercase mb-4 text-center text-secondary">
                         {group!.role}
                       </h4>
-                      <div className={getStaffRowContainerClass(group!.members.length)}>
+                      <div className="flex justify-center">
                         {group!.members.map((member, memberIndex) => (
                           <motion.div
                             key={member.discord_id}
@@ -347,7 +347,7 @@ const TexturePackPage = () => {
 
                 {otherStaffGroups.map((group, groupIndex) => (
                   <div key={group.role}>
-                    <h4 className="font-display text-xl font-bold uppercase mb-6 text-center text-secondary">
+                    <h4 className="font-display text-xl font-bold uppercase mb-4 text-center text-secondary">
                       {group.role}
                     </h4>
                     <div className={getStaffRowContainerClass(group.members.length)}>
